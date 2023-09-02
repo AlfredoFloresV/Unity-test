@@ -7,8 +7,10 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private float speed = 5f;
+
     [SerializeField]
     private float sensitivityX = 15f;
+    
     [SerializeField]
     private float sensitivityY = 5f;
 

@@ -16,7 +16,7 @@ public class MazeRenderer : MonoBehaviour
         for (int x = 0; x < mazeGenerator.mazeWidth; x++) {
             for (int y = 0; y < mazeGenerator.mazeHeight; y++) { 
                 GameObject newCell = Instantiate(mazeCellPrefab, 
-                                                 new Vector3((float)x * CellSize, 0f, (float)y*CellSize),
+                                                 new Vector3((float)x * CellSize, 0f, (float)y * CellSize),
                                                  Quaternion.identity,
                                                  transform);
 
@@ -40,5 +40,6 @@ public class MazeRenderer : MonoBehaviour
                 mazeCell.init(top, bottom, right, left);
             }
         }
+
     }
 }

@@ -132,8 +132,10 @@ public class MazeGenerator : MonoBehaviour
             else {
                 BreakWalls(currentCell, nextCell);
                 maze[currentCell.x, currentCell.y].visited = true;
+                // Debug.Log("Cell " + currentCell.x + " " + currentCell.y + " visited");
                 currentCell = nextCell;
                 path.Add(currentCell);
+                // Debug.Log(path.ToString());
             }
         }
     }
