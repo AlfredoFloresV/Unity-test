@@ -44,9 +44,14 @@ public class PlayerMotor : MonoBehaviour
 
     private void PerformMovement()
     {
-        if (velocity != Vector3.zero) 
+        if (velocity != Vector3.zero)
         {
             rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+            cam.GetComponent<Animator>().Play("HeadBobbing");
+        }
+        else 
+        {
+            cam.GetComponent<Animator>().Play("Idle");
         }
     }
 
@@ -59,4 +64,5 @@ public class PlayerMotor : MonoBehaviour
             cam.transform.Rotate(-cameraRotation);
         }
     }
+
 }

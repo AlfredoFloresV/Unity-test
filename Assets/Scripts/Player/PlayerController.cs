@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private float speed = 5f;
+    private float orgSpeed;
 
     [SerializeField]
     private float sensitivityX = 15f;
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         motor = GetComponent<PlayerMotor>();
+        orgSpeed = speed;
     }
 
     // Update is called once per frame
@@ -44,5 +46,16 @@ public class PlayerController : MonoBehaviour
         float xRot = Input.GetAxisRaw("Mouse Y");
         Vector3 cameraRotation = new Vector3(xRot, 0f, 0f) * sensitivityY;
         motor.RotateCamera(cameraRotation);
+
+
+        if (Input.GetKey(KeyCode.Space)) 
+        {
+            speed = orgSpeed * 2f;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            speed = orgSpeed;
+        }
     }
 }
