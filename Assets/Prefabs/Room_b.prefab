@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 07370c0840f16dc4882d2d93c1a392ba, type: 2}
+  - {fileID: 2100000, guid: 1fd3271f15c0a0d4d8888429a270d4ef, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -432,7 +432,7 @@ GameObject:
   - component: {fileID: 7328824232502295370}
   - component: {fileID: 7104691763935951787}
   m_Layer: 0
-  m_Name: MazeCell
+  m_Name: Room_b
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -475,6 +475,7 @@ MonoBehaviour:
   bottomWall: {fileID: 121048053420587104}
   rightWall: {fileID: 2827717735531038211}
   leftWall: {fileID: 1423113004153928354}
+  door: {fileID: 0}
 --- !u!1 &8859672674657765478
 GameObject:
   m_ObjectHideFlags: 0
