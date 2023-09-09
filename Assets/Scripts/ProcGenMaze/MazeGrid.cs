@@ -1,16 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using Unity.AI.Navigation;
+
 using Random = System.Random;
 
 public class MazeGrid : MonoBehaviour
 {
     [SerializeField]
-    [Range(3,50)]
+    private NavMeshSurface surface;
+
+    [SerializeField]
+    [Range(20, 80)]
     private int mazeSizeX;
 
     [SerializeField]
-    [Range(3, 50)]
+    [Range(20, 80)]
     private int mazeSizeY;
 
     [SerializeField]
@@ -26,6 +32,12 @@ public class MazeGrid : MonoBehaviour
     private GameObject player;
 
     [SerializeField]
+    private GameObject enemy;
+
+    [SerializeField]
+    private GameObject destPrefab;
+
+    [SerializeField]
     private int Scale = 1;
 
     [SerializeField]
@@ -35,9 +47,10 @@ public class MazeGrid : MonoBehaviour
     private List<Room> rooms;
     private List<RoomEdge> roomEdges;
     private List<Vector3> doorLocations;
+    private List<Transform> destinations;
     private CellType[,] grid;
     private GameObject[,] prefabGrid;
-
+    
 
     private void Start()
     {
@@ -45,7 +58,8 @@ public class MazeGrid : MonoBehaviour
         rooms = new List<Room>();
         roomEdges = new List<RoomEdge>();
         doorLocations = new List<Vector3>();
-        Debug.Log("Generating " + roomCount + " rooms");
+        destinations = new List<Transform>();
+        //Debug.Log("Generating " + roomCount + " rooms");
 
         prefabGrid = new GameObject[mazeSizeX, mazeSizeY];
         for (int x = 0; x < prefabGrid.GetLength(0); x++)
@@ -58,13 +72,66 @@ public class MazeGrid : MonoBehaviour
 
 
         createSpecialRooms();
-        createGrid();
+        createGrid(); // Imprimir el contenido de Grid
         DelaunayTriangulation();
+
+        /*
+        for (int i = 0; i < grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < grid.GetLength(1); j++)
+            {
+                Debug.Log(i + " " + j + " " + grid[i, j]);
+            }
+        }
+        */
+
         CreateHallways();
         ValidateWalls();
         PlaceDoors();
         //testRoom();
+
+        placeItems();
+        surface.BuildNavMesh();
+
+        NavMeshHit closestHit;
+        if (NavMesh.SamplePosition(enemy.transform.position, out closestHit, 500f, NavMesh.AllAreas))
+            enemy.transform.position = closestHit.position;
+        else Debug.Log("something weird happened");
+        enemy.GetComponent<LarryAI>().setRandomDestinations(destinations);
     }
+
+    private void placeItems() 
+    {
+        //Rotar payasos
+        int count = 0;
+        Random random = new Random();
+        while (count < 5)
+        {
+            int x = random.Next(0, mazeSizeX);
+            int z = random.Next(0, mazeSizeY);
+
+            if (grid[x, z] == CellType.Hallway)
+            {
+                bool failDist = false;
+                Vector3 l = new Vector3((x + 0.1f) * Scale, -0.2f, (z + 0.1f) * Scale);
+
+                for (int i = 0; i < destinations.Count; i++) 
+                {
+                    if (Vector3.Distance(l, destinations[i].transform.position) < 20f) 
+                    {
+                        failDist = true;
+                    }
+                }
+                if (failDist == false) 
+                {
+                    GameObject dest = Instantiate(destPrefab, l, Quaternion.identity);
+                    destinations.Add(dest.transform);
+                    count++;
+                }
+            }
+        }
+    }
+
 
     private void updateGrids(Vector3 loc, Vector3 size, Room room) 
     {
@@ -73,7 +140,7 @@ public class MazeGrid : MonoBehaviour
         {
             for (int z = 0; z < (int)size.z; z++)
             {
-                Vector3 realLoc = loc + new Vector3(x * Scale, 0, z * Scale);
+                Vector3 realLoc = loc + new Vector3(x, 0, z);
                 grid[(int)realLoc.x, (int)realLoc.z] = CellType.Room;
                 prefabGrid[(int)realLoc.x, (int)realLoc.z] = room.getPrefabs()[count];
                 count++;
@@ -89,8 +156,9 @@ public class MazeGrid : MonoBehaviour
         {
             for (int z = 0; z < (int) size.z; z++) 
             {
-                Vector3 realLoc = location + new Vector3(x * scale + 0.5f, 0, z * scale + 0.5f);
+                Vector3 realLoc = location * scale + new Vector3(x * scale + (scale / 2), 0.5f * scale, z * scale + (scale / 2));
                 GameObject roomObj = Instantiate(roomPrefab, realLoc, Quaternion.identity);
+                roomObj.GetComponent<Transform>().localScale = new Vector3(1f * Scale, 1f * Scale, 1f * Scale);
                 roomCubes.Add(roomObj);
             }
         }
@@ -102,7 +170,8 @@ public class MazeGrid : MonoBehaviour
 
     private GameObject DrawHallway(Vector3 location, Vector3 size) 
     {
-        GameObject hallwayObj = Instantiate(hallwayPrefab, location + size * 0.5f, Quaternion.identity);
+        //location + size * 0.5f
+        GameObject hallwayObj = Instantiate(hallwayPrefab, location + new Vector3((Scale/2), 0, (Scale/2)), Quaternion.identity);
         hallwayObj.GetComponent<Transform>().localScale = size;
         return hallwayObj;
     }
@@ -126,36 +195,36 @@ public class MazeGrid : MonoBehaviour
         grid = gridObj.getGrid();
         
         //First room
-        Vector3 loc = new Vector3(2f, 0.5f, 2f);
-        Vector3 size = new Vector3(2f * Scale, 1.0f * Scale, 4f * Scale);
+        Vector3 loc = new Vector3(2f, 0f, 2f);
+        Vector3 size = new Vector3(2f, 1.0f, 4f);
         Room room = createRoom(loc, size, -1, Scale);
         rooms.Add(room);
         updateGrids(loc, size, room);
         
         //Second room
-        loc = new Vector3(2f, 0.5f, mazeSizeY - 4);
-        size = new Vector3(4f * Scale, 1.0f * Scale, 2f * Scale);
+        loc = new Vector3(2f, 0f, (mazeSizeY - 4));
+        size = new Vector3(4f, 1.0f, 2f);
         room = createRoom(loc, size, -2, Scale);
         rooms.Add(room);
         updateGrids(loc, size, room);
 
         //Third room
-        loc = new Vector3(mazeSizeX - 4, 0.5f, mazeSizeY - 6);
-        size = new Vector3(2f * Scale, 1.0f * Scale, 4f * Scale);
+        loc = new Vector3((mazeSizeX - 4), 0f, (mazeSizeY - 8));
+        size = new Vector3(2f, 1.0f, 4f);
         room = createRoom(loc, size, -3, Scale);
         rooms.Add(room);
         updateGrids(loc, size, room);
 
         //Fourth room
-        loc = new Vector3(mazeSizeX - 6, 0.5f, 2f);
-        size = new Vector3(4f * Scale, 1.0f * Scale, 2f * Scale);
+        loc = new Vector3((mazeSizeX - 8), 0f, 2f);
+        size = new Vector3(4f, 1.0f, 2f);
         room = createRoom(loc, size, -4, Scale);
         rooms.Add(room);
         updateGrids(loc, size, room);
 
 
         //Determinar inicio y fin
-        player.GetComponent<Transform>().position = new Vector3(3f, 0.5f, 4f);
+        player.GetComponent<Transform>().position = new Vector3(6f, 1f, 6f);
     }
 
     private void createGrid() 
@@ -165,8 +234,8 @@ public class MazeGrid : MonoBehaviour
 
         for (int i = 0; i < roomCount; i++) 
         {
-            Vector3 loc = new Vector3(random.Next(1, mazeSizeX) * Scale, 0.5f, random.Next(1, mazeSizeY) * Scale);
-            Vector3 size = new Vector3(random.Next(2, roomSize) * Scale, 1.0f * Scale, random.Next(2, roomSize) * Scale);
+            Vector3 loc = new Vector3(random.Next(1, mazeSizeX), 0f, random.Next(1, mazeSizeY));
+            Vector3 size = new Vector3(random.Next(2, roomSize), 1.0f, random.Next(2, roomSize));
 
             //Debug.Log(loc + " " + size + " " +i);
             Room room = createRoom(loc, size, i, Scale);
@@ -175,10 +244,14 @@ public class MazeGrid : MonoBehaviour
             //Intersect new room with the others
             for (int j = 0; j < rooms.Count; j++) 
             {
-                bool outOfBounds = (room.getBounds().max.x >= mazeSizeX - size.x) || (room.getBounds().max.z >= mazeSizeY - size.z);
+                Vector3 bounds = (loc + size);
+                
+                
+                bool outOfBounds = (bounds.x >= mazeSizeX || bounds.z >= mazeSizeY);
 
-                if (Room.isInsersecting(room, rooms[j], offset) || outOfBounds) 
+                if (Room.isInsersecting(room, rooms[j], Scale) || outOfBounds) 
                 {
+                    //Debug.Log("cannot insert " + loc + " " + size);
                     //Delete prefabs
                     List<GameObject> prefabs = room.getPrefabs();
                     for (int k = 0; k < prefabs.Count; k++) 
@@ -194,21 +267,6 @@ public class MazeGrid : MonoBehaviour
             {
                 rooms.Add(room);
                 updateGrids(loc, size, room);
-                
-                /*
-                int count = 0;
-                for (int x = 0; x < (int)size.x; x++)
-                {
-                    for (int z = 0; z < (int)size.z; z++)
-                    {
-                        Vector3 realLoc = loc + new Vector3(x * Scale, 0, z * Scale);
-                        grid[(int)realLoc.x, (int)realLoc.z] = CellType.Room;
-                        prefabGrid[(int)realLoc.x, (int)realLoc.z] = room.getPrefabs()[count];
-                        count ++;
-                        //Debug.Log("Creating Room " + (int)realLoc.x + " " + (int)realLoc.z);
-                    }
-                }
-                */
             }
         }
     }
@@ -278,8 +336,8 @@ public class MazeGrid : MonoBehaviour
             PathFinder pf = new PathFinder(gridAux, mazeSizeX, mazeSizeY);
             RoomEdge re = mstree[k];
 
-            List<PathNode> path = pf.findPath(re.getRoom1().getScaledLocation(), re.getRoom2().getScaledLocation());
-            Debug.Log(path[0].getLocation() + " " + path[path.Count - 1].getLocation());
+            List<PathNode> path = pf.findPath(re.getRoom1().getLocation(), re.getRoom2().getLocation());
+            //Debug.Log(path[0].getLocation() + " " + path[path.Count - 1].getLocation());
 
             if (!existLocation(path[0].getLocation()))
             {
@@ -302,10 +360,17 @@ public class MazeGrid : MonoBehaviour
                 //Debug.Log(newGrid[i,j]);
                 if (gridAux[i, j] == CellType.Hallway && prefabGrid[i, j] == null)
                 {
-                    Vector3 location = new Vector3(i * Scale, 0, j * Scale);
+                    Vector3 location = new Vector3(i * Scale, 0.5f * Scale, j * Scale);
                     GameObject hallwayObj = DrawHallway(location, size);
                     grid[i, j] = CellType.Hallway;
                     prefabGrid[i, j] = hallwayObj;
+                }
+                else 
+                {
+                    if ((grid[i, j] == CellType.Room && (prefabGrid[i, j] == null)) || (gridAux[i, j] == CellType.Hallway && prefabGrid[i, j] != null)) 
+                    {
+                        Debug.Log("Celda rara " + i + " " + j + " " + grid[i, j] + " " + (prefabGrid[i, j] == null));
+                    }
                 }
             }
         }
@@ -369,7 +434,7 @@ public class MazeGrid : MonoBehaviour
             Vector3 loc = doorLocations[i];
             int x = (int) loc.x;
             int z = (int) loc.z;
-            Debug.Log(grid[x, z] + " " + loc);
+            //Debug.Log(grid[x, z] + " " + loc);
 
             CellType cell = grid[x, z];
             CellType lookfor = CellType.None;
@@ -392,7 +457,7 @@ public class MazeGrid : MonoBehaviour
             {
                 prefabGrid[x, z].GetComponent<MazeCellObject>().DisableRight();
                 prefabGrid[x + 1, z].GetComponent<MazeCellObject>().DisableLeft();
-                prefabGrid[x, z].GetComponent<MazeCellObject>().placeDoor("right");
+                prefabGrid[x + 1, z].GetComponent<MazeCellObject>().placeDoor("left");
             }
 
             //Left
@@ -400,23 +465,31 @@ public class MazeGrid : MonoBehaviour
             {
                 prefabGrid[x, z].GetComponent<MazeCellObject>().DisableLeft();
                 prefabGrid[x - 1, z].GetComponent<MazeCellObject>().DisableRight();
-                prefabGrid[x, z].GetComponent<MazeCellObject>().placeDoor("left");
+                prefabGrid[x - 1, z].GetComponent<MazeCellObject>().placeDoor("right");
             }
 
             //Top
             if (z + 1 < mazeSizeY && grid[x, z + 1] == lookfor)
             {
-                prefabGrid[x, z].GetComponent<MazeCellObject>().DisableTop();
-                prefabGrid[x, z + 1].GetComponent<MazeCellObject>().DisableBottom();
-                prefabGrid[x, z].GetComponent<MazeCellObject>().placeDoor("top");
+                if ( (x - 1 > 0 && grid[x - 1, z + 1] != CellType.Hallway) ||
+                     (x + 1 < mazeSizeX && grid[x + 1, z + 1] != CellType.Hallway))
+                {
+                    prefabGrid[x, z].GetComponent<MazeCellObject>().DisableTop();
+                    prefabGrid[x, z + 1].GetComponent<MazeCellObject>().DisableBottom();
+                    prefabGrid[x, z + 1].GetComponent<MazeCellObject>().placeDoor("bottom");
+                }
             }
 
             //Bottom
             if (z - 1 > 0 && grid[x, z - 1] == lookfor)
             {
-                prefabGrid[x, z].GetComponent<MazeCellObject>().DisableBottom();
-                prefabGrid[x, z - 1].GetComponent<MazeCellObject>().DisableTop();
-                prefabGrid[x, z].GetComponent<MazeCellObject>().placeDoor("bottom");
+                if ((x - 1 > 0 && grid[x - 1, z - 1] != CellType.Hallway) ||
+                     (x + 1 < mazeSizeX && grid[x + 1, z - 1] != CellType.Hallway)) 
+                {
+                    prefabGrid[x, z].GetComponent<MazeCellObject>().DisableBottom();
+                    prefabGrid[x, z - 1].GetComponent<MazeCellObject>().DisableTop();
+                    prefabGrid[x, z - 1].GetComponent<MazeCellObject>().placeDoor("top");
+                }     
             }
         }
     }
@@ -561,7 +634,7 @@ public class Room
         return bounds;
     }
 
-    public static bool isInsersecting(Room room1, Room room2, int offset) 
+    public static bool isInsersecting(Room room1, Room room2, int scale) 
     {
         foreach (var pos1 in room1.bounds.allPositionsWithin)
         {
@@ -584,8 +657,10 @@ public class Room
         bounds = new BoundsInt(Vector3Int.FloorToInt(loc), Vector3Int.FloorToInt(size));
         id = i;
         this.scale = scale;
+        location = loc;
 
         //Modify location point to place the door
+        /*
         Random random = new Random();
         int num = random.Next(1,10);
 
@@ -597,6 +672,7 @@ public class Room
         {
             location = loc + new Vector3(0f, 0f, 1f * scale); ;
         }
+        */
     }
 }
 
