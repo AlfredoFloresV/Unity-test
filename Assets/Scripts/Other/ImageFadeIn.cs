@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections; // Add this using directive for IEnumerator
 
 public class ImageFadeIn : MonoBehaviour
 {
