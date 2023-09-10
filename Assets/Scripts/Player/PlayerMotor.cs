@@ -159,6 +159,11 @@ public class PlayerMotor : MonoBehaviour
         flashLight.GetComponent<Flashlight>().chargeBattery();
     }
 
+    public void spendLight() 
+    {
+        flashLight.GetComponent<Flashlight>().spendLight(0.3f);
+    }
+
     public void handleKeys(string key) 
     {
         audioSource.PlayOneShot(grabbingKeys);

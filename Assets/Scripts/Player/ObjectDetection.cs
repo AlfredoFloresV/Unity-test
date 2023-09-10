@@ -141,6 +141,7 @@ public class ObjectDetection : MonoBehaviour
                 enemy.transform.GetComponent<Animator>().Play("Larry_Stun3");
                 enemy.transform.GetComponent<LarryAI>().stun = true;
                 StartCoroutine(enemy.transform.GetComponent<LarryAI>().recover());
+                GetComponent<PlayerMotor>().spendLight();
             }
 
         }

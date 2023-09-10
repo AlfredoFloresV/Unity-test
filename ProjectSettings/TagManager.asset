@@ -18,6 +18,9 @@ TagManager:
   - key4
   - biscuit
   - battery
+  - specialroom
+  - specialdoor
+  - barrel
   layers:
   - Default
   - TransparentFX
@@ -33,7 +36,7 @@ TagManager:
   - Wall
   - Door
   - Larry
-  - 
+  - Items
   - 
   - 
   - 

@@ -60,6 +60,15 @@ public class Flashlight : MonoBehaviour
         }
     }
 
+    public void spendLight(float value) 
+    {
+        intensity = intensity - value;
+        if (intensity < 0) 
+        {
+            intensity = 1f;
+        }
+    }
+
     IEnumerator WaitForClickBtn()
     {
         yield return new WaitForSeconds(1);

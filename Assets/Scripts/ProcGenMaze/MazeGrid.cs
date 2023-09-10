@@ -36,6 +36,9 @@ public class MazeGrid : MonoBehaviour
     private GameObject enemy;
 
     [SerializeField]
+    private GameObject enemy2;
+
+    [SerializeField]
     private GameObject destPrefab;
 
     [SerializeField]
@@ -52,6 +55,12 @@ public class MazeGrid : MonoBehaviour
 
     [SerializeField]
     private GameObject biscuit;
+
+    [SerializeField]
+    private GameObject specialRoom;
+
+    [SerializeField]
+    private GameObject barrel;
 
     private int roomCount;
     private List<Room> rooms;
@@ -102,6 +111,15 @@ public class MazeGrid : MonoBehaviour
                     enemy.transform.position = closestHit.position;
                 else Debug.Log("something weird happened");
                 enemy.GetComponent<LarryAI>().setRandomDestinations(destinations);
+
+                if (enemy2 != null) 
+                {
+                    if (NavMesh.SamplePosition(enemy2.transform.position, out closestHit, 500f, NavMesh.AllAreas))
+                        enemy2.transform.position = closestHit.position;
+                    else Debug.Log("something weird happened");
+                    enemy2.GetComponent<LarryAI>().setRandomDestinations(destinations);
+                }
+
                 ready = true;
             }
             catch (KeyNotFoundException e) 
@@ -115,6 +133,20 @@ public class MazeGrid : MonoBehaviour
                 ready = false;
             }
         }
+    }
+
+    private bool hasDoor(Vector3 loc) 
+    {
+        for (int i = 0; i < doorLocations.Count; i++) 
+        {
+            Vector3 l = doorLocations[i];
+            if (Vector3.Distance(l, loc) < 6.0f) 
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void placeItems()
@@ -156,12 +188,12 @@ public class MazeGrid : MonoBehaviour
         {
             int x = random.Next(0, mazeSizeX);
             int z = random.Next(0, mazeSizeY);
+            Vector3 l = new Vector3((x + 0.25f) * Scale, 0f + 0.5f, (z + 0.25f) * Scale);
 
-            if (grid[x, z] == CellType.Room)
+            if (grid[x, z] == CellType.Room && !hasDoor(l))
             {
                 bool failDist = false;
-                Vector3 l = new Vector3((x + 0.25f) * Scale, 0f, (z + 0.25f) * Scale);
-
+                
                 for (int i = 0; i < keyItems.Count; i++)
                 {
                     if (Vector3.Distance(l, keyItems[i].transform.position) < 5f)
@@ -171,7 +203,9 @@ public class MazeGrid : MonoBehaviour
                 }
                 if (failDist == false)
                 {
-                    GameObject item = Instantiate(keys[count], l, Quaternion.identity);
+                    GameObject b = Instantiate(barrel, new Vector3(l.x, 0.5f, l.z), Quaternion.identity);
+                    b.GetComponent<Transform>().eulerAngles = new Vector3(180f,0f,0f);
+                    GameObject item = Instantiate(keys[count], new Vector3(l.x, 0.5f, l.z), Quaternion.identity);
                     keyItems.Add(item);
                     count++;
                 }
@@ -183,12 +217,20 @@ public class MazeGrid : MonoBehaviour
         {
             for (int j = 0; j < grid.GetLength(1); j++)
             {
-                if (grid[i, j] == CellType.Room)
+                Vector3 loc = new Vector3(i * Scale + 0.5f * Scale, 0.13f + 0.5f, j * Scale + 0.5f);
+
+                if (grid[i, j] == CellType.Room && !hasDoor(loc))
                 {
-                    Vector3 loc = new Vector3( i * Scale + 0.5f * Scale, 0.13f, j * Scale + 0.5f);
                     if (random.Next(0, 12) < 1)
                     {
+                        GameObject b = Instantiate(barrel, new Vector3(loc.x, 0.5f, loc.z), Quaternion.identity);
+                        b.GetComponent<Transform>().eulerAngles = new Vector3(180f, 0f, 0f);
                         GameObject item = Instantiate(battery, loc, Quaternion.identity);
+                    }
+                    else if (random.Next(0, 10) < 2) 
+                    {
+                        GameObject b = Instantiate(barrel, new Vector3(loc.x, 0.5f, loc.z), Quaternion.identity);
+                        b.GetComponent<Transform>().eulerAngles = new Vector3(180f, 0f, 0f);
                     }
                 }
             }
@@ -199,12 +241,20 @@ public class MazeGrid : MonoBehaviour
         {
             for (int j = 0; j < grid.GetLength(1); j++)
             {
-                if (grid[i, j] == CellType.Room)
+                Vector3 loc = new Vector3(i * Scale + 1.5f * Scale, 0.13f + 0.5f, j * Scale + 1.5f);
+
+                if (grid[i, j] == CellType.Room && !hasDoor(loc))
                 {
-                    Vector3 loc = new Vector3( i * Scale + 1.5f * Scale, 0.13f, j * Scale + 1.5f);
                     if (random.Next(0, 15) < 1)
                     {
+                        GameObject b = Instantiate(barrel, new Vector3(loc.x, 0.5f, loc.z), Quaternion.identity);
+                        b.GetComponent<Transform>().eulerAngles = new Vector3(180f, 0f, 0f);
                         GameObject item = Instantiate(biscuit, loc, Quaternion.identity);
+                    }
+                    else if (random.Next(0, 10) < 2)
+                    {
+                        GameObject b = Instantiate(barrel, new Vector3(loc.x, 0.5f, loc.z), Quaternion.identity);
+                        b.GetComponent<Transform>().eulerAngles = new Vector3(180f, 0f, 0f);
                     }
                 }
             }
@@ -246,6 +296,41 @@ public class MazeGrid : MonoBehaviour
 
         return room;
     }
+
+
+    private Room createSpecialRoom(Vector3 location, Vector3 size, int id, int scale)
+    {
+        List<GameObject> roomCubes = new List<GameObject>();
+        List<GameObject> roomCubes2 = new List<GameObject>();
+
+        foreach (Transform child in specialRoom.transform)
+        {
+            if (child.tag == "specialroom")
+            {
+                roomCubes.Add(child.gameObject);
+            }
+        }
+
+        int count = 0;
+        for (int x = 0; x < (int)size.x; x++)
+        {
+            for (int z = 0; z < (int)size.z; z++)
+            {
+                Vector3 realLoc = location * scale + new Vector3(x * scale + (scale / 2), 0.5f * scale, z * scale + (scale / 2));
+                GameObject specialRoomPrefab = roomCubes[count];
+                GameObject roomObj = Instantiate(specialRoomPrefab, realLoc, Quaternion.identity);
+                roomObj.GetComponent<Transform>().localScale = new Vector3(1f * Scale, 1f * Scale, 1f * Scale);
+                roomCubes2.Add(roomObj);
+                Debug.Log("adding cube " + x + " " + z);
+                count++;
+            }
+        }
+
+        Room room = new Room(location, size, roomCubes2, id, scale);
+
+        return room;
+    }
+
 
     private GameObject DrawHallway(Vector3 location, Vector3 size) 
     {
@@ -290,7 +375,7 @@ public class MazeGrid : MonoBehaviour
         //Third room
         loc = new Vector3((mazeSizeX - 4), 0f, (mazeSizeY - 8));
         size = new Vector3(2f, 1.0f, 4f);
-        room = createRoom(loc, size, -3, Scale);
+        room = createSpecialRoom(loc, size, -3, Scale);
         rooms.Add(room);
         updateGrids(loc, size, room);
 
@@ -302,8 +387,13 @@ public class MazeGrid : MonoBehaviour
         updateGrids(loc, size, room);
 
 
-        //Determinar inicio y fin
-        player.GetComponent<Transform>().position = new Vector3(6f, 0.7f, 6f);
+        player.GetComponent<Transform>().position = new Vector3(6f, 0.7f, 10f);
+        player.GetComponent<Transform>().eulerAngles = new Vector3(0f,180f,0f);
+        enemy.GetComponent<Transform>().position = new Vector3(24f * Scale, 0f, 3f * Scale);
+        if (enemy2 != null) 
+        {
+            enemy2.GetComponent<Transform>().position = new Vector3(3f * Scale, 0f, 27f * Scale);
+        }
     }
 
     private void createGrid() 
