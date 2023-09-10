@@ -5,6 +5,9 @@ using UnityEngine;
 public class ObjectDetection : MonoBehaviour
 {
     [SerializeField]
+    float detectionDistance = 5f;
+
+    [SerializeField]
     private Material highlightMaterial;
     [SerializeField]
     private Material originalMaterial;
@@ -16,7 +19,17 @@ public class ObjectDetection : MonoBehaviour
 
     GameObject lastHighlightedObject = null;
 
+    private Shader standard;
+    private Shader highlight;
+
     private string interactionMessage = ""; // Message to display when an object is selected
+
+    private void Start()
+    {
+        standard = Shader.Find("Standard"); //Not working
+        highlight = Shader.Find("Unlit/Texture");
+    }
+
     void HighlightObject(GameObject gameObject)
     {
         if (lastHighlightedObject != gameObject)
@@ -26,6 +39,7 @@ public class ObjectDetection : MonoBehaviour
                 ClearHighlighted();
                 originalMaterial = gameObject.GetComponent<MeshRenderer>().sharedMaterial;
                 gameObject.GetComponent<MeshRenderer>().sharedMaterial = highlightMaterial;
+                gameObject.GetComponent<MeshRenderer>().sharedMaterial.shader = highlight;
             }
 
             lastHighlightedObject = gameObject;
@@ -44,6 +58,7 @@ public class ObjectDetection : MonoBehaviour
                 if (m == highlightMaterial)
                 {
                     lastHighlightedObject.GetComponent<MeshRenderer>().sharedMaterial = originalMaterial;
+                    lastHighlightedObject.GetComponent<MeshRenderer>().sharedMaterial.shader = standard;
                 }
                 
             }
@@ -55,7 +70,6 @@ public class ObjectDetection : MonoBehaviour
 
     void HighlightObjectInCenterOfCam()
     {
-        float rayDistance = 5f;
         // Ray from the center of the viewport.
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit rayHit;
@@ -64,7 +78,7 @@ public class ObjectDetection : MonoBehaviour
         Debug.DrawRay(cam.transform.position, forward, Color.green);
         
         // Check if we hit something.
-        if (Physics.Raycast(ray, out rayHit, rayDistance))
+        if (Physics.Raycast(ray, out rayHit, detectionDistance))
         {
             // Get the object that was hit.
             GameObject hitObject = rayHit.collider.gameObject;
@@ -84,6 +98,40 @@ public class ObjectDetection : MonoBehaviour
 
                 //HandleObjectInteraction(rayHit.collider.transform);
             }
+            if (rayHit.collider.tag == "biscuit") 
+            {
+                interactionMessage = "Press E to interact";
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    interactionMessage = "";
+                    rayHit.collider.gameObject.SetActive(false);
+                    GetComponent<PlayerMotor>().restoreHealth();
+                }
+            }
+            if (rayHit.collider.tag == "battery") 
+            {
+                interactionMessage = "Press E to interact";
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    interactionMessage = "";
+                    rayHit.collider.gameObject.SetActive(false);
+                    GetComponent<PlayerMotor>().restoreLight();
+                }
+            }
+            if (rayHit.collider.tag == "key1" || rayHit.collider.tag == "key2" || rayHit.collider.tag == "key3" || rayHit.collider.tag == "key4") 
+            {
+                interactionMessage = "Press E to interact";
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    interactionMessage = "";
+                    rayHit.collider.gameObject.SetActive(false);
+                    GetComponent<PlayerMotor>().handleKeys(rayHit.collider.tag);
+                }
+            }
+
             if (rayHit.collider.tag == "face")
             {
                 Debug.Log("stunned");

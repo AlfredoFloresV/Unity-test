@@ -7,7 +7,6 @@ public class Flashlight : MonoBehaviour
     [SerializeField]
     private Light spotlight;
 
-
     [SerializeField]
     private Transform flEnabled;
     [SerializeField]
@@ -26,6 +25,8 @@ public class Flashlight : MonoBehaviour
     {
         l = spotlight.GetComponent<Light>();
         audioSource = GetComponent<AudioSource>();
+
+        InvokeRepeating("updateFlashLight", 10.0f, 1.0f);
     }
 
     // Update is called once per frame
@@ -37,19 +38,27 @@ public class Flashlight : MonoBehaviour
             StartCoroutine(WaitForClickBtn());
         }
 
-        //if (l.enabled) 
-        //{
-        //    StartCoroutine(updateFlashLight());
-        //}
+        
     }
 
-    IEnumerator updateFlashLight() 
+    private void updateFlashLight() 
     {
-        yield return new WaitForSeconds(10f);
-        intensity = intensity - 0.1f;
-        l.intensity = intensity;
+        if (l.enabled && intensity > 0) 
+        {
+            intensity = intensity - 0.01f;
+            l.intensity = intensity;
+        }
     }
 
+
+    public void chargeBattery() 
+    {
+        intensity = intensity + 0.5f;
+        if (intensity > 1) 
+        {
+            intensity = 1f;
+        }
+    }
 
     IEnumerator WaitForClickBtn()
     {

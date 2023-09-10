@@ -17,20 +17,36 @@ public class PlayerMotor : MonoBehaviour
     private Vector3 cameraRotation = Vector3.zero;
 
     [SerializeField]
+    private GameObject flashLight;
+
+    [SerializeField]
     private AudioClip hurt;
+
+    [SerializeField]
+    private AudioClip eatingBiscuit;
+
+    [SerializeField]
+    private AudioClip rechargeBattery;
+
+    [SerializeField]
+    private AudioClip grabbingKeys;
 
     private Rigidbody rb;
     private AudioSource audioSource;
 
+    private float maxCamera = 40f;
+
     private bool isHurt;
     public int Health = 5;
     public int Damage = 0;
+    public Dictionary<string, bool> keysFound;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
         isHurt = false;
+        keysFound = new Dictionary<string, bool>();
     }
 
     public void Move(Vector3 v)
@@ -66,6 +82,7 @@ public class PlayerMotor : MonoBehaviour
             }
             else
             {
+                rb.angularVelocity = Vector3.zero;
                 cam.GetComponent<Animator>().Play("Idle");
             }
         }
@@ -77,7 +94,15 @@ public class PlayerMotor : MonoBehaviour
 
         if (cam != null) 
         {
-            cam.transform.Rotate(-cameraRotation);
+            //Debug.Log(-cameraRotation);
+            //cam.transform.Rotate(-cameraRotation);
+            
+            Vector3 angles = cam.transform.eulerAngles - cameraRotation;
+
+            if (angles.x < maxCamera || angles.x > (360 - maxCamera)) 
+            {
+                cam.transform.Rotate(-cameraRotation);
+            }
         }
     }
 
@@ -101,10 +126,10 @@ public class PlayerMotor : MonoBehaviour
 
     private void handleLife() 
     {
-        Damage += 1;
+        Damage += 2;
         if (Health - Damage >= 0)
         {
-            cameraEffects.GetComponent<UIMaterialSwitcher>().damageScreen = Damage;
+            cameraEffects.GetComponent<UIMaterialSwitcher>().damageScreen = (Damage - 1) > 0 ? Damage - 1 : 0 ;
         }
         else 
         {
@@ -117,5 +142,26 @@ public class PlayerMotor : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         isHurt = false;
+    }
+
+
+    public void restoreHealth() 
+    {
+        audioSource.PlayOneShot(eatingBiscuit);
+        Health = Health + 2 >= 5 ? 5 : Health + 2;
+        Damage = Damage - 2 <= 0 ? 0 : Damage - 2;
+        cameraEffects.GetComponent<UIMaterialSwitcher>().damageScreen = Damage;
+    }
+
+    public void restoreLight() 
+    {
+        audioSource.PlayOneShot(rechargeBattery);
+        flashLight.GetComponent<Flashlight>().chargeBattery();
+    }
+
+    public void handleKeys(string key) 
+    {
+        audioSource.PlayOneShot(grabbingKeys);
+        keysFound[key] = true;
     }
 }

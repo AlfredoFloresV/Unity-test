@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,8 +41,17 @@ public class MazeGrid : MonoBehaviour
     [SerializeField]
     private int Scale = 1;
 
+    //[SerializeField]
+    //private Material greenMaterial;
+
     [SerializeField]
-    private Material greenMaterial;
+    private List<GameObject> keys;
+
+    [SerializeField]
+    private GameObject battery;
+
+    [SerializeField]
+    private GameObject biscuit;
 
     private int roomCount;
     private List<Room> rooms;
@@ -50,7 +60,7 @@ public class MazeGrid : MonoBehaviour
     private List<Transform> destinations;
     private CellType[,] grid;
     private GameObject[,] prefabGrid;
-    
+    private List<GameObject> keyItems;
 
     private void Start()
     {
@@ -99,11 +109,17 @@ public class MazeGrid : MonoBehaviour
                 Debug.Log(e.StackTrace);
                 ready = false;
             }
+            catch (Exception e)
+            {
+                Debug.Log(e.StackTrace);
+                ready = false;
+            }
         }
     }
 
-    private void placeItems() 
+    private void placeItems()
     {
+        //Place clowns
         //Rotar payasos
         int count = 0;
         Random random = new Random();
@@ -117,14 +133,14 @@ public class MazeGrid : MonoBehaviour
                 bool failDist = false;
                 Vector3 l = new Vector3((x + 0.2f) * Scale, -0.25f, (z + 0.2f) * Scale);
 
-                for (int i = 0; i < destinations.Count; i++) 
+                for (int i = 0; i < destinations.Count; i++)
                 {
-                    if (Vector3.Distance(l, destinations[i].transform.position) < 20f) 
+                    if (Vector3.Distance(l, destinations[i].transform.position) < 20f)
                     {
                         failDist = true;
                     }
                 }
-                if (failDist == false) 
+                if (failDist == false)
                 {
                     GameObject dest = Instantiate(destPrefab, l, Quaternion.identity);
                     destinations.Add(dest.transform);
@@ -132,9 +148,67 @@ public class MazeGrid : MonoBehaviour
                 }
             }
         }
+        
+        //Place keys
+        count = 0;
+        List<GameObject> keyItems = new List<GameObject>();
+        while (count < keys.Count)
+        {
+            int x = random.Next(0, mazeSizeX);
+            int z = random.Next(0, mazeSizeY);
 
+            if (grid[x, z] == CellType.Room)
+            {
+                bool failDist = false;
+                Vector3 l = new Vector3((x + 0.25f) * Scale, 0f, (z + 0.25f) * Scale);
 
+                for (int i = 0; i < keyItems.Count; i++)
+                {
+                    if (Vector3.Distance(l, keyItems[i].transform.position) < 5f)
+                    {
+                        failDist = true;
+                    }
+                }
+                if (failDist == false)
+                {
+                    GameObject item = Instantiate(keys[count], l, Quaternion.identity);
+                    keyItems.Add(item);
+                    count++;
+                }
+            }
+        }
 
+        //Place batteries (place by room with probability 20%)
+        for (int i = 0; i < grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < grid.GetLength(1); j++)
+            {
+                if (grid[i, j] == CellType.Room)
+                {
+                    Vector3 loc = new Vector3( i * Scale + 0.5f * Scale, 0.13f, j * Scale + 0.5f);
+                    if (random.Next(0, 12) < 1)
+                    {
+                        GameObject item = Instantiate(battery, loc, Quaternion.identity);
+                    }
+                }
+            }
+        }
+
+        //Place biscuits (place by room with probability 20%)
+        for (int i = 0; i < grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < grid.GetLength(1); j++)
+            {
+                if (grid[i, j] == CellType.Room)
+                {
+                    Vector3 loc = new Vector3( i * Scale + 1.5f * Scale, 0.13f, j * Scale + 1.5f);
+                    if (random.Next(0, 15) < 1)
+                    {
+                        GameObject item = Instantiate(biscuit, loc, Quaternion.identity);
+                    }
+                }
+            }
+        }
     }
 
 
@@ -542,7 +616,7 @@ public class MazeGrid : MonoBehaviour
         }
     }
     */
-}
+    }
 
 
     // Used for triangulation
