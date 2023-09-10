@@ -2034,7 +2034,7 @@ MonoBehaviour:
   mazeSizeY: 30
   roomSize: 4
   roomPrefab: {fileID: 4320020285090016537, guid: a38954a369bbe6d44bd66acbbf098899, type: 3}
-  hallwayPrefab: {fileID: 4320020285090016537, guid: c77e6c746d83d874ea0eac772b7dfa91, type: 3}
+  hallwayPrefab: {fileID: 4320020285090016537, guid: c2415f543d5c0b7d0b6f2d21e85fd2a8, type: 3}
   player: {fileID: 1269125981}
   enemy: {fileID: 1127941014}
   destPrefab: {fileID: 2184199489180434785, guid: c92ad9175458da34cbe8ec4575349a1b, type: 3}

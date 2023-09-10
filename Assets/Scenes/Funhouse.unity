@@ -534,7 +534,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7783850335911841624, guid: e5a5fd945677a3f43bc08c44bf38e61f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.078
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 7783850335911841624, guid: e5a5fd945677a3f43bc08c44bf38e61f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1907,6 +1907,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 1614230488}
+  hurt: {fileID: 0}
 --- !u!54 &1363281079
 Rigidbody:
   m_ObjectHideFlags: 0
