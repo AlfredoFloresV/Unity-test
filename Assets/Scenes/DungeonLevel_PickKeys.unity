@@ -1623,14 +1623,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03ebb8d22cfa465b5810ee43ec7672eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  object1Prefab: {fileID: 6883637303614550925, guid: 226d40475247a869ea65eb4e4e36b8b6, type: 3}
-  object2Prefab: {fileID: 2965162527560158066, guid: c54999babeab2c4a18f811af3298a0e7, type: 3}
-  object3Prefab: {fileID: 1268453604268281030, guid: 29dfc22acce3b8237957313672f3ac2f, type: 3}
-  object4Prefab: {fileID: 4465255742636003230, guid: eea53fc0efbed5e2783ffe34d1df3f31, type: 3}
+  key1Prefab: {fileID: 6883637303614550925, guid: 226d40475247a869ea65eb4e4e36b8b6, type: 3}
+  key2Prefab: {fileID: 2965162527560158066, guid: c54999babeab2c4a18f811af3298a0e7, type: 3}
+  key3Prefab: {fileID: 1268453604268281030, guid: 29dfc22acce3b8237957313672f3ac2f, type: 3}
+  key4Prefab: {fileID: 4465255742636003230, guid: eea53fc0efbed5e2783ffe34d1df3f31, type: 3}
+  ticketPrefab: {fileID: 0}
+  missingpersonPrefab: {fileID: 0}
   key1: 0
   key2: 0
   key3: 0
   key4: 0
+  ticket: 0
+  missingperson: 0
 --- !u!1 &1455802615
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,15 +2,19 @@ using UnityEngine;
 
 public class ObjectPickupAndRotate : MonoBehaviour
 {
-    public GameObject object1Prefab;
-    public GameObject object2Prefab;
-    public GameObject object3Prefab;
-    public GameObject object4Prefab;
+    public GameObject key1Prefab;
+    public GameObject key2Prefab;
+    public GameObject key3Prefab;
+    public GameObject key4Prefab;
+    public GameObject ticketPrefab;
+    public GameObject missingpersonPrefab;
 
     public bool key1 = false;
     public bool key2 = false;
     public bool key3 = false;
     public bool key4 = false;
+    public bool ticket = false;
+    public bool missingperson = false;
 
     private bool isPaused = false;
     private float originalTimeScale;
@@ -34,7 +38,7 @@ public class ObjectPickupAndRotate : MonoBehaviour
         if (key1 && !isPaused)
         {
             PauseScene();
-            SpawnObject(object1Prefab, new Vector3(1f, 1f, 1f));
+            SpawnObject(key1Prefab, new Vector3(1f, 1f, 1f));
             objectIntMessage = "Found ";
             objectNameMessage = "YELLOW KEY";
             interactionMessage = "Press Q to return";
@@ -42,7 +46,7 @@ public class ObjectPickupAndRotate : MonoBehaviour
         if (key2 && !isPaused)
         {
             PauseScene();
-            SpawnObject(object2Prefab, new Vector3(1f, 1f, 1f));
+            SpawnObject(key2Prefab, new Vector3(1f, 1f, 1f));
             objectIntMessage = "Found ";
             objectNameMessage = "PINK KEY";
             interactionMessage = "Press Q to return";
@@ -50,7 +54,7 @@ public class ObjectPickupAndRotate : MonoBehaviour
         if (key3 && !isPaused)
         {
             PauseScene();
-            SpawnObject(object3Prefab, new Vector3(1f, 1f, 1f));
+            SpawnObject(key3Prefab, new Vector3(1f, 1f, 1f));
             objectIntMessage = "Found ";
             objectNameMessage = "GREEN KEY";
             interactionMessage = "Press Q to return";
@@ -58,7 +62,23 @@ public class ObjectPickupAndRotate : MonoBehaviour
         if (key4 && !isPaused)
         {
             PauseScene();
-            SpawnObject(object4Prefab, new Vector3(1f, 1f, 1f));
+            SpawnObject(key4Prefab, new Vector3(1f, 1f, 1f));
+            objectIntMessage = "Found ";
+            objectNameMessage = "ORANGE KEY";
+            interactionMessage = "Press Q to return";
+        }
+        if (ticket && !isPaused)
+        {
+            PauseScene();
+            SpawnObject(ticketPrefab, new Vector3(1f, 1f, 1f));
+            objectIntMessage = "Found ";
+            objectNameMessage = "ORANGE KEY";
+            interactionMessage = "Press Q to return";
+        }
+        if (missingperson && !isPaused)
+        {
+            PauseScene();
+            SpawnObject(missingpersonPrefab, new Vector3(1f, 1f, 1f));
             objectIntMessage = "Found ";
             objectNameMessage = "ORANGE KEY";
             interactionMessage = "Press Q to return";
