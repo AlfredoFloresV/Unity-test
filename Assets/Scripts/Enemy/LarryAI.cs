@@ -160,18 +160,42 @@ public class LarryAI : MonoBehaviour
         {
             animator.Play(attacks[Random.Range(0, attacks.Count)]);
             audioSource.PlayOneShot(Random.Range(0, 2) == 0 ? attack1 : attack2);
-            //cam.GetComponent<Animator>().Play("ShakeCamera");
+            
             chasing = false;
             walking = false;
             idle = false;
             GetComponent<CapsuleCollider>().enabled = false;
-            //player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            
             StopCoroutine(chase());
             StopCoroutine(nextDestination());
             StartCoroutine(attack());
-            player.GetComponent<AudioSource>().PlayOneShot(hurt);
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("player"))
+        {
+            chasing = true;
+            walking = false;
+            idle = false;
+            StopCoroutine(nextDestination());
+            StopCoroutine(chase());
+            StartCoroutine(chase());
+        }
+
+        if (other.gameObject.CompareTag("destination"))
+        {
+            if (chasing == false)
+            {
+                walking = false;
+                idle = true;
+                animator.Play("Larry_Celebration1");
+            }
+        }
+    }
+
+
 
     public IEnumerator nextDestination()
     {
@@ -203,8 +227,6 @@ public class LarryAI : MonoBehaviour
         yield return new WaitForSeconds(15f);
         GetComponent<CapsuleCollider>().enabled = true;
         audioSource.PlayOneShot(Random.Range(0, 2) == 0 ? laffying1 : laffying2);
-        //player.GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezePosition;
-        //player.gameObject.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezePositionY;
     }
 
     public IEnumerator recover()

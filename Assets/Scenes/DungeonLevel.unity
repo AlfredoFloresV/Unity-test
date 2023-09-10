@@ -900,14 +900,14 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6759310969682578756, guid: a000e26b9a475a74fa5ba48428e66284, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9024909086455374145, guid: a000e26b9a475a74fa5ba48428e66284, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 1269125981}
-    - target: {fileID: 9024909086455374145, guid: a000e26b9a475a74fa5ba48428e66284, type: 3}
-      propertyPath: mask.m_Bits
-      value: 256
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1366,9 +1366,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 1837505148}
-  cameraEffects: {fileID: 0}
+  cameraEffects: {fileID: 823261979}
   hurt: {fileID: 8300000, guid: 982c774feab80fa44b89dfe806dd231f, type: 3}
-  Health: 100
+  Health: 5
   Damage: 0
 --- !u!54 &1269125986
 Rigidbody:

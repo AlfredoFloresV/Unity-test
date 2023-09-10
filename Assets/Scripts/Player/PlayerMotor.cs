@@ -82,11 +82,11 @@ public class PlayerMotor : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.CompareTag("enemy"))
+        if (collision.gameObject.CompareTag("enemy"))
         {
-            if (isHurt == false) 
+            if (isHurt == false)
             {
                 Debug.Log("shake");
                 isHurt = true;
@@ -115,7 +115,7 @@ public class PlayerMotor : MonoBehaviour
 
     IEnumerator recover() 
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         isHurt = false;
     }
 }

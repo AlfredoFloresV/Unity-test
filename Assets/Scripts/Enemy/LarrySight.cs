@@ -18,12 +18,13 @@ public class LarrySight : MonoBehaviour
             script.walking = false;
             script.idle = false;
             StopCoroutine(script.nextDestination());
-            //StopCoroutine(script.chase());
+            StopCoroutine(script.chase());
             StartCoroutine(script.chase());
         }
 
         if (other.gameObject.CompareTag("destination"))
         {
+            script = enemy.GetComponent<LarryAI>();
             if (script.chasing == false)
             {
                 script.walking = false;
