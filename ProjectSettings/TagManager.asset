@@ -10,6 +10,7 @@ TagManager:
   - floor
   - destination
   - enemy
+  - face
   layers:
   - Default
   - TransparentFX

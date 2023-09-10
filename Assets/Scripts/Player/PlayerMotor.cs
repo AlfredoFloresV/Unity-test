@@ -12,12 +12,19 @@ public class PlayerMotor : MonoBehaviour
     private Vector3 rotation = Vector3.zero;
     private Vector3 cameraRotation = Vector3.zero;
 
+    [SerializeField]
+    private AudioClip hurt;
 
     private Rigidbody rb;
+    private AudioSource audioSource;
+
+    private bool isHurt;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
+        isHurt = false;
     }
 
     public void Move(Vector3 v)
@@ -44,14 +51,17 @@ public class PlayerMotor : MonoBehaviour
 
     private void PerformMovement()
     {
-        if (velocity != Vector3.zero)
+        if (!isHurt) 
         {
-            rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
-            cam.GetComponent<Animator>().Play("HeadBobbing");
-        }
-        else 
-        {
-            cam.GetComponent<Animator>().Play("Idle");
+            if (velocity != Vector3.zero)
+            {
+                rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+                cam.GetComponent<Animator>().Play("HeadBobbing");
+            }
+            else
+            {
+                cam.GetComponent<Animator>().Play("Idle");
+            }
         }
     }
 
@@ -65,4 +75,21 @@ public class PlayerMotor : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("enemy"))
+        {
+            Debug.Log("shake");
+            isHurt = true;
+            audioSource.PlayOneShot(hurt);
+            cam.GetComponent<Animator>().Play("ShakeCamera");
+            StartCoroutine(recover());
+        }
+    }
+
+    IEnumerator recover() 
+    {
+        yield return new WaitForSeconds(2f);
+        isHurt = false;
+    }
 }

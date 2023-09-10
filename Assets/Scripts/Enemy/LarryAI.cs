@@ -21,6 +21,18 @@ public class LarryAI : MonoBehaviour
     [SerializeField]
     private AudioClip laffying1;
 
+    [SerializeField]
+    private AudioClip laffying2;
+
+    [SerializeField]
+    private AudioClip attack1;
+
+    [SerializeField]
+    private AudioClip attack2;
+
+    [SerializeField]
+    private AudioClip hurt;
+
     private NavMeshAgent ai;
     private Animator animator;
     private int randDecision;
@@ -44,6 +56,7 @@ public class LarryAI : MonoBehaviour
         animator = GetComponent<Animator>();
         destinations = new List<Transform>();
         ai = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
         startActions = false;
         attacks = new List<string>(){ "Larry_Attack1", "Larry_Attack2", "Larry_Attack3" };
     }
@@ -125,6 +138,9 @@ public class LarryAI : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("player")) 
         {
+            animator.Play(attacks[Random.Range(0, attacks.Count)]);
+            audioSource.PlayOneShot(Random.Range(0, 2) == 0 ? attack1 : attack2);
+            //cam.GetComponent<Animator>().Play("ShakeCamera");
             chasing = false;
             walking = false;
             idle = false;
@@ -133,7 +149,7 @@ public class LarryAI : MonoBehaviour
             StopCoroutine(chase());
             StopCoroutine(nextDestination());
             StartCoroutine(attack());
-            
+            player.GetComponent<AudioSource>().PlayOneShot(hurt);
         }
     }
 
@@ -157,7 +173,7 @@ public class LarryAI : MonoBehaviour
     IEnumerator larryIntro() 
     {
         Debug.Log("Larry intro");
-        animator.Play("Larry_Intro");
+        animator.Play("Larry_JumpScare1");
         yield return new WaitForSeconds(5f);
         startActions = true;
     }
@@ -165,9 +181,9 @@ public class LarryAI : MonoBehaviour
     IEnumerator attack() 
     {
         idle = true;
-        animator.Play(attacks[Random.Range(0, attacks.Count)]);
         yield return new WaitForSeconds(10f);
         GetComponent<BoxCollider>().enabled = true;
+        audioSource.PlayOneShot(Random.Range(0, 2) == 0 ? laffying1 : laffying2);
         //player.GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezePosition;
         //player.gameObject.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezePositionY;
     }

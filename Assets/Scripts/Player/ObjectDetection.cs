@@ -7,7 +7,7 @@ public class ObjectDetection : MonoBehaviour
     private LayerMask mask;
 
     [SerializeField]
-    private float detectionDistance = 1.5f;
+    private float detectionDistance = 0.5f;
 
     [SerializeField]
     private Material btnSelected;
@@ -39,6 +39,14 @@ public class ObjectDetection : MonoBehaviour
                     hit.collider.transform.GetComponent<OpenDoor>().open();
                     hit.collider.transform.GetComponent<Renderer>().material = btnSelected;
                 }
+            }
+
+            if (hit.collider.tag == "enemy") 
+            {
+                Debug.Log("larry stun");
+                AudioSource audioSource = hit.collider.transform.GetComponent<AudioSource>();
+                audioSource.Play();
+                hit.collider.transform.GetComponent<Animator>().Play("Larry_Stun3");
             }
         }
     }
