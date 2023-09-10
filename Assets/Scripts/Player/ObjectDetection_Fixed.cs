@@ -16,10 +16,11 @@ public class ObjectDetection_Fixed : MonoBehaviour
     private Material btnFocus;
 
     [SerializeField]
-    private Material btnSelected; 
+    private Material btnSelected; // The selected material
 
     private Dictionary<Transform, ObjectState> objectStates = new Dictionary<Transform, ObjectState>();
 
+    // Enum to represent the different object states
     private enum ObjectState
     {
         Normal,
@@ -27,11 +28,14 @@ public class ObjectDetection_Fixed : MonoBehaviour
         Pressed
     }
 
+    private string interactionMessage = ""; // Message to display when an object is selected
+
     void Start()
     {
         mask = LayerMask.GetMask("Object Detection");
     }
 
+    // Update is called once per frame
     void Update()
     {
         Ray ray = new Ray(transform.position, transform.TransformDirection(Vector3.forward));
@@ -40,49 +44,13 @@ public class ObjectDetection_Fixed : MonoBehaviour
         {
             if (hit.collider.tag == "door")
             {
-                Transform hitObject = hit.collider.transform;
-
-                if (!objectStates.ContainsKey(hitObject))
-                {
-                    objectStates.Add(hitObject, ObjectState.Normal);
-                }
-
-                ObjectState currentState = objectStates[hitObject];
-
-                switch (currentState)
-                {
-                    case ObjectState.Normal:
-                        hitObject.GetComponent<Renderer>().material = btnFocus;
-                        if (Input.GetKeyDown(KeyCode.E))
-                        {
-                            hitObject.GetComponent<OpenDoor>().open();
-                            objectStates[hitObject] = ObjectState.Pressed;
-                            hitObject.GetComponent<Renderer>().material = btnSelected;
-                        }
-                        else if (!Input.GetKey(KeyCode.E))
-                        {
-                            objectStates[hitObject] = ObjectState.Selected;
-                        }
-                        break;
-
-                    case ObjectState.Selected:
-                        hitObject.GetComponent<Renderer>().material = btnFocus;
-                        if (Input.GetKeyDown(KeyCode.E))
-                        {
-                            hitObject.GetComponent<OpenDoor>().open();
-                            objectStates[hitObject] = ObjectState.Pressed;
-                            hitObject.GetComponent<Renderer>().material = btnSelected;
-                        }
-                        break;
-
-                    case ObjectState.Pressed:
-                        hitObject.GetComponent<Renderer>().material = btnSelected;
-                        break;
-                }
+                HandleObjectInteraction(hit.collider.transform);
             }
+            // Add additional tags here if needed for other objects.
         }
         else
         {
+            // No object hit, revert the material of all objects to Normal
             foreach (var kvp in objectStates)
             {
                 Transform obj = kvp.Key;
@@ -98,6 +66,66 @@ public class ObjectDetection_Fixed : MonoBehaviour
                     }
                 }
             }
+
+            interactionMessage = ""; // Clear the interaction message when not hitting any object
         }
+    }
+
+    // Handle object interaction logic
+    private void HandleObjectInteraction(Transform objectTransform)
+    {
+        // If the object is not in the dictionary, add it with the state set to Normal
+        if (!objectStates.ContainsKey(objectTransform))
+        {
+            objectStates.Add(objectTransform, ObjectState.Normal);
+        }
+
+        ObjectState currentState = objectStates[objectTransform];
+
+        switch (currentState)
+        {
+            case ObjectState.Normal:
+                objectTransform.GetComponent<Renderer>().material = btnFocus;
+                interactionMessage = ""; // Clear the interaction message
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    // Call the appropriate interaction method for the object
+                    InteractWithObject(objectTransform);
+                }
+                else if (!Input.GetKey(KeyCode.E))
+                {
+                    objectStates[objectTransform] = ObjectState.Selected;
+                    interactionMessage = "Press E to interact"; // Display interaction message
+                }
+                break;
+
+            case ObjectState.Selected:
+                objectTransform.GetComponent<Renderer>().material = btnFocus;
+                interactionMessage = "Press E to interact"; // Display interaction message
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    // Call the appropriate interaction method for the object
+                    InteractWithObject(objectTransform);
+                }
+                break;
+
+            case ObjectState.Pressed:
+                objectTransform.GetComponent<Renderer>().material = btnSelected;
+                break;
+        }
+    }
+
+    // Custom interaction method for objects (you can customize this for each object)
+    private void InteractWithObject(Transform objectTransform)
+    {
+        objectTransform.GetComponent<OpenDoor>().open();
+        objectStates[objectTransform] = ObjectState.Pressed;
+        objectTransform.GetComponent<Renderer>().material = btnSelected;
+    }
+
+    // Display GUI elements
+    private void OnGUI()
+    {
+        GUI.Label(new Rect(Screen.width / 2 - (Screen.width * 0.1f), Screen.height - (Screen.height * 0.07f), Screen.width * 0.4f, Screen.height * 0.14f), "<size=50>" + interactionMessage + "</size>");
     }
 }
