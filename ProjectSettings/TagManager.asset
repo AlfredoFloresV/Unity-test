@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - door
+  - player
+  - wall
+  - floor
+  - destination
+  - enemy
+  - face
   layers:
   - Default
   - TransparentFX
@@ -12,13 +19,13 @@ TagManager:
   - Water
   - UI
   - Post Processing
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Object Detection
+  - Characters
+  - Ceil
+  - Floor
+  - Wall
+  - Door
+  - Larry
   - 
   - 
   - 

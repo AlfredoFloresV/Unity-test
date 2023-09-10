@@ -102,7 +102,7 @@ public class PathFinder
         }
 
         path.Reverse();
-        path.RemoveAt(0);
+        //path.RemoveAt(0);
 
         UpdateGrid(path);
         return path;
