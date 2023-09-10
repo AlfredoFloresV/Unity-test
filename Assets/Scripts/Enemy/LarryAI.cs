@@ -33,6 +33,9 @@ public class LarryAI : MonoBehaviour
     [SerializeField]
     private AudioClip hurt;
 
+    [SerializeField]
+    private LayerMask mask;
+
     private NavMeshAgent ai;
     private Animator animator;
     private int randDecision;
@@ -42,23 +45,27 @@ public class LarryAI : MonoBehaviour
     private AudioSource audioSource;
     private List<Transform> destinations;
     private List<string> attacks;
-    private bool walking, chasing, idle; //attacking, stunned
+    public bool walking, chasing, idle; //attacking, stunned
     private Vector3 dest;
     private bool startActions;
 
+
+    public bool stun = false;
 
     private void Start()
     {
         walking = false;
         chasing = false;
         idle = true;
-        
+        stun = false;
+
         animator = GetComponent<Animator>();
         destinations = new List<Transform>();
         ai = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
         startActions = false;
-        attacks = new List<string>(){ "Larry_Attack1", "Larry_Attack2", "Larry_Attack3" };
+        attacks = new List<string>() { "Larry_Attack1", "Larry_Attack2", "Larry_Attack3" };
+        //Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), player.GetComponent<CapsuleCollider>(), );
     }
 
     public void setRandomDestinations(List<Transform> dest)
@@ -78,10 +85,11 @@ public class LarryAI : MonoBehaviour
 
     private void Update()
     {
-        if (startActions == true)
+        if (startActions == true && stun == false)
         {
             if (chasing == true)
             {
+                Debug.Log("chasing");
                 walking = false;
                 dest = new Vector3(player.transform.position.x, 0, player.transform.position.z);
                 ai.destination = dest;
@@ -93,7 +101,7 @@ public class LarryAI : MonoBehaviour
             }
             else if (walking == true && destinations.Count > 0)
             {
-                //Debug.Log("patrol");
+                Debug.Log("patrol");
                 patrol();
                 ai.destination = dest;
                 ai.speed = Speed;
@@ -101,42 +109,54 @@ public class LarryAI : MonoBehaviour
             }
             else if (idle == true)
             {
-                //Debug.Log("idle");
+                Debug.Log("idle");
                 ai.speed = 0;
                 StartCoroutine(nextDestination());
                 idle = false;
             }
+
+            //detectPlayer();
+            //StartCoroutine(ValidateLoc());
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    /*
+    private void detectPlayer()
     {
-        if (other.CompareTag("player"))
-        {
-            chasing = true;
-            walking = false;
-            idle = false;
-            //animator.ResetTrigger("idle");
-            //animator.ResetTrigger("walk");
-            StopCoroutine(nextDestination());
-            StopCoroutine(chase());
-            StartCoroutine(chase());
-        }
+        RaycastHit hit;
 
-        if (other.CompareTag("destination"))
+        if (Physics.Raycast(transform.position - new Vector3(0, 0.5f, 0), transform.TransformDirection(Vector3.forward), out hit, 5.5f, mask))
         {
-            if (chasing == false)
+            if (hit.collider.tag == "player")
             {
+                chasing = true;
                 walking = false;
-                idle = true;
-                animator.Play("Larry_Celebration1");
+                idle = false;
+                StopCoroutine(nextDestination());
+                StopCoroutine(chase());
+                StartCoroutine(chase());
             }
         }
-    }
+
+        if (Physics.Raycast(transform.position - new Vector3(0,0.5f,0), transform.TransformDirection(Vector3.back), out hit, 3.5f, mask))
+        {
+            if (hit.collider.tag == "player")
+            {
+                transform.eulerAngles = new Vector3(0f, 180f, 0f);
+                chasing = true;
+                walking = false;
+                idle = false;
+                StopCoroutine(nextDestination());
+                StopCoroutine(chase());
+                StartCoroutine(chase());
+            }
+        }
+    }*/
+
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("player")) 
+        if (collision.gameObject.CompareTag("player"))
         {
             animator.Play(attacks[Random.Range(0, attacks.Count)]);
             audioSource.PlayOneShot(Random.Range(0, 2) == 0 ? attack1 : attack2);
@@ -144,7 +164,7 @@ public class LarryAI : MonoBehaviour
             chasing = false;
             walking = false;
             idle = false;
-            GetComponent<BoxCollider>().enabled = false;
+            GetComponent<CapsuleCollider>().enabled = false;
             //player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
             StopCoroutine(chase());
             StopCoroutine(nextDestination());
@@ -153,8 +173,7 @@ public class LarryAI : MonoBehaviour
         }
     }
 
-
-    IEnumerator nextDestination()
+    public IEnumerator nextDestination()
     {
         yield return new WaitForSeconds(idleTime);
         walking = true;
@@ -162,7 +181,7 @@ public class LarryAI : MonoBehaviour
         idle = false;
     }
 
-    IEnumerator chase()
+    public IEnumerator chase()
     {
         yield return new WaitForSeconds(chaseTime);
         chasing = false;
@@ -170,7 +189,7 @@ public class LarryAI : MonoBehaviour
         idle = false;
     }
 
-    IEnumerator larryIntro() 
+    IEnumerator larryIntro()
     {
         Debug.Log("Larry intro");
         animator.Play("Larry_JumpScare1");
@@ -178,13 +197,35 @@ public class LarryAI : MonoBehaviour
         startActions = true;
     }
 
-    IEnumerator attack() 
+    IEnumerator attack()
     {
         idle = true;
-        yield return new WaitForSeconds(10f);
-        GetComponent<BoxCollider>().enabled = true;
+        yield return new WaitForSeconds(15f);
+        GetComponent<CapsuleCollider>().enabled = true;
         audioSource.PlayOneShot(Random.Range(0, 2) == 0 ? laffying1 : laffying2);
         //player.GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezePosition;
         //player.gameObject.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezePositionY;
     }
+
+    public IEnumerator recover()
+    {
+        yield return new WaitForSeconds(20f);
+        stun = false;
+    }
+
+    public IEnumerator ValidateLoc() 
+    {
+        Vector3 loc = transform.position;
+        yield return new WaitForSeconds(10f);
+        Vector3 loc2 = transform.position;
+
+        if (Vector3.Distance(loc, loc2) < 0.5) 
+        {
+            walking = true;
+            idle = false;
+            chasing = false;
+            Debug.Log("again");
+        }
+    }
+
 }

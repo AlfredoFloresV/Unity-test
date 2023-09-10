@@ -7,19 +7,26 @@ public class Footsteps : MonoBehaviour
     [SerializeField]
     private GameObject footsteps;
 
+
+    private int keyNo = 0;
+
     // Update is called once per frame
     void Update()
     {
+
         if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D) ||
            Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow))
         {
-            DisableFootSteps();
+            keyNo--;
+            if(keyNo == 0)
+                DisableFootSteps();
         }
 
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) ||
            Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow)) 
         {
             EnableFootsteps();
+            keyNo++;
         }
 
         

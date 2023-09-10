@@ -115,7 +115,7 @@ public class MazeGrid : MonoBehaviour
             if (grid[x, z] == CellType.Hallway)
             {
                 bool failDist = false;
-                Vector3 l = new Vector3((x + 0.1f) * Scale, -0.2f, (z + 0.1f) * Scale);
+                Vector3 l = new Vector3((x + 0.2f) * Scale, -0.25f, (z + 0.2f) * Scale);
 
                 for (int i = 0; i < destinations.Count; i++) 
                 {
@@ -132,6 +132,9 @@ public class MazeGrid : MonoBehaviour
                 }
             }
         }
+
+
+
     }
 
 
@@ -226,7 +229,7 @@ public class MazeGrid : MonoBehaviour
 
 
         //Determinar inicio y fin
-        player.GetComponent<Transform>().position = new Vector3(6f, 1f, 6f);
+        player.GetComponent<Transform>().position = new Vector3(6f, 0.7f, 6f);
     }
 
     private void createGrid() 

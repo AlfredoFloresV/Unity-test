@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMotor : MonoBehaviour
 {
     [SerializeField]
     private Camera cam;
+
+    [SerializeField]
+    private GameObject cameraEffects;
 
     private Vector3 velocity = Vector3.zero;
     private Vector3 rotation = Vector3.zero;
@@ -19,6 +23,8 @@ public class PlayerMotor : MonoBehaviour
     private AudioSource audioSource;
 
     private bool isHurt;
+    public int Health = 5;
+    public int Damage = 0;
 
     private void Start()
     {
@@ -75,21 +81,41 @@ public class PlayerMotor : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("enemy"))
+        if (other.gameObject.CompareTag("enemy"))
         {
-            Debug.Log("shake");
-            isHurt = true;
-            audioSource.PlayOneShot(hurt);
-            cam.GetComponent<Animator>().Play("ShakeCamera");
-            StartCoroutine(recover());
+            if (isHurt == false) 
+            {
+                Debug.Log("shake");
+                isHurt = true;
+                audioSource.PlayOneShot(hurt);
+                cam.GetComponent<Animator>().Play("ShakeCamera");
+                StartCoroutine(recover());
+                cameraEffects.GetComponent<UIFadeInAndOut>().damage = true;
+                handleLife();
+            }
+        }
+    }
+
+    private void handleLife() 
+    {
+        Damage += 1;
+        if (Health - Damage >= 0)
+        {
+            cameraEffects.GetComponent<UIMaterialSwitcher>().damageScreen = Damage;
+        }
+        else 
+        {
+            //Actualizar!!
+            SceneManager.LoadScene(0);
         }
     }
 
     IEnumerator recover() 
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(5f);
         isHurt = false;
     }
 }

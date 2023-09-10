@@ -11,6 +11,7 @@ TagManager:
   - destination
   - enemy
   - face
+  - doorBtn
   layers:
   - Default
   - TransparentFX
