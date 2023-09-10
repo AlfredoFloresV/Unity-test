@@ -70,34 +70,36 @@ public class MazeGrid : MonoBehaviour
             }
         }
 
+        bool ready = false;
 
-        createSpecialRooms();
-        createGrid(); // Imprimir el contenido de Grid
-        DelaunayTriangulation();
-
-        /*
-        for (int i = 0; i < grid.GetLength(0); i++)
+        while (ready == false) 
         {
-            for (int j = 0; j < grid.GetLength(1); j++)
+            try {
+                createSpecialRooms();
+                createGrid(); // Imprimir el contenido de Grid
+                DelaunayTriangulation();
+
+
+                CreateHallways();
+                ValidateWalls();
+                PlaceDoors();
+
+                placeItems();
+                surface.BuildNavMesh();
+
+                NavMeshHit closestHit;
+                if (NavMesh.SamplePosition(enemy.transform.position, out closestHit, 500f, NavMesh.AllAreas))
+                    enemy.transform.position = closestHit.position;
+                else Debug.Log("something weird happened");
+                enemy.GetComponent<LarryAI>().setRandomDestinations(destinations);
+                ready = true;
+            }
+            catch (KeyNotFoundException e) 
             {
-                Debug.Log(i + " " + j + " " + grid[i, j]);
+                Debug.Log(e.StackTrace);
+                ready = false;
             }
         }
-        */
-
-        CreateHallways();
-        ValidateWalls();
-        PlaceDoors();
-        //testRoom();
-
-        placeItems();
-        surface.BuildNavMesh();
-
-        NavMeshHit closestHit;
-        if (NavMesh.SamplePosition(enemy.transform.position, out closestHit, 500f, NavMesh.AllAreas))
-            enemy.transform.position = closestHit.position;
-        else Debug.Log("something weird happened");
-        enemy.GetComponent<LarryAI>().setRandomDestinations(destinations);
     }
 
     private void placeItems() 
