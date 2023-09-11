@@ -62,6 +62,9 @@ public class MazeGrid : MonoBehaviour
     [SerializeField]
     private GameObject barrel;
 
+    [SerializeField]
+    private bool ready;
+
     private int roomCount;
     private List<Room> rooms;
     private List<RoomEdge> roomEdges;
@@ -89,7 +92,8 @@ public class MazeGrid : MonoBehaviour
             }
         }
 
-        bool ready = false;
+        //bool ready = false;
+        ready = false;
 
         while (ready == false) 
         {
@@ -182,7 +186,7 @@ public class MazeGrid : MonoBehaviour
         }
         
         //Place keys
-        count = 0;
+        /*count = 0;
         List<GameObject> keyItems = new List<GameObject>();
         while (count < keys.Count)
         {
@@ -210,10 +214,10 @@ public class MazeGrid : MonoBehaviour
                     count++;
                 }
             }
-        }
+        }*/
 
         //Place batteries (place by room with probability 20%)
-        for (int i = 0; i < grid.GetLength(0); i++)
+        /*for (int i = 0; i < grid.GetLength(0); i++)
         {
             for (int j = 0; j < grid.GetLength(1); j++)
             {
@@ -234,10 +238,10 @@ public class MazeGrid : MonoBehaviour
                     }
                 }
             }
-        }
+        }*/
 
         //Place biscuits (place by room with probability 20%)
-        for (int i = 0; i < grid.GetLength(0); i++)
+        /*for (int i = 0; i < grid.GetLength(0); i++)
         {
             for (int j = 0; j < grid.GetLength(1); j++)
             {
@@ -258,7 +262,7 @@ public class MazeGrid : MonoBehaviour
                     }
                 }
             }
-        }
+        }*/
     }
 
 
@@ -666,7 +670,7 @@ public class MazeGrid : MonoBehaviour
     /*
     private void PlaceDoors()
     {
-        // No puede haber doors pegadas, validar vecinos acorde a la dirección y al maxroomsize
+        // No puede haber doors pegadas, validar vecinos acorde a la direcciï¿½n y al maxroomsize
         //for (int i = 0; i < rooms.Count; i++) 
         //{
         //    Debug.Log(rooms[i].getLocation() + " " + rooms[i].getId());
