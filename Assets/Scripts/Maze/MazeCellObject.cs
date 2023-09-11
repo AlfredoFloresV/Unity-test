@@ -33,7 +33,7 @@ public class MazeCellObject : MonoBehaviour
 
     public void DisableDoor() 
     {
-        if(!door.CompareTag("specialdoor"))
+        if(!door.CompareTag("special gate"))
             door.SetActive(false);
     }
 

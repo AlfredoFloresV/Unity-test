@@ -97,11 +97,12 @@ public class MazeGrid : MonoBehaviour
 
         while (ready == false) 
         {
-            try {
+            try
+            {
                 createSpecialRooms();
                 createGrid(); // Imprimir el contenido de Grid
                 DelaunayTriangulation();
-                
+
 
                 CreateHallways();
                 ValidateWalls();
@@ -116,7 +117,7 @@ public class MazeGrid : MonoBehaviour
                 else Debug.Log("something weird happened");
                 enemy.GetComponent<LarryAI>().setRandomDestinations(destinations);
 
-                if (enemy2 != null) 
+                if (enemy2 != null)
                 {
                     if (NavMesh.SamplePosition(enemy2.transform.position, out closestHit, 500f, NavMesh.AllAreas))
                         enemy2.transform.position = closestHit.position;
@@ -124,6 +125,7 @@ public class MazeGrid : MonoBehaviour
                     enemy2.GetComponent<LarryAI>().setRandomDestinations(destinations);
                 }
                 ready = true;
+                GetComponent<DungeonTileReplacement>().startReplacement = true;
             }
             catch (KeyNotFoundException e) 
             {
