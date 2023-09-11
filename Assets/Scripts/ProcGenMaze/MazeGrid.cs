@@ -101,7 +101,7 @@ public class MazeGrid : MonoBehaviour
                 createSpecialRooms();
                 createGrid(); // Imprimir el contenido de Grid
                 DelaunayTriangulation();
-
+                
 
                 CreateHallways();
                 ValidateWalls();
@@ -123,7 +123,6 @@ public class MazeGrid : MonoBehaviour
                     else Debug.Log("something weird happened");
                     enemy2.GetComponent<LarryAI>().setRandomDestinations(destinations);
                 }
-
                 ready = true;
             }
             catch (KeyNotFoundException e) 
