@@ -1866,8 +1866,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _newGameLevel: DungeonLevel
-  _sceneCredits: 
-  _sceneCollectables: 
+  _sceneCredits: Credits
+  _sceneCollectables: Collectibles
   tittle: {fileID: 1316994160}
   audioSource: {fileID: 1200893691}
   clip: {fileID: 8300000, guid: c91cd2f4a09858247bd9c2e4ae1dce47, type: 3}
