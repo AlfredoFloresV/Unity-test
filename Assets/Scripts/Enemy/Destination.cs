@@ -37,7 +37,7 @@ public class Destination : MonoBehaviour
 
     IEnumerator reEnable() 
     {
-        yield return new WaitForSeconds(30f);
+        yield return new WaitForSeconds(60f);
         GetComponent<Collider>().enabled = true;
     }
 }

@@ -135,12 +135,11 @@ public class ObjectDetection : MonoBehaviour
             if (rayHit.collider.tag == "face")
             {
                 Debug.Log("stunned");
-                GameObject enemy = GameObject.FindGameObjectWithTag("enemy");
-                AudioSource audioSource = enemy.transform.GetComponent<AudioSource>();
-                audioSource.Play();
-                enemy.transform.GetComponent<Animator>().Play("Larry_Stun3");
-                enemy.transform.GetComponent<LarryAI>().stun = true;
-                StartCoroutine(enemy.transform.GetComponent<LarryAI>().recover());
+                LarryAI ai = rayHit.collider.gameObject.GetComponentInParent<LarryAI>();
+                rayHit.collider.gameObject.GetComponentInParent<AudioSource>().PlayOneShot(ai.hurt);
+                rayHit.collider.gameObject.GetComponentInParent<Animator>().Play("Larry_Stun3");
+                ai.stun = true;
+                StartCoroutine(ai.recover());
                 GetComponent<PlayerMotor>().spendLight();
             }
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = System.Random;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMotor : MonoBehaviour
@@ -31,6 +32,12 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField]
     private AudioClip grabbingKeys;
 
+    [SerializeField]
+    private AudioClip boo;
+
+    [SerializeField]
+    private AudioClip locked;
+
     private Rigidbody rb;
     private AudioSource audioSource;
 
@@ -40,6 +47,7 @@ public class PlayerMotor : MonoBehaviour
     public int Health = 5;
     public int Damage = 0;
     public Dictionary<string, bool> keysFound;
+    public string VictoryKey;
 
     private void Start()
     {
@@ -47,6 +55,9 @@ public class PlayerMotor : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         isHurt = false;
         keysFound = new Dictionary<string, bool>();
+        Random random = new Random();
+
+        VictoryKey = "" + (random.Next(1, 5));
     }
 
     public void Move(Vector3 v)
@@ -134,7 +145,7 @@ public class PlayerMotor : MonoBehaviour
         else 
         {
             //Actualizar!!
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene("GameOver1 1");
         }
     }
 
@@ -168,5 +179,23 @@ public class PlayerMotor : MonoBehaviour
     {
         audioSource.PlayOneShot(grabbingKeys);
         keysFound[key] = true;
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("specialdoor") && other.gameObject.name.Contains(VictoryKey) && keysFound["key" + VictoryKey] == true)
+        {
+            SceneManager.LoadScene("Win");
+        }
+        else if (other.gameObject.CompareTag("specialdoor") && !other.gameObject.name.Contains(VictoryKey) && keysFound["key" + VictoryKey] == true)
+        {
+            audioSource.PlayOneShot(boo);
+            other.gameObject.GetComponent<Animator>().Play("open");
+        }
+        else if (other.gameObject.CompareTag("specialdoor") && keysFound["key" + VictoryKey] == false)
+        {
+            audioSource.PlayOneShot(locked);
+        }
     }
 }

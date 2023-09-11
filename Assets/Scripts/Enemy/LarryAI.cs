@@ -31,7 +31,7 @@ public class LarryAI : MonoBehaviour
     private AudioClip attack2;
 
     [SerializeField]
-    private AudioClip hurt;
+    public AudioClip hurt;
 
     [SerializeField]
     private LayerMask mask;
