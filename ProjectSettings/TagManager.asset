@@ -21,6 +21,7 @@ TagManager:
   - specialroom
   - specialdoor
   - barrel
+  - ReplaceMe
   layers:
   - Default
   - TransparentFX
