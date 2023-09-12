@@ -87,7 +87,7 @@ public class LarryActions : MonoBehaviour
                     ai.speed = 0;
                     break;
                 case LarryState.Kill:
-                    Debug.Log("Kill");
+                    KillActions();
                     ai.speed = speed * increaseFactor * 1.4f;
                     break;
             }

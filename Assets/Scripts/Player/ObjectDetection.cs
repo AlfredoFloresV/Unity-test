@@ -137,7 +137,6 @@ public class ObjectDetection : MonoBehaviour
 
             if (rayHit.collider.tag == "larry_face")
             {
-                Debug.Log("stun");
                 PlayerMotor pm = GetComponent<PlayerMotor>();
 
                 if (pm.lightEnabled() && pm.getIntensity() >= 0.5 && pm.getFocus() == true) 
