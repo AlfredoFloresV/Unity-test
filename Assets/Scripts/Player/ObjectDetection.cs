@@ -5,6 +5,9 @@ using UnityEngine;
 public class ObjectDetection : MonoBehaviour
 {
     [SerializeField]
+    private GameObject cameraEffects;
+
+    [SerializeField]
     float detectionDistance = 5f;
 
     [SerializeField]
@@ -43,7 +46,7 @@ public class ObjectDetection : MonoBehaviour
             }
 
             lastHighlightedObject = gameObject;
-            interactionMessage = "";
+            interactingWithObject(false);
         }
 
     }
@@ -64,7 +67,7 @@ public class ObjectDetection : MonoBehaviour
             }
 
             lastHighlightedObject = null;
-            interactionMessage = "";
+            interactingWithObject(false);
         }
     }
 
@@ -87,7 +90,7 @@ public class ObjectDetection : MonoBehaviour
 
             if (rayHit.collider.tag == "doorBtn")
             {
-                interactionMessage = "Press E to interact";
+                interactingWithObject(true);
 
                 if (Input.GetKeyDown(KeyCode.E)) 
                 {
@@ -100,47 +103,51 @@ public class ObjectDetection : MonoBehaviour
             }
             if (rayHit.collider.tag == "biscuit") 
             {
-                interactionMessage = "Press E to interact";
+                interactingWithObject(true);
 
                 if (Input.GetKeyDown(KeyCode.E)) 
                 {
-                    interactionMessage = "";
+                    interactingWithObject(false);
                     rayHit.collider.gameObject.SetActive(false);
                     GetComponent<PlayerMotor>().restoreHealth();
                 }
             }
             if (rayHit.collider.tag == "battery") 
             {
-                interactionMessage = "Press E to interact";
+                interactingWithObject(true);
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    interactionMessage = "";
+                    interactingWithObject(false);
                     rayHit.collider.gameObject.SetActive(false);
                     GetComponent<PlayerMotor>().restoreLight();
                 }
             }
             if (rayHit.collider.tag == "key1" || rayHit.collider.tag == "key2" || rayHit.collider.tag == "key3" || rayHit.collider.tag == "key4") 
             {
-                interactionMessage = "Press E to interact";
+                interactingWithObject(true);
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    interactionMessage = "";
+                    interactingWithObject(false);
                     rayHit.collider.gameObject.SetActive(false);
                     GetComponent<PlayerMotor>().handleKeys(rayHit.collider.tag);
                 }
             }
 
-            if (rayHit.collider.tag == "face")
+            if (rayHit.collider.tag == "larry_face")
             {
-                Debug.Log("stunned");
-                LarryAI ai = rayHit.collider.gameObject.GetComponentInParent<LarryAI>();
-                rayHit.collider.gameObject.GetComponentInParent<AudioSource>().PlayOneShot(ai.hurt);
-                rayHit.collider.gameObject.GetComponentInParent<Animator>().Play("Larry_Stun3");
-                ai.stun = true;
-                StartCoroutine(ai.recover());
-                GetComponent<PlayerMotor>().spendLight();
+                Debug.Log("stun");
+                PlayerMotor pm = GetComponent<PlayerMotor>();
+
+                if (pm.lightEnabled() && pm.getIntensity() >= 0.5 && pm.getFocus() == true) 
+                {
+                    Debug.Log("stunning");
+                    LarryActions ai = rayHit.collider.gameObject.GetComponentInParent<LarryActions>();
+                    ai.StunActions();
+                    GetComponent<PlayerMotor>().spendLight();
+                }
+            
             }
 
         }
@@ -153,6 +160,20 @@ public class ObjectDetection : MonoBehaviour
     void Update()
     {
         HighlightObjectInCenterOfCam();
+    }
+
+    private void interactingWithObject(bool interacting) 
+    {
+        if (interacting == true)
+        {
+            interactionMessage = "Press E to interact";
+            cameraEffects.GetComponent<UISight>().pointing(true);
+        }
+        else 
+        {
+            interactionMessage = "";
+            cameraEffects.GetComponent<UISight>().pointing(false);
+        }
     }
 
     // Display GUI elements

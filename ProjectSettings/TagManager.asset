@@ -10,7 +10,6 @@ TagManager:
   - floor
   - destination
   - enemy
-  - face
   - doorBtn
   - key1
   - key2
@@ -23,6 +22,9 @@ TagManager:
   - barrel
   - ReplaceMe
   - special gate
+  - jumpscare
+  - larry_body
+  - larry_face
   layers:
   - Default
   - TransparentFX

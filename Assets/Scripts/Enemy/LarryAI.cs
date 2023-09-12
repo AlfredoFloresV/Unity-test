@@ -36,11 +36,15 @@ public class LarryAI : MonoBehaviour
     [SerializeField]
     private LayerMask mask;
 
+    [SerializeField]
+    private Camera cam;
+
+    [SerializeField]
+    private Camera playerCam;
+
     private NavMeshAgent ai;
     private Animator animator;
     private int randDecision;
-
-
 
     private AudioSource audioSource;
     private List<Transform> destinations;
@@ -93,7 +97,7 @@ public class LarryAI : MonoBehaviour
                 walking = false;
                 dest = new Vector3(player.transform.position.x, 0, player.transform.position.z);
                 ai.destination = dest;
-                ai.speed = Speed * 2f;
+                ai.speed = Speed * 1.3f;
                 animator.Play("Larry_Run");
                 StopCoroutine(nextDestination());
                 StopCoroutine(chase());
@@ -120,68 +124,39 @@ public class LarryAI : MonoBehaviour
         }
     }
 
-    /*
-    private void detectPlayer()
+    private void chasePlayer() 
     {
-        RaycastHit hit;
+        chasing = true;
+        walking = false;
+        idle = false;
+        StopCoroutine(nextDestination());
+        StopCoroutine(chase());
+        StartCoroutine(chase());
+    }
 
-        if (Physics.Raycast(transform.position - new Vector3(0, 0.5f, 0), transform.TransformDirection(Vector3.forward), out hit, 5.5f, mask))
-        {
-            if (hit.collider.tag == "player")
-            {
-                chasing = true;
-                walking = false;
-                idle = false;
-                StopCoroutine(nextDestination());
-                StopCoroutine(chase());
-                StartCoroutine(chase());
-            }
-        }
-
-        if (Physics.Raycast(transform.position - new Vector3(0,0.5f,0), transform.TransformDirection(Vector3.back), out hit, 3.5f, mask))
-        {
-            if (hit.collider.tag == "player")
-            {
-                transform.eulerAngles = new Vector3(0f, 180f, 0f);
-                chasing = true;
-                walking = false;
-                idle = false;
-                StopCoroutine(nextDestination());
-                StopCoroutine(chase());
-                StartCoroutine(chase());
-            }
-        }
-    }*/
-
-
-    private void OnCollisionEnter(Collision collision)
+    public void attackPlayer() 
     {
-        if (collision.gameObject.CompareTag("player"))
-        {
-            animator.Play(attacks[Random.Range(0, attacks.Count)]);
-            audioSource.PlayOneShot(Random.Range(0, 2) == 0 ? attack1 : attack2);
-            
-            chasing = false;
-            walking = false;
-            idle = false;
-            GetComponent<CapsuleCollider>().enabled = false;
-            
-            StopCoroutine(chase());
-            StopCoroutine(nextDestination());
-            StartCoroutine(attack());
-        }
+        chasing = false;
+        walking = false;
+        idle = false;
+
+        StopCoroutine(chase());
+        StopCoroutine(nextDestination());
+        StartCoroutine(attack());
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("player"))
         {
-            chasing = true;
-            walking = false;
-            idle = false;
-            StopCoroutine(nextDestination());
-            StopCoroutine(chase());
-            StartCoroutine(chase());
+            if (Vector3.Distance(other.gameObject.transform.position, transform.position) < 1)
+            {
+                attackPlayer();
+            }
+            else 
+            {
+                chasePlayer();
+            }
         }
 
         if (other.gameObject.CompareTag("destination"))
@@ -224,8 +199,7 @@ public class LarryAI : MonoBehaviour
     IEnumerator attack()
     {
         idle = true;
-        yield return new WaitForSeconds(15f);
-        GetComponent<CapsuleCollider>().enabled = true;
+        yield return new WaitForSeconds(5f);
         audioSource.PlayOneShot(Random.Range(0, 2) == 0 ? laffying1 : laffying2);
     }
 
@@ -248,6 +222,12 @@ public class LarryAI : MonoBehaviour
             chasing = false;
             Debug.Log("again");
         }
+    }
+
+    public void recoverPlayerCam() 
+    {
+        cam.gameObject.SetActive(false);
+        playerCam.gameObject.SetActive(true);
     }
 
 }

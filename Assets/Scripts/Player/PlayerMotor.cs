@@ -38,26 +38,37 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField]
     private AudioClip locked;
 
+    [SerializeField]
+    private AudioClip unlock;
+
+    [SerializeField]
+    private AudioClip claps;
+
     private Rigidbody rb;
     private AudioSource audioSource;
 
     private float maxCamera = 40f;
 
-    private bool isHurt;
+    
+    private RigidbodyConstraints cons;
     public int Health = 5;
     public int Damage = 0;
     public Dictionary<string, bool> keysFound;
     public string VictoryKey;
+    public int numKeys;
+    private string interactionMessage;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
-        isHurt = false;
         keysFound = new Dictionary<string, bool>();
+        cons = rb.constraints;
         Random random = new Random();
 
         VictoryKey = "" + (random.Next(1, 5));
+        numKeys = 0;
+        interactionMessage = "";
     }
 
     public void Move(Vector3 v)
@@ -84,16 +95,22 @@ public class PlayerMotor : MonoBehaviour
 
     private void PerformMovement()
     {
-        if (!isHurt) 
+        if (velocity != Vector3.zero)
         {
-            if (velocity != Vector3.zero)
+            rb.constraints = cons;
+            rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+            if (cam.gameObject.activeSelf == true) 
             {
-                rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
                 cam.GetComponent<Animator>().Play("HeadBobbing");
             }
-            else
+                
+        }
+        else
+        {
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+            rb.angularVelocity = Vector3.zero;
+            if (cam.gameObject.activeSelf == true)
             {
-                rb.angularVelocity = Vector3.zero;
                 cam.GetComponent<Animator>().Play("Idle");
             }
         }
@@ -118,21 +135,13 @@ public class PlayerMotor : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter(Collision collision)
+    public void playerAttacked() 
     {
-        if (collision.gameObject.CompareTag("enemy"))
-        {
-            if (isHurt == false)
-            {
-                Debug.Log("shake");
-                isHurt = true;
-                audioSource.PlayOneShot(hurt);
-                cam.GetComponent<Animator>().Play("ShakeCamera");
-                StartCoroutine(recover());
-                cameraEffects.GetComponent<UIFadeInAndOut>().damage = true;
-                handleLife();
-            }
-        }
+        Debug.Log("shake");
+        audioSource.PlayOneShot(hurt);
+        cam.GetComponent<Animator>().Play("ShakeCamera");
+        cameraEffects.GetComponent<UIFadeInAndOut>().damage = true;
+        handleLife();
     }
 
     private void handleLife() 
@@ -149,13 +158,7 @@ public class PlayerMotor : MonoBehaviour
         }
     }
 
-    IEnumerator recover() 
-    {
-        yield return new WaitForSeconds(3f);
-        isHurt = false;
-    }
-
-
+    
     public void restoreHealth() 
     {
         audioSource.PlayOneShot(eatingBiscuit);
@@ -175,10 +178,28 @@ public class PlayerMotor : MonoBehaviour
         flashLight.GetComponent<Flashlight>().spendLight(0.3f);
     }
 
+    public float getIntensity() 
+    {
+        return flashLight.GetComponent<Flashlight>().intensity;
+    }
+
+    public bool getFocus() 
+    {
+        return flashLight.GetComponent<Flashlight>().focus;
+    }
+
+    public bool lightEnabled() 
+    {
+        return flashLight.GetComponent<Flashlight>().lightEnabled();
+    }
+
     public void handleKeys(string key) 
     {
         audioSource.PlayOneShot(grabbingKeys);
         keysFound[key] = true;
+        numKeys++;
+        interactionMessage = numKeys + "/4 keys";
+        StartCoroutine(deleteMessage());
     }
 
 
@@ -186,16 +207,42 @@ public class PlayerMotor : MonoBehaviour
     {
         if (other.gameObject.CompareTag("specialdoor") && other.gameObject.name.Contains(VictoryKey) && keysFound["key" + VictoryKey] == true)
         {
-            SceneManager.LoadScene("Win");
+            audioSource.PlayOneShot(unlock);
+            other.gameObject.GetComponent<Animator>().Play("open");
+            StartCoroutine(win(claps, true));
+            
         }
         else if (other.gameObject.CompareTag("specialdoor") && !other.gameObject.name.Contains(VictoryKey) && keysFound["key" + VictoryKey] == true)
         {
-            audioSource.PlayOneShot(boo);
+            audioSource.PlayOneShot(unlock);
             other.gameObject.GetComponent<Animator>().Play("open");
+            StartCoroutine(win(boo, false));
         }
         else if (other.gameObject.CompareTag("specialdoor") && keysFound["key" + VictoryKey] == false)
         {
             audioSource.PlayOneShot(locked);
         }
     }
+
+    private void OnGUI()
+    {
+        GUI.Label(new Rect(Screen.width / 2 - (Screen.width * 0.05f), Screen.height - (Screen.height * 0.14f), Screen.width * 0.5f, Screen.height * 0.14f), "<size=50>" + interactionMessage + "</size>");
+    }
+
+    IEnumerator deleteMessage() 
+    {
+        yield return new WaitForSeconds(4f);
+        interactionMessage = "";
+    }
+
+    IEnumerator win(AudioClip audio, bool w) 
+    {
+        yield return new WaitForSeconds(3f);
+        audioSource.PlayOneShot(audio);
+        if (w) 
+        {
+            SceneManager.LoadScene("Win");
+        }
+    }
+
 }

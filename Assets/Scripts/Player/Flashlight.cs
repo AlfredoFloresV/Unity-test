@@ -17,15 +17,17 @@ public class Flashlight : MonoBehaviour
     private Light l;
     private AudioSource audioSource;
 
-
-    public float intensity = 1f;
+    public float maxIntensity = 5f;
+    public float intensity;
+    public bool focus;
 
     // Start is called before the first frame update
     void Start()
     {
         l = spotlight.GetComponent<Light>();
         audioSource = GetComponent<AudioSource>();
-
+        intensity = maxIntensity;
+        focus = false;
         InvokeRepeating("updateFlashLight", 10.0f, 1.0f);
     }
 
@@ -38,14 +40,28 @@ public class Flashlight : MonoBehaviour
             StartCoroutine(WaitForClickBtn());
         }
 
-        
+        if (Input.GetKeyDown(KeyCode.Mouse0)) 
+        {
+            l.spotAngle = 50;
+            l.range = 10;
+            l.intensity = intensity * 3;
+            focus = true;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            l.spotAngle = 100;
+            l.range = 80;
+            l.intensity = intensity;
+            focus = false;
+        }
     }
 
     private void updateFlashLight() 
     {
         if (l.enabled && intensity > 0) 
         {
-            intensity = intensity - 0.01f;
+            intensity = intensity - 0.05f;
             l.intensity = intensity;
         }
     }
@@ -54,9 +70,9 @@ public class Flashlight : MonoBehaviour
     public void chargeBattery() 
     {
         intensity = intensity + 0.5f;
-        if (intensity > 1) 
+        if (intensity > maxIntensity) 
         {
-            intensity = 1f;
+            intensity = maxIntensity;
         }
     }
 
@@ -65,8 +81,13 @@ public class Flashlight : MonoBehaviour
         intensity = intensity - value;
         if (intensity < 0) 
         {
-            intensity = 1f;
+            intensity = 0f;
         }
+    }
+
+    public bool lightEnabled() 
+    {
+        return l.enabled;
     }
 
     IEnumerator WaitForClickBtn()

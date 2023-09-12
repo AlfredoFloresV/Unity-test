@@ -115,14 +115,14 @@ public class MazeGrid : MonoBehaviour
                 if (NavMesh.SamplePosition(enemy.transform.position, out closestHit, 500f, NavMesh.AllAreas))
                     enemy.transform.position = closestHit.position;
                 else Debug.Log("something weird happened");
-                enemy.GetComponent<LarryAI>().setRandomDestinations(destinations);
+                enemy.GetComponent<LarryActions>().setRandomDestinations(destinations);
 
                 if (enemy2 != null)
                 {
                     if (NavMesh.SamplePosition(enemy2.transform.position, out closestHit, 500f, NavMesh.AllAreas))
                         enemy2.transform.position = closestHit.position;
                     else Debug.Log("something weird happened");
-                    enemy2.GetComponent<LarryAI>().setRandomDestinations(destinations);
+                    enemy2.GetComponent<LarryActions>().setRandomDestinations(destinations);
                 }
                 ready = true;
                 GetComponent<DungeonTileReplacement>().startReplacement = true;

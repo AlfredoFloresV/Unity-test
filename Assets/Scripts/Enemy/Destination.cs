@@ -24,20 +24,4 @@ public class Destination : MonoBehaviour
 
         renderElem.GetComponent<Renderer>().material = materials[matnum];
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("enemy")) 
-        {
-            GetComponent<Collider>().enabled = false;
-            StartCoroutine(reEnable());
-        }
-    }
-
-
-    IEnumerator reEnable() 
-    {
-        yield return new WaitForSeconds(60f);
-        GetComponent<Collider>().enabled = true;
-    }
 }
