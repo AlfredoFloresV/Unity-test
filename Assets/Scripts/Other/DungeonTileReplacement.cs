@@ -1,18 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using System.Linq;
 
 public class DungeonTileReplacement : MonoBehaviour
 {
     public List<GameObject> obligatoryPrefabs; // List of prefabs that must spawn
     public List<GameObject> optionalPrefabs; // List of prefabs for random replacement
 
-    public float minDistanceBetweenPrefabs = 5f; // Minimum distance between spawned prefabs
+    public float minDistanceBetweenObligatory = 5f; // Minimum distance between spawned obligatory prefabs
 
-    public float replacementSpawnProbability = 0.5f; // Probability of spawning optional prefabs
+    public float replacementSpawnProbability = 0.5f; // Probability of spawning replacement prefabs
 
     public bool startReplacement = false; // Public boolean to trigger the replacement
+
+    private List<Vector3> obligatorySpawnPositions = new List<Vector3>();
 
     void Update()
     {
@@ -28,25 +29,21 @@ public class DungeonTileReplacement : MonoBehaviour
         // Find all game objects with the "ReplaceMe" tag in the scene
         GameObject[] replaceMeTiles = GameObject.FindGameObjectsWithTag("ReplaceMe");
 
-        int requiredPrefabCount = 0;
+        int obligatoryPrefabCount = 0;
         Dictionary<string, int> replacementPrefabCounts = new Dictionary<string, int>();
-
-        // Create lists to store objects that have been replaced by obligatoryPrefabs and optionalPrefabs
-        List<GameObject> objectsReplacedByObligatoryPrefabs = new List<GameObject>();
-        List<GameObject> objectsReplacedByOptionalPrefabs = new List<GameObject>();
 
         foreach (GameObject replaceMeTile in replaceMeTiles)
         {
             Transform tileTransform = replaceMeTile.transform;
 
-            // Check if there's a requiredPrefab to spawn
-            if (requiredPrefabCount < obligatoryPrefabs.Count)
+            // Check if there's an obligatoryPrefab to spawn
+            if (obligatoryPrefabCount < obligatoryPrefabs.Count)
             {
-                // Check the minimum distance from all spawned optional prefabs
+                // Check if the position is valid for an obligatoryPrefab
                 bool validPosition = true;
-                foreach (GameObject prefab in optionalPrefabs)
+                foreach (Vector3 spawnPosition in obligatorySpawnPositions)
                 {
-                    if (Vector3.Distance(tileTransform.position, prefab.transform.position) < minDistanceBetweenPrefabs)
+                    if (Vector3.Distance(tileTransform.position, spawnPosition) < minDistanceBetweenObligatory)
                     {
                         validPosition = false;
                         break;
@@ -56,60 +53,44 @@ public class DungeonTileReplacement : MonoBehaviour
                 // If valid position, spawn an obligatoryPrefab
                 if (validPosition)
                 {
-                    GameObject obligatoryPrefab = obligatoryPrefabs[requiredPrefabCount];
+                    GameObject obligatoryPrefab = obligatoryPrefabs[obligatoryPrefabCount];
                     Instantiate(obligatoryPrefab, tileTransform.position, tileTransform.rotation);
-                    requiredPrefabCount++;
-
-                    // Add this object to the list of replaced objects by obligatoryPrefabs
-                    objectsReplacedByObligatoryPrefabs.Add(replaceMeTile);
+                    obligatorySpawnPositions.Add(tileTransform.position);
+                    obligatoryPrefabCount++;
                 }
             }
 
-            // Check for optional prefabs (if any)
+            // Check for replacement prefabs (if any)
             if (Random.value < replacementSpawnProbability)
             {
                 int randomIndex = Random.Range(0, optionalPrefabs.Count);
-                GameObject optionalPrefab = optionalPrefabs[randomIndex];
+                GameObject replacementPrefab = optionalPrefabs[randomIndex];
 
-                // Check the minimum distance from all spawned obligatory prefabs
-                bool validPosition = true;
-                foreach (GameObject prefab in obligatoryPrefabs)
+                // Instantiate the replacement prefab at the same position and rotation
+                Instantiate(replacementPrefab, tileTransform.position, tileTransform.rotation);
+
+                // Count replacement prefabs by name
+                string prefabName = replacementPrefab.name;
+                if (replacementPrefabCounts.ContainsKey(prefabName))
                 {
-                    if (Vector3.Distance(tileTransform.position, prefab.transform.position) < minDistanceBetweenPrefabs)
-                    {
-                        validPosition = false;
-                        break;
-                    }
+                    replacementPrefabCounts[prefabName]++;
                 }
-
-                // If valid position, spawn an optionalPrefab
-                if (validPosition)
+                else
                 {
-                    Instantiate(optionalPrefab, tileTransform.position, tileTransform.rotation);
-
-                    // Add this object to the list of replaced objects by optionalPrefabs
-                    objectsReplacedByOptionalPrefabs.Add(replaceMeTile);
+                    replacementPrefabCounts[prefabName] = 1;
                 }
             }
+
+            // Destroy the game object with the "ReplaceMe" tag
+            Destroy(replaceMeTile);
         }
 
-        // Remove objects replaced by obligatoryPrefabs and optionalPrefabs from the list
-        foreach (var replacedObject in objectsReplacedByObligatoryPrefabs)
-        {
-            GameObject.Destroy(replacedObject);
-        }
-
-        foreach (var replacedObject in objectsReplacedByOptionalPrefabs)
-        {
-            GameObject.Destroy(replacedObject);
-        }
-
-        Debug.Log("Obligatory Prefabs Count: " + requiredPrefabCount);
+        Debug.Log("Obligatory Prefabs Count: " + obligatoryPrefabCount);
 
         // Print replacement prefab counts by name
         foreach (var kvp in replacementPrefabCounts)
         {
-            Debug.Log("Optional Prefab: " + kvp.Key + ", Count: " + kvp.Value);
+            Debug.Log("Replacement Prefab: " + kvp.Key + ", Count: " + kvp.Value);
         }
     }
 }
