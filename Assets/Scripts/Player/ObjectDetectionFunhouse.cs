@@ -84,63 +84,26 @@ public class ObjectDetectionFunhouse : MonoBehaviour
             GameObject hitObject = rayHit.collider.gameObject;
             HighlightObject(hitObject);
 
-
-            if (rayHit.collider.tag == "doorBtn")
+            if (rayHit.collider.tag == "ticket") 
             {
                 interactionMessage = "Press E to interact";
 
                 if (Input.GetKeyDown(KeyCode.E)) 
                 {
                     interactionMessage = "";
-                    rayHit.collider.gameObject.GetComponent<OpenDoor>().open();
-                    rayHit.collider.gameObject.GetComponent<Renderer>().material = selectedMaterial;
+                    Destroy(rayHit.transform.gameObject); 
                 }
-
-                //HandleObjectInteraction(rayHit.collider.transform);
             }
-            if (rayHit.collider.tag == "biscuit") 
+
+            if (rayHit.collider.tag == "missingposter") 
             {
                 interactionMessage = "Press E to interact";
 
                 if (Input.GetKeyDown(KeyCode.E)) 
                 {
                     interactionMessage = "";
-                    rayHit.collider.gameObject.SetActive(false);
-                    GetComponent<PlayerMotor>().restoreHealth();
+                    Destroy(rayHit.transform.gameObject); 
                 }
-            }
-            if (rayHit.collider.tag == "battery") 
-            {
-                interactionMessage = "Press E to interact";
-
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    interactionMessage = "";
-                    rayHit.collider.gameObject.SetActive(false);
-                    GetComponent<PlayerMotor>().restoreLight();
-                }
-            }
-            if (rayHit.collider.tag == "key1" || rayHit.collider.tag == "key2" || rayHit.collider.tag == "key3" || rayHit.collider.tag == "key4") 
-            {
-                interactionMessage = "Press E to interact";
-
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    interactionMessage = "";
-                    rayHit.collider.gameObject.SetActive(false);
-                    GetComponent<PlayerMotor>().handleKeys(rayHit.collider.tag);
-                }
-            }
-
-            if (rayHit.collider.tag == "face")
-            {
-                Debug.Log("stunned");
-                LarryAI ai = rayHit.collider.gameObject.GetComponentInParent<LarryAI>();
-                rayHit.collider.gameObject.GetComponentInParent<AudioSource>().PlayOneShot(ai.hurt);
-                rayHit.collider.gameObject.GetComponentInParent<Animator>().Play("Larry_Stun3");
-                ai.stun = true;
-                StartCoroutine(ai.recover());
-                GetComponent<PlayerMotor>().spendLight();
             }
 
         }
