@@ -61,6 +61,17 @@ public class MST
         return dictRoomEdges;
     }
 
+    public static bool elemInList(List<int> l, int elem) 
+    {
+        for (int i = 0; i < l.Count; i++) 
+        {
+            if (l[i] == elem)
+                return true;
+        }
+
+        return false;
+    }
+
     public static List<RoomEdge> MinSpanningTree(List<RoomEdge> roomEdges) 
     {
         Dictionary<int, List<int>> adjList = AdjacencyList(roomEdges);
@@ -69,8 +80,14 @@ public class MST
         List<int> visitedNodes = new List<int>();
         List<RoomEdge> mstree = new List<RoomEdge>();
 
-        int lastNode = -1;
+        int lastNode = -1; //id of first room
         int countPos = 0;
+
+        List<int> keyList = new List<int>(adjList.Keys);
+        for (int s = 0; s < keyList.Count; s++)
+            Debug.Log("adjlist node id: " + keyList[s]);
+
+        visitedNodes.Add(lastNode);
 
         while (visitedNodes.Count != adjList.Keys.Count) 
         {
@@ -78,12 +95,12 @@ public class MST
             bool nodeFound = false;
             for (int i = 0; i < nodes.Count; i++)
             {
-                if (!visitedNodes.Contains(nodes[i]))
+                if (!elemInList(visitedNodes, nodes[i])) //(!visitedNodes.Contains(nodes[i]))
                 {
                     RoomEdge re = dictRE[lastNode + "-" + nodes[i]];
                     mstree.Add(re);
                     dictRE.Remove(lastNode + "-" + nodes[i]);
-                    visitedNodes.Add(lastNode);
+                    visitedNodes.Add(nodes[i]);
                     lastNode = nodes[i];
                     nodeFound = true;
                     break;
@@ -96,14 +113,17 @@ public class MST
             }
         }
 
-        /*
+
+        for(int s = 0; s < visitedNodes.Count; s++)
+            Debug.Log("visited node id: " + visitedNodes[s]);
+
         //Drawing lines
         for (int i = 0; i < mstree.Count; i++)
         {
-            //Debug.Log("mst " + mstree[i].getRoom1().getId() + " " + mstree[i].getRoom2().getId());
-            Debug.DrawLine(mstree[i].getRoom1().getLocation(), mstree[i].getRoom2().getLocation(), new Color(0f, 0f, 1f), 200f);
+            Debug.Log("mst " + mstree[i].getRoom1().getId() + " " + mstree[i].getRoom2().getId());
+            Debug.DrawLine(mstree[i].getRoom1().getLocation() * 2, mstree[i].getRoom2().getLocation() * 2, new Color(0f, 1f, 0f), 200f);
         }
-        */
+        
 
         //Adding cycles 
         Random random = new Random();
@@ -120,7 +140,7 @@ public class MST
         for (int i = 0; i < mstree.Count; i++)
         {
             //Debug.Log("mst " + mstree[i].getRoom1().getId() + " " + mstree[i].getRoom2().getId());
-            //Debug.DrawLine(mstree[i].getRoom1().getLocation(), mstree[i].getRoom2().getLocation(), new Color(0f, 0f, 1f), 200f);
+            //Debug.DrawLine(mstree[i].getRoom1().getLocation() * 2, mstree[i].getRoom2().getLocation() * 2, new Color(0f, 1f, 0f), 200f);
         }
         
         return mstree;

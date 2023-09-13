@@ -63,12 +63,18 @@ public class PlayerMotor : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
         keysFound = new Dictionary<string, bool>();
+
+        for (int i = 1; i < 5; i++) 
+            keysFound["key" + i] = false;
+        
         cons = rb.constraints;
         Random random = new Random();
 
         VictoryKey = "" + (random.Next(1, 5));
         numKeys = 0;
         interactionMessage = "";
+
+
     }
 
     public void Move(Vector3 v)

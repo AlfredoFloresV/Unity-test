@@ -1060,6 +1060,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   footsteps: {fileID: 2016004054}
+  flashlight: {fileID: 961501586}
 --- !u!82 &853846561
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1585,7 +1586,7 @@ MonoBehaviour:
   - {fileID: 2683181888989305272, guid: 070e9717e9fbffd678eaf1d5d686c81b, type: 3}
   - {fileID: 6615147236381658409, guid: 3b6e30f6deaaa382ca0015fe16194603, type: 3}
   minDistanceBetweenPrefabs: 10
-  minDistanceToDoor: 5
+  minDistanceToDoor: 3
   replacementSpawnProbability: 0.5
   startReplacement: 0
 --- !u!82 &1278654480

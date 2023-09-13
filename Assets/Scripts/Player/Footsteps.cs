@@ -7,6 +7,8 @@ public class Footsteps : MonoBehaviour
     [SerializeField]
     private GameObject footsteps;
 
+    [SerializeField]
+    private GameObject flashlight;
 
     private int keyNo = 0;
 
@@ -33,11 +35,13 @@ public class Footsteps : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) 
         {
             footsteps.GetComponent<AudioSource>().pitch = 1.2f;
+            //flashlight.GetComponent<Animator>().Play("LightSprint");
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
             footsteps.GetComponent<AudioSource>().pitch = 0.9f;
+            //flashlight.GetComponent<Animator>().Play("LightWalking");
         }
     }
 

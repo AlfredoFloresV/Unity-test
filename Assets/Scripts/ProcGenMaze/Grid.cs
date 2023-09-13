@@ -31,16 +31,16 @@ public class Grid
             for (int j = 0; j < gridMap.GetLength(1); j++) 
             {
                 //Vertical lines
-                Debug.DrawLine(new Vector3(i, 0, j) * cellSize, new Vector3(i, 0, j + 1) * cellSize, Color.white, 200f);
+                //Debug.DrawLine(new Vector3(i, 0, j) * cellSize, new Vector3(i, 0, j + 1) * cellSize, Color.white, 200f);
                 //Horizontal lines
-                Debug.DrawLine(new Vector3(i, 0, j) * cellSize, new Vector3(i + 1, 0, j) * cellSize, Color.white, 200f);
+                //Debug.DrawLine(new Vector3(i, 0, j) * cellSize, new Vector3(i + 1, 0, j) * cellSize, Color.white, 200f);
                 
                 gridMap[i, j] = CellType.None;
             }
         }
 
-        Debug.DrawLine(new Vector3(0, 0, height) * cellSize, new Vector3(width, 0, height) * cellSize, Color.white, 200f);
-        Debug.DrawLine(new Vector3(width, 0, 0) * cellSize, new Vector3(width, 0, height) * cellSize, Color.white, 200f);
+        //Debug.DrawLine(new Vector3(0, 0, height) * cellSize, new Vector3(width, 0, height) * cellSize, Color.white, 200f);
+        //Debug.DrawLine(new Vector3(width, 0, 0) * cellSize, new Vector3(width, 0, height) * cellSize, Color.white, 200f);
         
     }
 }

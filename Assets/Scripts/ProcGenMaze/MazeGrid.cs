@@ -420,8 +420,6 @@ public class MazeGrid : MonoBehaviour
             for (int j = 0; j < rooms.Count; j++) 
             {
                 Vector3 bounds = (loc + size);
-                
-                
                 bool outOfBounds = (bounds.x >= mazeSizeX || bounds.z >= mazeSizeY);
 
                 if (Room.isInsersecting(room, rooms[j], Scale) || outOfBounds) 
@@ -455,7 +453,7 @@ public class MazeGrid : MonoBehaviour
                 RoomEdge re = new RoomEdge(rooms[i], rooms[j]);
                 bool addEdge = true;
 
-                //Debug.Log("working with edge " + re.getRoom1().getId() + " " + re.getRoom2().getId());
+                //Debug.Log("working with edge " + re.getRoom1().getId() + " " + re.getRoom2().getId()); 
                 for (int k = 0; k < roomEdges.Count; k++)
                 {
                     if (RoomEdge.intersects(re, roomEdges[k])) 
@@ -482,10 +480,10 @@ public class MazeGrid : MonoBehaviour
         }
 
         //Drawing lines
-        //for (int i = 0; i < roomEdges.Count; i++) 
-        //{
-        //    Debug.DrawLine(roomEdges[i].getRoom1().getLocation(), roomEdges[i].getRoom2().getLocation(), new Color(0f,0f,1f), 120f);
-        //}
+        for (int i = 0; i < roomEdges.Count; i++) 
+        {
+            Debug.DrawLine(roomEdges[i].getRoom1().getLocation() * Scale, roomEdges[i].getRoom2().getLocation() * Scale , new Color(0f,0f,1f), 120f);
+        }
     }
 
 
@@ -609,7 +607,7 @@ public class MazeGrid : MonoBehaviour
             Vector3 loc = doorLocations[i];
             int x = (int) loc.x;
             int z = (int) loc.z;
-            //Debug.Log(grid[x, z] + " " + loc);
+            Debug.Log(grid[x, z] + " " + loc);
 
             CellType cell = grid[x, z];
             CellType lookfor = CellType.None;
@@ -668,51 +666,7 @@ public class MazeGrid : MonoBehaviour
             }
         }
     }
-
-    /*
-    private void PlaceDoors()
-    {
-        // No puede haber doors pegadas, validar vecinos acorde a la direcci�n y al maxroomsize
-        //for (int i = 0; i < rooms.Count; i++) 
-        //{
-        //    Debug.Log(rooms[i].getLocation() + " " + rooms[i].getId());
-        //}
-
-        //Look for room wall connected with hallways
-        for (int x = 0; x < prefabGrid.GetLength(0); x++)
-        {
-            for (int z = 0; z < prefabGrid.GetLength(1); z++)
-            {
-                if (grid[x, z] != CellType.Room) continue;
-
-                //Check Top create bottom door from hallway
-                if (z + 1 < mazeSizeY && grid[x, z + 1] == CellType.Hallway) 
-                {
-                    prefabGrid[x, z + 1].GetComponent<MazeCellObject>().placeDoor("bottom");
-                }
-
-                //Check Bottom create top door from hallway
-                if (z - 1 > 0 && grid[x, z - 1] == CellType.Hallway)
-                {
-                    prefabGrid[x, z - 1].GetComponent<MazeCellObject>().placeDoor("top");
-                }
-
-                //Check Left create right door from hallway
-                if (x - 1 > 0 && grid[x - 1, z] == CellType.Hallway) 
-                {
-                    prefabGrid[x - 1, z].GetComponent<MazeCellObject>().placeDoor("right");
-                }
-
-                //Check Left create right door from hallway
-                if (x + 1 < mazeSizeY && grid[x + 1, z] == CellType.Hallway)
-                {
-                    prefabGrid[x + 1, z].GetComponent<MazeCellObject>().placeDoor("left");
-                }
-            }
-        }
-    }
-    */
-    }
+}
 
 
     // Used for triangulation
