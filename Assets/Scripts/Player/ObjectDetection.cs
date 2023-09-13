@@ -141,7 +141,6 @@ public class ObjectDetection : MonoBehaviour
 
                 if (pm.lightEnabled() && pm.getIntensity() >= 0.5 && pm.getFocus() == true) 
                 {
-                    Debug.Log("stunning");
                     LarryActions ai = rayHit.collider.gameObject.GetComponentInParent<LarryActions>();
                     ai.StunActions();
                     GetComponent<PlayerMotor>().spendLight();

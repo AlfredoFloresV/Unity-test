@@ -160,10 +160,14 @@ public class LarryActions : MonoBehaviour
 
     public void StunActions() 
     {
-        animator.Play("Larry_Stun3");
-        audioSource.PlayOneShot(stunAudio);
-        StopCoroutine(chasing());
-        StartCoroutine(recover(10f));
+        if (currentState != LarryState.Stun) 
+        {
+            currentState = LarryState.Stun;
+            animator.Play("Larry_Stun3");
+            audioSource.PlayOneShot(stunAudio);
+            StopCoroutine(chasing());
+            StartCoroutine(recover(10f));
+        }
     }
 
     public void AttackActions(string attack) 
