@@ -31,6 +31,7 @@ public class ObjectPickupAndRotate : MonoBehaviour
         objectIntMessage = "";
         objectNameMessage = "";
         interactionMessage = "";
+        Cursor.visible = false;
     }
 
     private void Update()
@@ -72,7 +73,7 @@ public class ObjectPickupAndRotate : MonoBehaviour
             PauseScene();
             SpawnObject(ticketPrefab, new Vector3(1f, 1f, 1f));
             objectIntMessage = "Found ";
-            objectNameMessage = "ORANGE KEY";
+            objectNameMessage = "TICKET";
             interactionMessage = "Press Q to return";
         }
         if (missingperson && !isPaused)
@@ -80,7 +81,7 @@ public class ObjectPickupAndRotate : MonoBehaviour
             PauseScene();
             SpawnObject(missingpersonPrefab, new Vector3(1f, 1f, 1f));
             objectIntMessage = "Found ";
-            objectNameMessage = "ORANGE KEY";
+            objectNameMessage = "MISSING PERSON POSTER";
             interactionMessage = "Press Q to return";
         }
         if (Input.GetKeyDown(KeyCode.Q) && isPaused)
@@ -91,6 +92,8 @@ public class ObjectPickupAndRotate : MonoBehaviour
             key2 = false;
             key3 = false;
             key4 = false;
+            ticket = false;
+            missingperson = false;
             objectIntMessage = "";
             objectNameMessage = "";
             interactionMessage = "";

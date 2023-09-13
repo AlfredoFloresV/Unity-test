@@ -25,6 +25,9 @@ TagManager:
   - jumpscare
   - larry_body
   - larry_face
+  - missingposter
+  - ticket
+  - arrow
   layers:
   - Default
   - TransparentFX
@@ -41,7 +44,7 @@ TagManager:
   - Door
   - Larry
   - Items
-  - 
+  - Collectibles
   - 
   - 
   - 

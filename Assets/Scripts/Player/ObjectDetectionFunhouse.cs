@@ -23,11 +23,26 @@ public class ObjectDetectionFunhouse : MonoBehaviour
     private Shader highlight;
 
     private string interactionMessage = ""; // Message to display when an object is selected
+    private ObjectPickupAndRotate pickup;
+    private Animator animDoor1;
+    private Animator animDoor2;
+    private MeshRenderer policeTape1;
+    private MeshRenderer policeTape2;
+    private MeshRenderer policeTape3;
+    private BoxCollider funhouseFloor;
 
     private void Start()
     {
         standard = Shader.Find("Standard"); //Not working
         highlight = Shader.Find("Unlit/Texture");
+        pickup = GameObject.Find ("Camera").GetComponent<ObjectPickupAndRotate>();
+        animDoor1 = GameObject.Find ("StartDoor1").GetComponent<Animator>();
+        animDoor2 = GameObject.Find ("StartDoor2").GetComponent<Animator>();
+        policeTape1 = GameObject.Find ("PoliceTapeD1").GetComponent<MeshRenderer>();
+        policeTape2 = GameObject.Find ("PoliceTapeD2").GetComponent<MeshRenderer>();
+        policeTape3 = GameObject.Find ("PoliceTapeD3").GetComponent<MeshRenderer>();
+        funhouseFloor = GameObject.Find ("FunhouseFloor").GetComponent<BoxCollider>();
+        
     }
 
     void HighlightObject(GameObject gameObject)
@@ -92,6 +107,13 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                 {
                     interactionMessage = "";
                     Destroy(rayHit.transform.gameObject); 
+                    pickup.ticket = true;
+                    animDoor1.enabled = true;
+                    animDoor2.enabled = true;
+                    policeTape1.enabled = false;
+                    policeTape2.enabled = false;
+                    policeTape3.enabled = false;
+
                 }
             }
 
@@ -103,6 +125,18 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                 {
                     interactionMessage = "";
                     Destroy(rayHit.transform.gameObject); 
+                    pickup.missingperson = true;
+                }
+            }
+
+            if (rayHit.collider.tag == "arrow") 
+            {
+                interactionMessage = "Press E to interact";
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    interactionMessage = "";
+                    funhouseFloor.enabled = false;
                 }
             }
 
