@@ -76,6 +76,7 @@ public class MazeGrid : MonoBehaviour
 
     private void Start()
     {
+        Cursor.visible = false;
         roomCount = (int) ((mazeSizeX + mazeSizeY) / 2.0f) + 3;
         rooms = new List<Room>();
         roomEdges = new List<RoomEdge>();
