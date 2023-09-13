@@ -1,19 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class DungeonTileReplacement : MonoBehaviour
 {
     public List<GameObject> obligatoryPrefabs; // List of prefabs that must spawn
     public List<GameObject> optionalPrefabs; // List of prefabs for random replacement
 
-    public float minDistanceBetweenObligatory = 5f; // Minimum distance between spawned obligatory prefabs
+    public float minDistanceBetweenPrefabs = 5f; // Minimum distance between spawned prefabs
+    public float minDistanceToDoor = 2f; // Minimum distance to objects with "door" tag
 
     public float replacementSpawnProbability = 0.5f; // Probability of spawning replacement prefabs
 
     public bool startReplacement = false; // Public boolean to trigger the replacement
 
-    private List<Vector3> obligatorySpawnPositions = new List<Vector3>();
+    private List<Vector3> spawnedPrefabPositions = new List<Vector3>();
 
     void Update()
     {
@@ -28,49 +28,54 @@ public class DungeonTileReplacement : MonoBehaviour
     {
         // Find all game objects with the "ReplaceMe" tag in the scene
         GameObject[] replaceMeTiles = GameObject.FindGameObjectsWithTag("ReplaceMe");
+        GameObject[] doorObjects = GameObject.FindGameObjectsWithTag("door"); // Find all objects with "door" tag
 
-        int obligatoryPrefabCount = 0;
         Dictionary<string, int> replacementPrefabCounts = new Dictionary<string, int>();
+        int obligatoryPrefabCount = 0;
 
         foreach (GameObject replaceMeTile in replaceMeTiles)
         {
             Transform tileTransform = replaceMeTile.transform;
 
-            // Check if there's an obligatoryPrefab to spawn
-            if (obligatoryPrefabCount < obligatoryPrefabs.Count)
-            {
-                // Check if the position is valid for an obligatoryPrefab
-                bool validPosition = true;
-                foreach (Vector3 spawnPosition in obligatorySpawnPositions)
-                {
-                    if (Vector3.Distance(tileTransform.position, spawnPosition) < minDistanceBetweenObligatory)
-                    {
-                        validPosition = false;
-                        break;
-                    }
-                }
+            // Check if the position is valid
+            bool validPosition = true;
 
-                // If valid position, spawn an obligatoryPrefab
-                if (validPosition)
+            // Check the minimum distance to door objects
+            foreach (GameObject doorObject in doorObjects)
+            {
+                if (Vector3.Distance(tileTransform.position, doorObject.transform.position) < minDistanceToDoor)
                 {
-                    GameObject obligatoryPrefab = obligatoryPrefabs[obligatoryPrefabCount];
-                    Instantiate(obligatoryPrefab, tileTransform.position, tileTransform.rotation);
-                    obligatorySpawnPositions.Add(tileTransform.position);
-                    obligatoryPrefabCount++;
+                    validPosition = false;
+                    break;
                 }
             }
 
-            // Check for replacement prefabs (if any)
-            if (Random.value < replacementSpawnProbability)
+            // Check the minimum distance between spawned obligatory prefabs
+            foreach (Vector3 spawnedPosition in spawnedPrefabPositions)
             {
-                int randomIndex = Random.Range(0, optionalPrefabs.Count);
-                GameObject replacementPrefab = optionalPrefabs[randomIndex];
+                if (Vector3.Distance(tileTransform.position, spawnedPosition) < minDistanceBetweenPrefabs)
+                {
+                    validPosition = false;
+                    break;
+                }
+            }
 
-                // Instantiate the replacement prefab at the same position and rotation
-                Instantiate(replacementPrefab, tileTransform.position, tileTransform.rotation);
+            // If valid position, spawn an obligatory prefab (only if remaining)
+            if (validPosition && obligatoryPrefabCount < obligatoryPrefabs.Count)
+            {
+                GameObject obligatoryPrefab = obligatoryPrefabs[obligatoryPrefabCount];
+                Instantiate(obligatoryPrefab, tileTransform.position, tileTransform.rotation);
+                obligatoryPrefabCount++;
+                spawnedPrefabPositions.Add(tileTransform.position); // Track the position of spawned obligatory prefab
+            }
+            // If all obligatory prefabs are spawned, consider spawning optional prefabs
+            else if (validPosition)
+            {
+                GameObject prefabToSpawn = optionalPrefabs[Random.Range(0, optionalPrefabs.Count)];
+                Instantiate(prefabToSpawn, tileTransform.position, tileTransform.rotation);
 
                 // Count replacement prefabs by name
-                string prefabName = replacementPrefab.name;
+                string prefabName = prefabToSpawn.name;
                 if (replacementPrefabCounts.ContainsKey(prefabName))
                 {
                     replacementPrefabCounts[prefabName]++;
@@ -85,12 +90,10 @@ public class DungeonTileReplacement : MonoBehaviour
             Destroy(replaceMeTile);
         }
 
-        Debug.Log("Obligatory Prefabs Count: " + obligatoryPrefabCount);
-
         // Print replacement prefab counts by name
         foreach (var kvp in replacementPrefabCounts)
         {
-            Debug.Log("Replacement Prefab: " + kvp.Key + ", Count: " + kvp.Value);
+            Debug.Log("Prefab: " + kvp.Key + ", Count: " + kvp.Value);
         }
     }
 }

@@ -1473,7 +1473,8 @@ MonoBehaviour:
   - {fileID: 2683181888989305272, guid: 070e9717e9fbffd678eaf1d5d686c81b, type: 3}
   - {fileID: 6615147236381658409, guid: 3b6e30f6deaaa382ca0015fe16194603, type: 3}
   minDistanceBetweenPrefabs: 10
-  replacementSpawnProbability: 0.3
+  minDistanceToDoor: 5
+  replacementSpawnProbability: 0.5
   startReplacement: 0
 --- !u!82 &1278654480
 AudioSource:
@@ -3054,7 +3055,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2038255466}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 40}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
