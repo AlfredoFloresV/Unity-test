@@ -40,6 +40,14 @@ public class MainMenuScript : MonoBehaviour
 
     public void StartGame() 
     {
+        fade.SetActive(true);
+        fade.GetComponent<Animator>().Play("FadeOut");
+        StartCoroutine(start());
+    }
+
+    IEnumerator start() 
+    {
+        yield return new WaitForSeconds(3f);
         SceneManager.LoadScene("DungeonLevel");
     }
 
@@ -52,6 +60,14 @@ public class MainMenuScript : MonoBehaviour
 
     public void QuitGame() 
     {
+        fade.SetActive(true);
+        fade.GetComponent<Animator>().Play("FadeOut");
+        StartCoroutine(quit());
+    }
+
+    IEnumerator quit() 
+    {
+        yield return new WaitForSeconds(3f);
         Application.Quit();
     }
 
@@ -69,6 +85,14 @@ public class MainMenuScript : MonoBehaviour
 
     public void Credits() 
     {
+        fade.SetActive(true);
+        fade.GetComponent<Animator>().Play("FadeOut");
+        StartCoroutine(cred());
+    }
+
+    IEnumerator cred() 
+    {
+        yield return new WaitForSeconds(3f);
         SceneManager.LoadScene("Credits");
     }
 }
