@@ -20,6 +20,9 @@ public class ObjectDetection : MonoBehaviour
     [SerializeField]
     private Camera cam;
 
+    [SerializeField]
+    private GameObject flashLight;
+
     GameObject lastHighlightedObject = null;
 
     private Shader standard;
@@ -141,11 +144,10 @@ public class ObjectDetection : MonoBehaviour
 
             if (rayHit.collider.tag == "larry_face")
             {
-                if (playerMotor != null
-                    && playerMotor.lightEnabled() 
-                    && playerMotor.getIntensity() >= 0.5 
-                    && playerMotor.getFocus() == true 
-                    && rayHit.collider.gameObject.GetComponent<LarryActions>().currentState != LarryState.Stun) 
+                if (rayHit.collider.gameObject.GetComponentInParent<LarryActions>().currentState != LarryState.Stun
+                    && flashLight.GetComponent<Flashlight>().lightEnabled() 
+                    && flashLight.GetComponent<Flashlight>().intensity >= 0.5 
+                    && flashLight.GetComponent<Flashlight>().focus == true) 
                 {
                     LarryActions ai = rayHit.collider.gameObject.GetComponentInParent<LarryActions>();
                     ai.StunActions();

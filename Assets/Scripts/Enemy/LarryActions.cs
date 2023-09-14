@@ -178,7 +178,7 @@ public class LarryActions : MonoBehaviour
 
     public void AttackActions(string attack) 
     {
-        if (player.GetComponent<PlayerMotor>().hit == false && currentState != LarryState.Stun ) 
+        if (player.GetComponent<PlayerMotor>().hit == false && currentState != LarryState.Stun) 
         {
             playerCam.gameObject.SetActive(false);
             cam.gameObject.SetActive(true);

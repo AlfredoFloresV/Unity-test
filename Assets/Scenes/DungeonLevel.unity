@@ -1267,6 +1267,7 @@ MonoBehaviour:
   originalMaterial: {fileID: 2100000, guid: c46e65d1194d0654986c46a66b579397, type: 2}
   selectedMaterial: {fileID: 2100000, guid: 6581645f5e3d9e14486c7aad9ca9caca, type: 2}
   cam: {fileID: 1393736479}
+  flashLight: {fileID: 961501586}
 --- !u!65 &853846563
 BoxCollider:
   m_ObjectHideFlags: 0

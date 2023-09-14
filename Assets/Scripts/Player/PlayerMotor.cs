@@ -279,46 +279,6 @@ public class PlayerMotor : MonoBehaviour
         }
     }
 
-
-
-    /*
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("specialdoor"))
-        {
-
-            interactingWithObject(true);
-
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                interactingWithObject(false);
-                string num = other.gameObject.name.Substring(other.gameObject.name.Length - 1);
-                bool isCorrectDoor = num == VictoryKey;
-
-                if (keysFound["key" + num] == true)
-                {
-                    audioSource.PlayOneShot(unlock);
-                    other.gameObject.GetComponent<Animator>().Play("open");
-
-                    if (isCorrectDoor)
-                    {
-                        StartCoroutine(win(claps, true));
-                    }
-                    else
-                    {
-                        StartCoroutine(win(boo, false));
-                    }
-                }
-                else
-                {
-                    audioSource.PlayOneShot(locked);
-                }
-            }
-        }
-    }
-    */
-
-
     private void interactingWithObject(bool interacting)
     {
         if (interacting == true)
