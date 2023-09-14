@@ -30,6 +30,7 @@ public class MainMenuController2 : MonoBehaviour
 
     [SerializeField]
     private GameObject fade;
+    public Button startButton;
 
     private void Start()
     {
@@ -61,7 +62,9 @@ public class MainMenuController2 : MonoBehaviour
         Destroy(musicController);
         Debug.Log("AfterDestroy");
         audioSource.Play();
-        startgame = true;        
+        startgame = true; 
+        startButton.interactable = false; 
+
     }
     public void GoToCredits()
     {
