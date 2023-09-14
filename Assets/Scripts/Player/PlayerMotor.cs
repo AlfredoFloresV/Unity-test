@@ -211,22 +211,30 @@ public class PlayerMotor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("specialdoor") && other.gameObject.name.Contains(VictoryKey) && keysFound["key" + VictoryKey] == true)
+        if (other.gameObject.CompareTag("specialdoor"))
         {
-            audioSource.PlayOneShot(unlock);
-            other.gameObject.GetComponent<Animator>().Play("open");
-            StartCoroutine(win(claps, true));
-            
-        }
-        else if (other.gameObject.CompareTag("specialdoor") && !other.gameObject.name.Contains(VictoryKey) && keysFound["key" + VictoryKey] == true)
-        {
-            audioSource.PlayOneShot(unlock);
-            other.gameObject.GetComponent<Animator>().Play("open");
-            StartCoroutine(win(boo, false));
-        }
-        else if (other.gameObject.CompareTag("specialdoor") && keysFound["key" + VictoryKey] == false)
-        {
-            audioSource.PlayOneShot(locked);
+            string num = other.gameObject.name.Substring(other.gameObject.name.Length - 1);
+            bool isCorrectDoor = name.Contains(VictoryKey);
+
+            if (keysFound["key" + num] == true)
+            {
+                if (isCorrectDoor)
+                {
+                    audioSource.PlayOneShot(unlock);
+                    other.gameObject.GetComponent<Animator>().Play("open");
+                    StartCoroutine(win(claps, true));
+                }
+                else
+                {
+                    audioSource.PlayOneShot(unlock);
+                    other.gameObject.GetComponent<Animator>().Play("open");
+                    StartCoroutine(win(boo, false));
+                }
+            }
+            else 
+            {
+                audioSource.PlayOneShot(locked);
+            }
         }
     }
 

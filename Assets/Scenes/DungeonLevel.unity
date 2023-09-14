@@ -1030,8 +1030,8 @@ MonoBehaviour:
   grabbingKeys: {fileID: 8300000, guid: 8ce6dcd355f74834ab692bcd53268a2b, type: 3}
   boo: {fileID: 8300000, guid: d5d22fd86c3c7994ea5594569191da72, type: 3}
   locked: {fileID: 8300000, guid: 8532a8525f8224241ab0be52e2218700, type: 3}
-  unlock: {fileID: 0}
-  claps: {fileID: 0}
+  unlock: {fileID: 8300000, guid: 9aeddd513bd1df24c97d7b69a0e0e08f, type: 3}
+  claps: {fileID: 8300000, guid: ff12020493758414c940fd46773f116e, type: 3}
   Health: 5
   Damage: 0
   VictoryKey: 
@@ -1729,8 +1729,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obligatoryPrefabs:
-  - {fileID: 7637363988062511354, guid: bdf6d10dd5158efc880848f364bf90e3, type: 3}
   - {fileID: 819108604304924537, guid: c2eaad8dbed2e3c0998313ce01e85977, type: 3}
+  - {fileID: 7637363988062511354, guid: bdf6d10dd5158efc880848f364bf90e3, type: 3}
   - {fileID: 2338670622615441073, guid: 5c2ea5eea17109b8988f29a52db83fb8, type: 3}
   - {fileID: 6241342817031219557, guid: 230c8599ea7c7c468bf82c4fb43e2276, type: 3}
   optionalPrefabs:
@@ -1865,10 +1865,10 @@ MonoBehaviour:
   destPrefab: {fileID: 2184199489180434785, guid: c92ad9175458da34cbe8ec4575349a1b, type: 3}
   Scale: 2
   keys:
-  - {fileID: 6333676778159948546, guid: 211e063161e02c64ca10aae31fbd00f0, type: 3}
-  - {fileID: 6603573458068040436, guid: 88d8eac022c4a254caaefca956724d97, type: 3}
-  - {fileID: 4418730745794683437, guid: 6342cbf4953004548a379b78bf886809, type: 3}
-  - {fileID: 6000874481391354267, guid: 5dc7e58f4530a24409fc3a8cf9750b79, type: 3}
+  - {fileID: 819108604304924537, guid: c2eaad8dbed2e3c0998313ce01e85977, type: 3}
+  - {fileID: 7637363988062511354, guid: bdf6d10dd5158efc880848f364bf90e3, type: 3}
+  - {fileID: 2338670622615441073, guid: 5c2ea5eea17109b8988f29a52db83fb8, type: 3}
+  - {fileID: 6241342817031219557, guid: 230c8599ea7c7c468bf82c4fb43e2276, type: 3}
   battery: {fileID: 3469878698640515718, guid: b13d6a081df81bd47a96fa58c02c39f2, type: 3}
   biscuit: {fileID: 872983729084361222, guid: 5daf69c619f29bb41b8b4b9512a08107, type: 3}
   specialRoom: {fileID: 4206604495867543707, guid: fa1b2c8743c9af8458a215918defd3b7, type: 3}
