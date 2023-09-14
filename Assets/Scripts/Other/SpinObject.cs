@@ -20,9 +20,5 @@ public class SpinObject : MonoBehaviour
             // Rotate the GameObject around the pivot point with the specified direction
             transform.RotateAround(pivotPoint.transform.position, rotationAxis, direction * spinSpeed * Time.deltaTime);
         }
-        else
-        {
-            Debug.LogWarning("Pivot point not assigned. Please assign a GameObject to the 'Pivot Point' field in the Inspector.");
-        }
     }
 }

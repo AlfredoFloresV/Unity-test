@@ -6,15 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
-    guid: ab087e14dddaf354f9d2160000d8f3b5
+    path: Assets/Scenes/Intro.unity
+    guid: ff06dc26cd8601a02bf14be5b4fb7ec0
   - enabled: 1
-    path: Assets/Scenes/PauseMenu.unity
-    guid: 6d1e325dabadd64489af8c389b8c87b0
+    path: Assets/Scenes/MainMenu2.unity
+    guid: 036bbcf6928356fec8d4fcf1f9b21ca1
   - enabled: 1
-    path: Assets/Scenes/Win.unity
-    guid: eb871a7b3814dcdccb7a3f129b03bcdb
-  - enabled: 0
     path: Assets/Scenes/Funhouse.unity
     guid: ec568a42fce331866a039473ec82fb7d
   - enabled: 1
@@ -23,12 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameOver1 1.unity
     guid: 64927b2d6ed9071999f9c3d3375f06ee
-  - enabled: 0
-    path: Assets/Scenes/Assets.unity
-    guid: 2168de706e45b2f9f8a412a77cff86a6
-  - enabled: 0
-    path: Assets/Scenes/Collectibles.unity
-    guid: f94b45dc9fc849a26aedc7314a89b5f3
+  - enabled: 1
+    path: Assets/Scenes/Win.unity
+    guid: eb871a7b3814dcdccb7a3f129b03bcdb
   - enabled: 1
     path: Assets/Scenes/Credits.unity
     guid: a25c7b77f1a8dda4b804ab4313b03a52

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ObjectDetectionFunhouse : MonoBehaviour
 {
@@ -23,26 +24,22 @@ public class ObjectDetectionFunhouse : MonoBehaviour
     private Shader highlight;
 
     private string interactionMessage = ""; // Message to display when an object is selected
-    private ObjectPickupAndRotate pickup;
+    private ObjectPickupAndRotate_Funhouse pickup;
     private Animator animDoor1;
     private Animator animDoor2;
-    private MeshRenderer policeTape1;
-    private MeshRenderer policeTape2;
-    private MeshRenderer policeTape3;
     private BoxCollider funhouseFloor;
+    private Animator playerAnimator;
+    public string targetSceneName = "DungeonLevel"; 
 
     private void Start()
     {
         standard = Shader.Find("Standard"); //Not working
         highlight = Shader.Find("Unlit/Texture");
-        pickup = GameObject.Find ("Camera").GetComponent<ObjectPickupAndRotate>();
+        pickup = GameObject.Find ("Camera").GetComponent<ObjectPickupAndRotate_Funhouse>();
         animDoor1 = GameObject.Find ("StartDoor1").GetComponent<Animator>();
         animDoor2 = GameObject.Find ("StartDoor2").GetComponent<Animator>();
-        policeTape1 = GameObject.Find ("PoliceTapeD1").GetComponent<MeshRenderer>();
-        policeTape2 = GameObject.Find ("PoliceTapeD2").GetComponent<MeshRenderer>();
-        policeTape3 = GameObject.Find ("PoliceTapeD3").GetComponent<MeshRenderer>();
         funhouseFloor = GameObject.Find ("FunhouseFloor").GetComponent<BoxCollider>();
-        
+        playerAnimator = GameObject.Find ("Player").GetComponent<Animator>();
     }
 
     void HighlightObject(GameObject gameObject)
@@ -75,9 +72,7 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                     lastHighlightedObject.GetComponent<MeshRenderer>().sharedMaterial = originalMaterial;
                     lastHighlightedObject.GetComponent<MeshRenderer>().sharedMaterial.shader = standard;
                 }
-                
             }
-
             lastHighlightedObject = null;
             interactionMessage = "";
         }
@@ -110,10 +105,6 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                     pickup.ticket = true;
                     animDoor1.enabled = true;
                     animDoor2.enabled = true;
-                    policeTape1.enabled = false;
-                    policeTape2.enabled = false;
-                    policeTape3.enabled = false;
-
                 }
             }
 
@@ -137,14 +128,21 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                 {
                     interactionMessage = "";
                     funhouseFloor.enabled = false;
+                    playerAnimator.enabled = true;
+                    StartCoroutine(NextLevel());
                 }
             }
-
         }
         else
         {
             ClearHighlighted();
         }
+    }
+
+    private IEnumerator NextLevel()
+    {
+        yield return new WaitForSeconds(1.5f);
+        SceneManager.LoadScene(targetSceneName);
     }
 
     void Update()

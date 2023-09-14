@@ -1,18 +1,10 @@
 using UnityEngine;
 
-public class ObjectPickupAndRotate : MonoBehaviour
+public class ObjectPickupAndRotate_Funhouse : MonoBehaviour
 {
-    public GameObject key1Prefab;
-    public GameObject key2Prefab;
-    public GameObject key3Prefab;
-    public GameObject key4Prefab;
     public GameObject ticketPrefab;
     public GameObject missingpersonPrefab;
 
-    public bool key1 = false;
-    public bool key2 = false;
-    public bool key3 = false;
-    public bool key4 = false;
     public bool ticket = false;
     public bool missingperson = false;
 
@@ -24,6 +16,12 @@ public class ObjectPickupAndRotate : MonoBehaviour
     private string objectNameMessage = "";
     private string interactionMessage = "";
 
+//Doors assets
+    private MeshRenderer policeTape1;
+    private MeshRenderer policeTape2;
+    private MeshRenderer policeTape3;
+    private AudioSource doorsOpen;
+
     private void Start()
     {
         originalTimeScale = Time.timeScale;
@@ -31,42 +29,14 @@ public class ObjectPickupAndRotate : MonoBehaviour
         objectNameMessage = "";
         interactionMessage = "";
         Cursor.visible = false;
+        policeTape1 = GameObject.Find ("PoliceTapeD1").GetComponent<MeshRenderer>();
+        policeTape2 = GameObject.Find ("PoliceTapeD2").GetComponent<MeshRenderer>();
+        policeTape3 = GameObject.Find ("PoliceTapeD3").GetComponent<MeshRenderer>();
+        doorsOpen = GameObject.Find ("DoorSound").GetComponent<AudioSource>();
     }
 
     private void Update()
     {
-        if (key1 && !isPaused)
-        {
-            PauseScene();
-            SpawnObject(key1Prefab, new Vector3(1f, 1f, 1f));
-            objectIntMessage = "Found ";
-            objectNameMessage = "YELLOW KEY";
-            interactionMessage = "Press Q to return";
-        }
-        if (key2 && !isPaused)
-        {
-            PauseScene();
-            SpawnObject(key2Prefab, new Vector3(1f, 1f, 1f));
-            objectIntMessage = "Found ";
-            objectNameMessage = "PINK KEY";
-            interactionMessage = "Press Q to return";
-        }
-        if (key3 && !isPaused)
-        {
-            PauseScene();
-            SpawnObject(key3Prefab, new Vector3(1f, 1f, 1f));
-            objectIntMessage = "Found ";
-            objectNameMessage = "GREEN KEY";
-            interactionMessage = "Press Q to return";
-        }
-        if (key4 && !isPaused)
-        {
-            PauseScene();
-            SpawnObject(key4Prefab, new Vector3(1f, 1f, 1f));
-            objectIntMessage = "Found ";
-            objectNameMessage = "ORANGE KEY";
-            interactionMessage = "Press Q to return";
-        }
         if (ticket && !isPaused)
         {
             PauseScene();
@@ -87,10 +57,10 @@ public class ObjectPickupAndRotate : MonoBehaviour
         {
             DestroyObject();
             ResumeScene();
-            key1 = false;
-            key2 = false;
-            key3 = false;
-            key4 = false;
+            if(ticket==true)
+            {
+                DoorsOpen();
+            }
             ticket = false;
             missingperson = false;
             objectIntMessage = "";
@@ -101,7 +71,15 @@ public class ObjectPickupAndRotate : MonoBehaviour
         // Allow rotation even when the scene is paused
         RotateObject();
     }
-    
+
+    private void DoorsOpen()
+    {
+        policeTape1.enabled = false;
+        policeTape2.enabled = false;
+        policeTape3.enabled = false;
+        doorsOpen.Play();
+    }
+
     private void PauseScene()
     {
         isPaused = true;

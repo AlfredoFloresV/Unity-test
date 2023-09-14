@@ -36,7 +36,7 @@ public class MainScreenBtn : MonoBehaviour
 
     public void startGame() 
     {
-        CancelInvoke("blinkImage");
+        //CancelInvoke("blinkImage");
         image.gameObject.SetActive(true);
         audioSource.PlayOneShot(startBtnSound);
         fade.SetActive(true);
