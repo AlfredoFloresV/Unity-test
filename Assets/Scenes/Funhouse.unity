@@ -6326,19 +6326,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1626287530}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03ebb8d22cfa465b5810ee43ec7672eb, type: 3}
+  m_Script: {fileID: 11500000, guid: 3f4c749b7c8b72c02bbfabbce5f28628, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key1Prefab: {fileID: 0}
-  key2Prefab: {fileID: 0}
-  key3Prefab: {fileID: 0}
-  key4Prefab: {fileID: 0}
   ticketPrefab: {fileID: 4950763635182294579, guid: 999821da420a5f3f882490e7f932c585, type: 3}
   missingpersonPrefab: {fileID: 4325725518143449853, guid: a936ec5517543d09d945727b3bdb1368, type: 3}
-  key1: 0
-  key2: 0
-  key3: 0
-  key4: 0
   ticket: 0
   missingperson: 0
 --- !u!1 &1636198201
