@@ -34,6 +34,13 @@ public class MainMenuController2 : MonoBehaviour
 
     [SerializeField]
     private GameObject fade;
+
+    [SerializeField]
+    private GameObject eye1;
+
+    [SerializeField]
+    private GameObject eye2;
+
     public Button startButton;
 
     private void Start()
@@ -68,6 +75,8 @@ public class MainMenuController2 : MonoBehaviour
         Destroy(musicController);
         Debug.Log("AfterDestroy");
         audioSource.Play();
+        eye1.GetComponent<SpinEye>().spinSpeed = 180;
+        eye2.GetComponent<SpinEye>().spinSpeed = 180;
         startgame = true; 
         startButton.interactable = false; 
 

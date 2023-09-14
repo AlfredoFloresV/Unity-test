@@ -12,7 +12,7 @@ public class LarryActions : MonoBehaviour
     private float increaseFactor = 1.1f;
 
     [SerializeField]
-    private LarryState currentState;
+    public LarryState currentState;
 
     [SerializeField]
     private GameObject player;
@@ -58,7 +58,7 @@ public class LarryActions : MonoBehaviour
         ready = false;
         final = false;
         currentState = LarryState.Idle;
-        chaseTime = 10f;
+        chaseTime = 2f;
         InvokeRepeating("killPlayer", 10.0f, 3.0f);
     }
 
@@ -78,7 +78,7 @@ public class LarryActions : MonoBehaviour
                     break;
                 case LarryState.Chase:
                     ChaseActions();
-                    ai.speed = speed * increaseFactor * 1.2f;
+                    ai.speed = speed * increaseFactor * 1.3f;
                     break;
                 case LarryState.Stun:
                     ai.speed = 0;
@@ -87,8 +87,8 @@ public class LarryActions : MonoBehaviour
                     ai.speed = 0;
                     break;
                 case LarryState.Kill:
+                    ai.speed = speed * increaseFactor * 1.6f;
                     KillActions();
-                    ai.speed = speed * increaseFactor * 1.4f;
                     break;
             }
         }
@@ -143,19 +143,25 @@ public class LarryActions : MonoBehaviour
 
     private void PatrolActions() 
     {
-        animator.Play("Larry_Walk1");
-        currentDestination = getNextDestination();
-        ai.destination = currentDestination;
-        currentState = LarryState.Walking;
+        if (currentState != LarryState.Stun)
+        {
+            animator.Play("Larry_Walk1");
+            currentDestination = getNextDestination();
+            ai.destination = currentDestination;
+            currentState = LarryState.Walking;
+        }
     }
 
     private void ChaseActions() 
     {
-        ai.destination = player.transform.position;
-        animator.Play("Larry_Run");
-        StopCoroutine(chasing());
-        StartCoroutine(chasing());
-        currentState = LarryState.Chasing;
+        if (currentState != LarryState.Stun) 
+        {
+            ai.destination = player.transform.position;
+            animator.Play("Larry_Run");
+            StopCoroutine(chasing());
+            StartCoroutine(chasing());
+            currentState = LarryState.Chasing;
+        }
     }
 
     public void StunActions() 
@@ -165,26 +171,42 @@ public class LarryActions : MonoBehaviour
             currentState = LarryState.Stun;
             animator.Play("Larry_Stun3");
             audioSource.PlayOneShot(stunAudio);
-            StopCoroutine(chasing());
-            StartCoroutine(recover(10f));
+            StopAllCoroutines();
+            StartCoroutine(recover(10f, false));
         }
     }
 
     public void AttackActions(string attack) 
     {
-        playerCam.gameObject.SetActive(false);
-        cam.gameObject.SetActive(true);
-        animator.Play(attack);
-        audioSource.PlayOneShot(Random.Range(0, 2) == 0 ? attackAudio1 : attackAudio2);
-        StopCoroutine(chasing());
-        StartCoroutine(recover(10f));
+        if (player.GetComponent<PlayerMotor>().hit == false && currentState != LarryState.Stun ) 
+        {
+            playerCam.gameObject.SetActive(false);
+            cam.gameObject.SetActive(true);
+            StopAllCoroutines();
+            animator.Play(attack);
+            audioSource.PlayOneShot(Random.Range(0, 2) == 0 ? attackAudio1 : attackAudio2);
+            player.GetComponent<PlayerMotor>().hit = true;
+
+            StartCoroutine(recover(2f, true));
+        }
     }
 
     public void KillActions() 
     {
-        ai.destination = player.transform.position;
-        animator.Play("Larry_Run");
-        currentState = LarryState.Killing;
+        if (currentState != LarryState.Stun) 
+        {
+            ai.destination = player.transform.position;
+            animator.Play("Larry_Run");
+            currentState = LarryState.Killing;
+            StopCoroutine(comeBackToKill());
+            StartCoroutine(comeBackToKill());
+        }
+    }
+
+    IEnumerator comeBackToKill() 
+    {
+        yield return new WaitForSeconds(2f);
+        currentState = LarryState.Kill;
     }
 
     public void recoverPlayerCam()
@@ -207,19 +229,28 @@ public class LarryActions : MonoBehaviour
         ready = true;
     }
 
-    IEnumerator recover(float seconds) 
+    IEnumerator recover(float seconds, bool fromKill) 
     {
         ai.speed = 0;
         yield return new WaitForSeconds(seconds);
+        if (fromKill && playerCam.gameObject.activeSelf == false)
+        {
+            recoverPlayerCam();
+        }
         currentState = LarryState.Idle;
+        
     }
 
     IEnumerator chasing() 
     {
         yield return new WaitForSeconds(chaseTime);
-        if (Vector3.Distance(transform.position, player.transform.position) > 5) 
+        if (Vector3.Distance(transform.position, player.transform.position) > 5)
         {
             currentState = LarryState.Idle;
+        }
+        else 
+        {
+            currentState = LarryState.Chase;
         }
     }
 
@@ -228,14 +259,15 @@ public class LarryActions : MonoBehaviour
         if (other.gameObject.CompareTag("player"))
         {
             audioSource.PlayOneShot(Random.Range(0, 2) == 0 ? laughingAudio1 : laughingAudio2);
-            currentState = LarryState.Chase;
+            if(currentState != LarryState.Kill && currentState != LarryState.Killing && currentState != LarryState.Stun)
+                currentState = LarryState.Chase;
         }
 
         if (other.gameObject.CompareTag("destination"))
         {
             ai.speed = 0;
             animator.Play("Larry_Celebration1");
-            StartCoroutine(recover(5f));
+            StartCoroutine(recover(3f, false));
         }
     }
 }

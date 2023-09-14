@@ -39,7 +39,16 @@ public class ObjectDetectionFunhouse : MonoBehaviour
     private BoxCollider funhouseFloor;
     private Animator playerAnimator;
     private AudioSource audioSource;
-    public string targetSceneName = "DungeonLevel"; 
+    public string targetSceneName = "DungeonLevel";
+
+    private float WidthPosition;
+    private float HeightPosition;
+
+    private float WidthBox;
+
+    public int msgState;
+    private Dictionary<int, string> messages;
+    private string prevMsg;
 
     private void Start()
     {
@@ -51,6 +60,15 @@ public class ObjectDetectionFunhouse : MonoBehaviour
         animDoor2 = GameObject.Find ("StartDoor2").GetComponent<Animator>();
         funhouseFloor = GameObject.Find ("FunhouseFloor").GetComponent<BoxCollider>();
         playerAnimator = GameObject.Find ("Player").GetComponent<Animator>();
+
+        messages = new Dictionary<int, string>();
+        messages[0] = "I should find a way inside...";
+        messages[1] = "It's locked. I need to find something to open the doors";
+        messages[2] = "If only I could buy a <b>ticket</b>";
+        messages[3] = "What?";
+        messages[4] = "I should take a closer look at that <b>arrow</b>";
+        msgState = 0;
+        prevMsg = "";
     }
 
     void HighlightObject(GameObject gameObject)
@@ -66,7 +84,12 @@ public class ObjectDetectionFunhouse : MonoBehaviour
             }
 
             lastHighlightedObject = gameObject;
-            interactionMessage = "";
+            if (interactionMessage.Equals("Press E to interact")) 
+            {
+                interactionMessage = prevMsg != "" ? prevMsg : "";
+                prevMsg = "";
+            }
+            
         }
 
     }
@@ -85,7 +108,11 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                 }
             }
             lastHighlightedObject = null;
-            interactionMessage = "";
+            if (interactionMessage.Equals("Press E to interact"))
+            {
+                interactionMessage = prevMsg != "" ? prevMsg : "";
+                prevMsg = "";
+            }
         }
     }
 
@@ -107,6 +134,9 @@ public class ObjectDetectionFunhouse : MonoBehaviour
 
             if (rayHit.collider.tag == "ticket") 
             {
+                if (!interactionMessage.Equals("Press E to interact") && !interactionMessage.Equals(""))
+                    prevMsg = interactionMessage;
+
                 interactionMessage = "Press E to interact";
 
                 if (Input.GetKeyDown(KeyCode.E)) 
@@ -118,11 +148,16 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                     pickup.ticket = true;
                     animDoor1.enabled = true;
                     animDoor2.enabled = true;
+                    StopAllCoroutines();
+                    StartCoroutine(afterTicket());
                 }
             }
 
             if (rayHit.collider.tag == "missingposter") 
             {
+                if (!interactionMessage.Equals("Press E to interact") && !interactionMessage.Equals(""))
+                    prevMsg = interactionMessage;
+
                 interactionMessage = "Press E to interact";
 
                 if (Input.GetKeyDown(KeyCode.E)) 
@@ -137,13 +172,17 @@ public class ObjectDetectionFunhouse : MonoBehaviour
 
             if (rayHit.collider.tag == "arrow") 
             {
+                if (!interactionMessage.Equals("Press E to interact") && !interactionMessage.Equals(""))
+                    prevMsg = interactionMessage;
+
                 interactionMessage = "Press E to interact";
 
                 if (Input.GetKeyDown(KeyCode.E)) 
                 {
+                    interactionMessage = "";
+                    StopAllCoroutines();
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(scream);
-                    interactionMessage = "";
                     funhouseFloor.enabled = false;
                     playerAnimator.enabled = true;
                     fade.GetComponent<Animator>().Play("FadeOut");
@@ -166,12 +205,45 @@ public class ObjectDetectionFunhouse : MonoBehaviour
     void Update()
     {
         HighlightObjectInCenterOfCam();
+
+        if (msgState != -1) 
+        {
+            StartCoroutine(instructions(messages[msgState], msgState == 2 ? -1 : msgState + 1));
+            msgState = -1;
+        }
     }
 
     // Display GUI elements
     private void OnGUI()
     {
-        GUI.Label(new Rect(Screen.width / 2 - (Screen.width * 0.1f), Screen.height - (Screen.height * 0.07f), Screen.width * 0.4f, Screen.height * 0.14f), "<size=50>" + interactionMessage + "</size>");
+        //GUIStyle style = new GUIStyle();
+        //style.alignment = TextAnchor.MiddleCenter;
+        //GUI.Label(new Rect(WidthPosition, HeightPosition, WidthBox, Screen.height * 0.15f), "<size=50>" + interactionMessage + "</size>", style);
+        //GUI.Label(new Rect(Screen.width / 2 - (Screen.width * 0.1f), Screen.height - (Screen.height * 0.07f), Screen.width * 0.4f, Screen.height * 0.14f), "<size=50>" + interactionMessage + "</size>");
+        GUIStyle style = new GUIStyle();
+        style.alignment = TextAnchor.MiddleCenter;
+        GUI.Label(new Rect(0, Screen.height * 0.8f, Screen.width, Screen.height * 0.15f), "<color=white><size=50>" + interactionMessage + "</size></color>", style);
     }
 
+
+    IEnumerator instructions(string message, int nextState)
+    {
+        interactionMessage = message;
+        yield return new WaitForSeconds(5f);
+        interactionMessage = "";
+        StartCoroutine(wait(nextState));
+    }
+
+    
+    IEnumerator wait(int nextState) 
+    {
+        yield return new WaitForSeconds(40f);
+        msgState = nextState;
+    }
+
+    IEnumerator afterTicket() 
+    {
+        yield return new WaitForSeconds(2f);
+        msgState = 3;
+    }
 }

@@ -12,7 +12,7 @@ public class AttackPlayer : MonoBehaviour
 
     private void Start()
     {
-        attacks = new List<string>() { "Larry_Attack1", "Larry_Attack3", "Larry_JumpScare3" };
+        attacks = new List<string>() { "Larry_Attack1", "Larry_Attack3", "Larry_JumpScare3", "Larry_JumpScare2", "Larry_Attack2" };
         waiting = false;
     }
 

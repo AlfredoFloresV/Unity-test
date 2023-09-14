@@ -28,6 +28,7 @@ TagManager:
   - missingposter
   - ticket
   - arrow
+  - specialdoorused
   layers:
   - Default
   - TransparentFX

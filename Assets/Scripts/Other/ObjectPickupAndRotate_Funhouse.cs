@@ -130,6 +130,10 @@ public class ObjectPickupAndRotate_Funhouse : MonoBehaviour
     private void OnGUI()
     {
         GUI.Label(new Rect(Screen.width / 2 - (Screen.width * 0.2f), Screen.height - (Screen.height * 0.95f), Screen.width * 0.4f, Screen.height * 0.85f), "<size=80>" + objectIntMessage + "<i>" + objectNameMessage + "</i></size>", new GUIStyle { alignment = TextAnchor.UpperCenter, normal = { textColor = Color.white } });
-        GUI.Label(new Rect(Screen.width / 2 - (Screen.width * 0.1f), Screen.height - (Screen.height * 0.07f), Screen.width * 0.4f, Screen.height * 0.14f), "<size=50>" + interactionMessage + "</size>");
+        GUIStyle style = new GUIStyle();
+        style.alignment = TextAnchor.MiddleCenter;
+        GUI.Label(new Rect(0, Screen.height * 0.8f, Screen.width, Screen.height * 0.15f), "<color=white><size=50>" + interactionMessage + "</size></color>", style);
+        //GUI.Label(new Rect(Screen.width / 2 - (Screen.width * 0.2f), Screen.height * 0.8f, Screen.width * 0.4f, Screen.height * 0.14f), "<size=50>" + interactionMessage + "</size>");
+        //GUI.Label(new Rect(Screen.width / 2 - (Screen.width * 0.1f), Screen.height - (Screen.height * 0.07f), Screen.width * 0.4f, Screen.height * 0.14f), "<size=50>" + interactionMessage + "</size>");
     }
 }

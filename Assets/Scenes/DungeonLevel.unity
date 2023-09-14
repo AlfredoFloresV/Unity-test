@@ -740,6 +740,10 @@ PrefabInstance:
       propertyPath: playerCam
       value: 
       objectReference: {fileID: 1393736479}
+    - target: {fileID: 7239718635420398630, guid: 728648b17a40dae4ab5f00ce4d1e0917, type: 3}
+      propertyPath: Priority
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 8316567431478447568, guid: 728648b17a40dae4ab5f00ce4d1e0917, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -898,16 +902,16 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 841584557}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1282009.9}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1614.8973, y: 1614.8973, z: 1614.8973}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1261250389}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -41989.324, y: 7552.1855}
-  m_SizeDelta: {x: 0.00024414062, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920.0002, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &841584559
 Animator:
@@ -1032,10 +1036,15 @@ MonoBehaviour:
   locked: {fileID: 8300000, guid: 8532a8525f8224241ab0be52e2218700, type: 3}
   unlock: {fileID: 8300000, guid: 9aeddd513bd1df24c97d7b69a0e0e08f, type: 3}
   claps: {fileID: 8300000, guid: ff12020493758414c940fd46773f116e, type: 3}
+  fade: {fileID: 841584557}
+  detectionDistance: 3
+  hearbeat: {fileID: 694629405}
+  bgmusic: {fileID: 1633577353}
   Health: 5
   Damage: 0
   VictoryKey: 
   numKeys: 0
+  hit: 0
 --- !u!54 &853846555
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1577,6 +1586,14 @@ PrefabInstance:
       propertyPath: playerCam
       value: 
       objectReference: {fileID: 1393736479}
+    - target: {fileID: 7239718635420398630, guid: 728648b17a40dae4ab5f00ce4d1e0917, type: 3}
+      propertyPath: Priority
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239718635420398630, guid: 728648b17a40dae4ab5f00ce4d1e0917, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8316567431478447568, guid: 728648b17a40dae4ab5f00ce4d1e0917, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1741,7 +1758,7 @@ MonoBehaviour:
   - {fileID: 4296456746145304540, guid: 60d1b116b52ced383850971f5ad79233, type: 3}
   - {fileID: 2683181888989305272, guid: 070e9717e9fbffd678eaf1d5d686c81b, type: 3}
   - {fileID: 6615147236381658409, guid: 3b6e30f6deaaa382ca0015fe16194603, type: 3}
-  minDistanceBetweenPrefabs: 10
+  minDistanceBetweenPrefabs: 2
   minDistanceToDoor: 3
   replacementSpawnProbability: 0.5
   startReplacement: 0

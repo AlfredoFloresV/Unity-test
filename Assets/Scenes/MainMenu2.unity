@@ -2202,6 +2202,11 @@ MonoBehaviour:
   eye1: {fileID: 834982361}
   eye2: {fileID: 831721949}
   fade: {fileID: 693154825}
+<<<<<<< Updated upstream
+=======
+  eye1: {fileID: 834982361}
+  eye2: {fileID: 831721949}
+>>>>>>> Stashed changes
   startButton: {fileID: 104548951}
 --- !u!1 &1200893690
 GameObject:

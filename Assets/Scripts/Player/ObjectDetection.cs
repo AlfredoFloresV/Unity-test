@@ -8,7 +8,7 @@ public class ObjectDetection : MonoBehaviour
     private GameObject cameraEffects;
 
     [SerializeField]
-    float detectionDistance = 5f;
+    float detectionDistance = 3f;
 
     [SerializeField]
     private Material highlightMaterial;
@@ -27,10 +27,14 @@ public class ObjectDetection : MonoBehaviour
 
     private string interactionMessage = ""; // Message to display when an object is selected
 
+    private PlayerMotor playerMotor;
+
     private void Start()
     {
         standard = Shader.Find("Standard"); //Not working
         highlight = Shader.Find("Unlit/Texture");
+        playerMotor = GetComponent<PlayerMotor>();
+        StartCoroutine(message());
     }
 
     void HighlightObject(GameObject gameObject)
@@ -77,7 +81,7 @@ public class ObjectDetection : MonoBehaviour
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit rayHit;
 
-        Vector3 forward = cam.transform.TransformDirection(Vector3.forward) * 5f;
+        Vector3 forward = cam.transform.TransformDirection(Vector3.forward) * 3f;
         Debug.DrawRay(cam.transform.position, forward, Color.green);
         
         // Check if we hit something.
@@ -137,9 +141,11 @@ public class ObjectDetection : MonoBehaviour
 
             if (rayHit.collider.tag == "larry_face")
             {
-                PlayerMotor pm = GetComponent<PlayerMotor>();
-
-                if (pm.lightEnabled() && pm.getIntensity() >= 0.5 && pm.getFocus() == true) 
+                if (playerMotor != null
+                    && playerMotor.lightEnabled() 
+                    && playerMotor.getIntensity() >= 0.5 
+                    && playerMotor.getFocus() == true 
+                    && rayHit.collider.gameObject.GetComponent<LarryActions>().currentState != LarryState.Stun) 
                 {
                     LarryActions ai = rayHit.collider.gameObject.GetComponentInParent<LarryActions>();
                     ai.StunActions();
@@ -177,7 +183,22 @@ public class ObjectDetection : MonoBehaviour
     // Display GUI elements
     private void OnGUI()
     {
-        GUI.Label(new Rect(Screen.width / 2 - (Screen.width * 0.1f), Screen.height - (Screen.height * 0.07f), Screen.width * 0.4f, Screen.height * 0.14f), "<size=50>" + interactionMessage + "</size>");
+        GUIStyle style = new GUIStyle();
+        style.alignment = TextAnchor.MiddleCenter;
+        GUI.Label(new Rect(0, Screen.height * 0.8f, Screen.width, Screen.height * 0.15f), "<color=white><size=50>" + interactionMessage + "</size></color>", style);
+        //GUI.Label(new Rect(Screen.width / 2 - (Screen.width * 0.25f), Screen.height * 0.8f, Screen.width * 0.5f, Screen.height * 0.14f), "<size=50>" + interactionMessage + "</size>", style);
+    }
+
+    IEnumerator message() 
+    {
+        yield return new WaitForSeconds(7f);
+        interactionMessage = "I need to find a way out";
+    }
+
+    IEnumerator clean() 
+    {
+        yield return new WaitForSeconds(10f);
+        interactionMessage = "";
     }
 
 }
