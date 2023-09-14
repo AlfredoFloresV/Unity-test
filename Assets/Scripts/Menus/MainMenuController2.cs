@@ -5,13 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-/*
-    #FFB600
-    #FF4A00
-    #F50000
-*/
-
-
 public class MainMenuController2 : MonoBehaviour
 {
     [Header("Levels to Load")]
@@ -34,12 +27,6 @@ public class MainMenuController2 : MonoBehaviour
 
     [SerializeField]
     private GameObject fade;
-
-    [SerializeField]
-    private GameObject eye1;
-
-    [SerializeField]
-    private GameObject eye2;
 
     public Button startButton;
 
