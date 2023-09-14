@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657832, g: 0.49641222, b: 0.57481664, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1563,7 +1563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pivotPoint: {fileID: 751672138}
-  spinSpeed: 90
+  spinSpeed: 95
   reverseSpin: 0
 --- !u!114 &831721952
 MonoBehaviour:
@@ -1693,7 +1693,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pivotPoint: {fileID: 147048045}
-  spinSpeed: 90
+  spinSpeed: 95
   reverseSpin: 0
 --- !u!1 &952776732
 GameObject:
@@ -2202,11 +2202,6 @@ MonoBehaviour:
   eye1: {fileID: 834982361}
   eye2: {fileID: 831721949}
   fade: {fileID: 693154825}
-<<<<<<< Updated upstream
-=======
-  eye1: {fileID: 834982361}
-  eye2: {fileID: 831721949}
->>>>>>> Stashed changes
   startButton: {fileID: 104548951}
 --- !u!1 &1200893690
 GameObject:
