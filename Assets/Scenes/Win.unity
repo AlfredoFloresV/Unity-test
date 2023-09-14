@@ -1445,7 +1445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc6f5c3bb519278aa8ec539672249c47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSceneName: MainMenu2
+  targetSceneName: credits
 --- !u!1 &1775787672
 GameObject:
   m_ObjectHideFlags: 0

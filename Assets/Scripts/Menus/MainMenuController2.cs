@@ -31,6 +31,8 @@ public class MainMenuController2 : MonoBehaviour
     private void Start()
     {
         startgame = false;   
+        Cursor.visible = true;
+
     }
 
     void Update()
