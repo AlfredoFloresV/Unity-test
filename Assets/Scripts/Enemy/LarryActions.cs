@@ -196,6 +196,12 @@ public class LarryActions : MonoBehaviour
 
     IEnumerator start() 
     {
+        if (animator == null) 
+        {
+            Debug.Log("animator null");
+            animator = GetComponent<Animator>();
+        }
+        
         animator.Play("Larry_JumpScare1");
         yield return new WaitForSeconds(5f);
         ready = true;

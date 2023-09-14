@@ -83,9 +83,9 @@ public class MST
         int lastNode = -1; //id of first room
         int countPos = 0;
 
-        List<int> keyList = new List<int>(adjList.Keys);
-        for (int s = 0; s < keyList.Count; s++)
-            Debug.Log("adjlist node id: " + keyList[s]);
+        //List<int> keyList = new List<int>(adjList.Keys);
+        //for (int s = 0; s < keyList.Count; s++)
+        //    Debug.Log("adjlist node id: " + keyList[s]);
 
         visitedNodes.Add(lastNode);
 
@@ -114,15 +114,15 @@ public class MST
         }
 
 
-        for(int s = 0; s < visitedNodes.Count; s++)
-            Debug.Log("visited node id: " + visitedNodes[s]);
+        //for(int s = 0; s < visitedNodes.Count; s++)
+        //    Debug.Log("visited node id: " + visitedNodes[s]);
 
         //Drawing lines
-        for (int i = 0; i < mstree.Count; i++)
-        {
-            Debug.Log("mst " + mstree[i].getRoom1().getId() + " " + mstree[i].getRoom2().getId());
-            Debug.DrawLine(mstree[i].getRoom1().getLocation() * 2, mstree[i].getRoom2().getLocation() * 2, new Color(0f, 1f, 0f), 200f);
-        }
+        //for (int i = 0; i < mstree.Count; i++)
+        //{
+        //    Debug.Log("mst " + mstree[i].getRoom1().getId() + " " + mstree[i].getRoom2().getId());
+        //    Debug.DrawLine(mstree[i].getRoom1().getLocation() * 2, mstree[i].getRoom2().getLocation() * 2, new Color(0f, 1f, 0f), 200f);
+        //}
         
 
         //Adding cycles 
@@ -137,11 +137,11 @@ public class MST
         }
 
         //Drawing lines
-        for (int i = 0; i < mstree.Count; i++)
-        {
+        //for (int i = 0; i < mstree.Count; i++)
+        //{
             //Debug.Log("mst " + mstree[i].getRoom1().getId() + " " + mstree[i].getRoom2().getId());
             //Debug.DrawLine(mstree[i].getRoom1().getLocation() * 2, mstree[i].getRoom2().getLocation() * 2, new Color(0f, 1f, 0f), 200f);
-        }
+        //}
         
         return mstree;
     }

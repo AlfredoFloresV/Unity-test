@@ -113,15 +113,22 @@ public class MazeGrid : MonoBehaviour
                 surface.BuildNavMesh();
 
                 NavMeshHit closestHit;
-                if (NavMesh.SamplePosition(enemy.transform.position, out closestHit, 500f, NavMesh.AllAreas))
+                if (NavMesh.SamplePosition(enemy.transform.position, out closestHit, 500f, NavMesh.AllAreas)) 
+                {
                     enemy.transform.position = closestHit.position;
+                    Debug.Log("setting up Larry 1 correctly");
+                }
+                    
                 else Debug.Log("something weird happened");
                 enemy.GetComponent<LarryActions>().setRandomDestinations(destinations);
 
                 if (enemy2 != null)
                 {
-                    if (NavMesh.SamplePosition(enemy2.transform.position, out closestHit, 500f, NavMesh.AllAreas))
+                    if (NavMesh.SamplePosition(enemy2.transform.position, out closestHit, 500f, NavMesh.AllAreas)) 
+                    {
                         enemy2.transform.position = closestHit.position;
+                        Debug.Log("setting up Larry 1 correctly");
+                    }
                     else Debug.Log("something weird happened");
                     enemy2.GetComponent<LarryActions>().setRandomDestinations(destinations);
                 }
@@ -327,7 +334,7 @@ public class MazeGrid : MonoBehaviour
                 GameObject roomObj = Instantiate(specialRoomPrefab, realLoc, Quaternion.identity);
                 roomObj.GetComponent<Transform>().localScale = new Vector3(1f * Scale, 1f * Scale, 1f * Scale);
                 roomCubes2.Add(roomObj);
-                Debug.Log("adding cube " + x + " " + z);
+                //Debug.Log("adding cube " + x + " " + z);
                 count++;
             }
         }
@@ -480,10 +487,10 @@ public class MazeGrid : MonoBehaviour
         }
 
         //Drawing lines
-        for (int i = 0; i < roomEdges.Count; i++) 
-        {
-            Debug.DrawLine(roomEdges[i].getRoom1().getLocation() * Scale, roomEdges[i].getRoom2().getLocation() * Scale , new Color(0f,0f,1f), 120f);
-        }
+        //for (int i = 0; i < roomEdges.Count; i++) 
+        //{
+        //    Debug.DrawLine(roomEdges[i].getRoom1().getLocation() * Scale, roomEdges[i].getRoom2().getLocation() * Scale , new Color(0f,0f,1f), 120f);
+        //}
     }
 
 
@@ -607,7 +614,7 @@ public class MazeGrid : MonoBehaviour
             Vector3 loc = doorLocations[i];
             int x = (int) loc.x;
             int z = (int) loc.z;
-            Debug.Log(grid[x, z] + " " + loc);
+            //Debug.Log(grid[x, z] + " " + loc);
 
             CellType cell = grid[x, z];
             CellType lookfor = CellType.None;

@@ -18,6 +18,15 @@ public class ObjectDetectionFunhouse : MonoBehaviour
     [SerializeField]
     private Camera cam;
 
+    [SerializeField]
+    private AudioClip paperAudio;
+
+    [SerializeField]
+    private AudioClip scream;
+
+    [SerializeField]
+    private GameObject fade;
+
     GameObject lastHighlightedObject = null;
 
     private Shader standard;
@@ -29,10 +38,12 @@ public class ObjectDetectionFunhouse : MonoBehaviour
     private Animator animDoor2;
     private BoxCollider funhouseFloor;
     private Animator playerAnimator;
+    private AudioSource audioSource;
     public string targetSceneName = "DungeonLevel"; 
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         standard = Shader.Find("Standard"); //Not working
         highlight = Shader.Find("Unlit/Texture");
         pickup = GameObject.Find ("Camera").GetComponent<ObjectPickupAndRotate_Funhouse>();
@@ -100,6 +111,8 @@ public class ObjectDetectionFunhouse : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.E)) 
                 {
+                    audioSource.PlayOneShot(paperAudio);
+                    audioSource.pitch = 1.3f;
                     interactionMessage = "";
                     Destroy(rayHit.transform.gameObject); 
                     pickup.ticket = true;
@@ -114,6 +127,8 @@ public class ObjectDetectionFunhouse : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.E)) 
                 {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
                     Destroy(rayHit.transform.gameObject); 
                     pickup.missingperson = true;
@@ -126,9 +141,12 @@ public class ObjectDetectionFunhouse : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.E)) 
                 {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(scream);
                     interactionMessage = "";
                     funhouseFloor.enabled = false;
                     playerAnimator.enabled = true;
+                    fade.GetComponent<Animator>().Play("FadeOut");
                     StartCoroutine(NextLevel());
                 }
             }
@@ -141,7 +159,7 @@ public class ObjectDetectionFunhouse : MonoBehaviour
 
     private IEnumerator NextLevel()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(5f);
         SceneManager.LoadScene(targetSceneName);
     }
 

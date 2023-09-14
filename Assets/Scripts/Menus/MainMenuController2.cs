@@ -28,6 +28,9 @@ public class MainMenuController2 : MonoBehaviour
     [Header("Music Controller")]
     public GameObject musicController;
 
+    [SerializeField]
+    private GameObject fade;
+
     private void Start()
     {
         startgame = false;   
@@ -39,12 +42,20 @@ public class MainMenuController2 : MonoBehaviour
     {
         //Debug.Log("audiosource playing:" + audioSource.isPlaying.ToString());
         //Debug.Log("startgame:" + startgame.ToString());
-        if (!audioSource.isPlaying&&startgame)
+        if (!audioSource.isPlaying && startgame)
         {
             Debug.Log("Load");
-            SceneManager.LoadScene(_newGameLevel);
+            fade.GetComponent<Animator>().Play("FadeOut");
+            StartCoroutine(nextScene());
         }
     }
+
+    IEnumerator nextScene() 
+    {
+        yield return new WaitForSeconds(4f);
+        SceneManager.LoadScene(_newGameLevel);
+    }
+
     public void NewGameDialogYes(){
         Debug.Log("Click");
         Destroy(musicController);

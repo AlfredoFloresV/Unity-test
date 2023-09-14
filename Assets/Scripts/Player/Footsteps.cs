@@ -10,29 +10,20 @@ public class Footsteps : MonoBehaviour
     [SerializeField]
     private GameObject flashlight;
 
-    private int keyNo = 0;
-
     // Update is called once per frame
     void Update()
     {
-
-        if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D) ||
-           Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow))
-        {
-            keyNo--;
-            if(keyNo == 0)
-                DisableFootSteps();
-        }
-
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) ||
-           Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow)) 
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) ||
+           Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow))
         {
             EnableFootsteps();
-            keyNo++;
+        }
+        else
+        {
+            DisableFootSteps();
         }
 
-        
-        if (Input.GetKeyDown(KeyCode.Space)) 
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             footsteps.GetComponent<AudioSource>().pitch = 1.2f;
             //flashlight.GetComponent<Animator>().Play("LightSprint");
@@ -45,12 +36,12 @@ public class Footsteps : MonoBehaviour
         }
     }
 
-    private void EnableFootsteps() 
+    private void EnableFootsteps()
     {
         footsteps.SetActive(true);
     }
 
-    private void DisableFootSteps() 
+    private void DisableFootSteps()
     {
         footsteps.SetActive(false);
     }
