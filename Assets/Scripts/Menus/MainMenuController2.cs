@@ -28,6 +28,10 @@ public class MainMenuController2 : MonoBehaviour
     [Header("Music Controller")]
     public GameObject musicController;
 
+    [Header("Eyes")]
+    public GameObject eye1;
+    public GameObject eye2;
+
     [SerializeField]
     private GameObject fade;
     public Button startButton;
@@ -59,6 +63,8 @@ public class MainMenuController2 : MonoBehaviour
 
     public void NewGameDialogYes(){
         Debug.Log("Click");
+        eye1.GetComponent<SpinEye>().spinSpeed = 300.0f;
+        eye2.GetComponent<SpinEye>().spinSpeed = 300.0f;
         Destroy(musicController);
         Debug.Log("AfterDestroy");
         audioSource.Play();
