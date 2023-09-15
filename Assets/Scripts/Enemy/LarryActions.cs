@@ -123,20 +123,13 @@ public class LarryActions : MonoBehaviour
 
     private Vector3 getNextDestination() 
     {
-        int count = 0;
-
-        while (count < 3) 
+        Vector3 d = destinations[Random.Range(0, destinations.Count)];
+        if (Vector3.Distance(d, this.gameObject.transform.position) > 10) 
         {
-            Vector3 d = destinations[Random.Range(0, destinations.Count)];
-            if (Vector3.Distance(d, transform.position) > 3)
-            {
-                return d;
-            }
-            count++;
+            return d;
         }
 
-        Debug.Log("destination not found, going to exit");
-        return destinations[3];
+        return getNextDestination();
     }
     
     private void IdleActions() 
