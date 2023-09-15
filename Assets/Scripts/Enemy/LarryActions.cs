@@ -180,13 +180,12 @@ public class LarryActions : MonoBehaviour
     {
         if (player.GetComponent<PlayerMotor>().hit == false && currentState != LarryState.Stun) 
         {
+            player.GetComponent<PlayerMotor>().hit = true;
             playerCam.gameObject.SetActive(false);
             cam.gameObject.SetActive(true);
             StopAllCoroutines();
             animator.Play(attack);
             audioSource.PlayOneShot(Random.Range(0, 2) == 0 ? attackAudio1 : attackAudio2);
-            player.GetComponent<PlayerMotor>().hit = true;
-
             StartCoroutine(recover(2f, true));
         }
     }

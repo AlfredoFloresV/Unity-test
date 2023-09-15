@@ -144,10 +144,13 @@ public class ObjectDetection : MonoBehaviour
 
             if (rayHit.collider.tag == "larry_face")
             {
+
+
                 if (rayHit.collider.gameObject.GetComponentInParent<LarryActions>().currentState != LarryState.Stun
-                    && flashLight.GetComponent<Flashlight>().lightEnabled() 
+                    && flashLight.GetComponent<Flashlight>().lightEnabled() == true
                     && flashLight.GetComponent<Flashlight>().intensity >= 0.5 
-                    && flashLight.GetComponent<Flashlight>().focus == true) 
+                    && flashLight.GetComponent<Flashlight>().focus == true
+                    && GetComponent<PlayerMotor>().hit == false) 
                 {
                     LarryActions ai = rayHit.collider.gameObject.GetComponentInParent<LarryActions>();
                     ai.StunActions();

@@ -40,16 +40,15 @@ public class Flashlight : MonoBehaviour
             StartCoroutine(WaitForClickBtn());
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0)) 
+        if (Input.GetKey(KeyCode.Mouse0)) 
         {
             l.spotAngle = 50;
             l.range = 10;
             l.intensity = intensity * 3;
             focus = true;
         }
-
-        if (Input.GetKeyUp(KeyCode.Mouse0))
-        {
+        else 
+        { 
             l.spotAngle = 100;
             l.range = 80;
             l.intensity = intensity;
