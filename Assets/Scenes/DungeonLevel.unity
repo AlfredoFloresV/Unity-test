@@ -1011,8 +1011,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
-  sensitivityX: 14
-  sensitivityY: 3
+  sensitivityX: 4
+  sensitivityY: 2
 --- !u!114 &853846554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1747,8 +1747,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obligatoryPrefabs:
-  - {fileID: 819108604304924537, guid: c2eaad8dbed2e3c0998313ce01e85977, type: 3}
-  - {fileID: 7637363988062511354, guid: bdf6d10dd5158efc880848f364bf90e3, type: 3}
+  - {fileID: 819108604304924537, guid: bdf6d10dd5158efc880848f364bf90e3, type: 3}
+  - {fileID: 7637363988062511354, guid: c2eaad8dbed2e3c0998313ce01e85977, type: 3}
   - {fileID: 2338670622615441073, guid: 5c2ea5eea17109b8988f29a52db83fb8, type: 3}
   - {fileID: 6241342817031219557, guid: 230c8599ea7c7c468bf82c4fb43e2276, type: 3}
   optionalPrefabs:
@@ -1886,8 +1886,8 @@ MonoBehaviour:
   destPrefab: {fileID: 2184199489180434785, guid: c92ad9175458da34cbe8ec4575349a1b, type: 3}
   Scale: 2
   keys:
-  - {fileID: 819108604304924537, guid: c2eaad8dbed2e3c0998313ce01e85977, type: 3}
-  - {fileID: 7637363988062511354, guid: bdf6d10dd5158efc880848f364bf90e3, type: 3}
+  - {fileID: 819108604304924537, guid: bdf6d10dd5158efc880848f364bf90e3, type: 3}
+  - {fileID: 7637363988062511354, guid: c2eaad8dbed2e3c0998313ce01e85977, type: 3}
   - {fileID: 2338670622615441073, guid: 5c2ea5eea17109b8988f29a52db83fb8, type: 3}
   - {fileID: 6241342817031219557, guid: 230c8599ea7c7c468bf82c4fb43e2276, type: 3}
   battery: {fileID: 3469878698640515718, guid: b13d6a081df81bd47a96fa58c02c39f2, type: 3}

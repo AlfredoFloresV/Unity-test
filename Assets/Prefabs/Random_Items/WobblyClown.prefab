@@ -72,6 +72,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: destination
       objectReference: {fileID: 0}
+    - target: {fileID: 1151388028547126963, guid: a021727c7f1c910228a1cfb48b01f18d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 8164078558771037576, guid: a021727c7f1c910228a1cfb48b01f18d, type: 3}
       propertyPath: m_Name
       value: WobblyClown

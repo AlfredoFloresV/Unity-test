@@ -60,7 +60,7 @@ public class Flashlight : MonoBehaviour
     {
         if (l.enabled && intensity > 0) 
         {
-            intensity = intensity - 0.01f;
+            intensity = intensity - 0.05f;
             l.intensity = intensity;
         }
     }
