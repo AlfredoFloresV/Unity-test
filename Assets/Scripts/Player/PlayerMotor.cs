@@ -172,7 +172,7 @@ public class PlayerMotor : MonoBehaviour
         Damage += 1;
         if (Health - Damage >= 0)
         {
-            cameraEffects.GetComponent<UIMaterialSwitcher>().damageScreen = (Damage - 1) > 0 ? Damage - 1 : 0 ;
+            cameraEffects.GetComponent<UIMaterialSwitcher>().damageScreen = Damage;
         }
         else 
         {

@@ -42,7 +42,7 @@ public class LarryActions : MonoBehaviour
     private Animator animator;
     private NavMeshAgent ai;
 
-    private List<Transform> destinations;
+    private List<Vector3> destinations;
     private Vector3 currentDestination;
     private bool ready;
     private bool final;
@@ -54,7 +54,7 @@ public class LarryActions : MonoBehaviour
         ai = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
 
-        destinations = new List<Transform>();
+        destinations = new List<Vector3>();
         ready = false;
         final = false;
         currentState = LarryState.Idle;
@@ -105,23 +105,31 @@ public class LarryActions : MonoBehaviour
     }
 
 
-    public void setRandomDestinations(List<Transform> destinations) 
+    public void setRandomDestinations(List<Transform> dest) 
     {
-        this.destinations = destinations;
+        //for (int i = 0; i < dest.Count; i++)
+        //{
+        //    destinations[i] = new Vector3(dest[i].position.x, 0, dest[i].position.z);
+        //}
+
         StartCoroutine(start());
     }
 
     private Vector3 getNextDestination() 
     {
+        List<Vector3> dest = new List<Vector3>();
         Vector3 result = new Vector3(0,0,0);
         float distance = 0;
 
-        for (int i = 0; i < destinations.Count; i++) 
+
+        GameObject[] clowns = GameObject.FindGameObjectsWithTag("destination");
+
+        for (int i = 0; i < clowns.Length; i++) 
         {
-            if (Vector3.Distance(destinations[i].position, transform.position) > distance) 
+            if (Vector3.Distance(clowns[i].transform.position, transform.position) > distance)
             {
-                result = destinations[i].position;
-                distance = Vector3.Distance(destinations[i].position, transform.position);
+                result = clowns[i].transform.position;
+                distance = Vector3.Distance(result, transform.position);
             }
         }
 
@@ -149,6 +157,7 @@ public class LarryActions : MonoBehaviour
             currentDestination = getNextDestination();
             ai.destination = currentDestination;
             currentState = LarryState.Walking;
+            Debug.Log("Patrol " + gameObject.name + " " + currentDestination);
         }
     }
 
@@ -266,6 +275,7 @@ public class LarryActions : MonoBehaviour
         {
             ai.speed = 0;
             animator.Play("Larry_Celebration1");
+            Debug.Log("Arrived " + gameObject.name + " " + currentDestination);
             StartCoroutine(recover(3f, false));
         }
     }
