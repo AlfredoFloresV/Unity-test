@@ -1878,8 +1878,8 @@ MonoBehaviour:
   mazeSizeX: 30
   mazeSizeY: 30
   roomSize: 4
-  roomPrefab: {fileID: 4320020285090016537, guid: b5959452d9f38ee63afba263ff6a1b31, type: 3}
-  hallwayPrefab: {fileID: 4320020285090016537, guid: c2415f543d5c0b7d0b6f2d21e85fd2a8, type: 3}
+  roomPrefab: {fileID: 4320020285090016537, guid: 1cfe30119f60e402cbf8f4867e252cbe, type: 3}
+  hallwayPrefab: {fileID: 4320020285090016537, guid: 913d734074bb4097cafd2b82c9a4dafd, type: 3}
   player: {fileID: 853846552}
   enemy: {fileID: 701770596}
   enemy2: {fileID: 1174334539}
