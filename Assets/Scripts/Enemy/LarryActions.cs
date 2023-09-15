@@ -53,12 +53,18 @@ public class LarryActions : MonoBehaviour
         animator = GetComponent<Animator>();
         ai = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
-
-        destinations = new List<Vector3>();
         ready = false;
         final = false;
         currentState = LarryState.Idle;
         chaseTime = 2f;
+
+        destinations = new List<Vector3>();
+
+        destinations.Add(new Vector3(6, 0f, 11));
+        destinations.Add(new Vector3(48, 0f, 6));
+        destinations.Add(new Vector3(6, 0f, 54));
+        destinations.Add(new Vector3(54, 0f, 48));
+
         InvokeRepeating("killPlayer", 10.0f, 3.0f);
     }
 
@@ -117,23 +123,20 @@ public class LarryActions : MonoBehaviour
 
     private Vector3 getNextDestination() 
     {
-        List<Vector3> dest = new List<Vector3>();
-        Vector3 result = new Vector3(0,0,0);
-        float distance = 0;
+        int count = 0;
 
-
-        GameObject[] clowns = GameObject.FindGameObjectsWithTag("destination");
-
-        for (int i = 0; i < clowns.Length; i++) 
+        while (count < 3) 
         {
-            if (Vector3.Distance(clowns[i].transform.position, transform.position) > distance)
+            Vector3 d = destinations[Random.Range(0, destinations.Count)];
+            if (Vector3.Distance(d, transform.position) > 3)
             {
-                result = clowns[i].transform.position;
-                distance = Vector3.Distance(result, transform.position);
+                return d;
             }
+            count++;
         }
 
-        return result;
+        Debug.Log("destination not found, going to exit");
+        return destinations[3];
     }
     
     private void IdleActions() 

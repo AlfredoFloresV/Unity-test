@@ -166,6 +166,13 @@ public class MazeGrid : MonoBehaviour
     {
         //Place clowns
         //Rotar payasos
+
+        Instantiate(destPrefab, new Vector3(6f, -0.25f, 11f), Quaternion.identity);
+        Instantiate(destPrefab, new Vector3(48f, -0.25f, 6f), Quaternion.identity);
+        Instantiate(destPrefab, new Vector3(6f, -0.25f, 54f), Quaternion.identity);
+        Instantiate(destPrefab, new Vector3(54f, -0.25f, 48f), Quaternion.identity);
+
+        /*
         int count = 0;
         Random random = new Random();
         while (count < 5)
@@ -193,7 +200,7 @@ public class MazeGrid : MonoBehaviour
                 }
             }
         }
-        
+        */
         //Place keys
         /*count = 0;
         List<GameObject> keyItems = new List<GameObject>();
