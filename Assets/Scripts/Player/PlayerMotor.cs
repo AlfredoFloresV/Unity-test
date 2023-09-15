@@ -185,8 +185,8 @@ public class PlayerMotor : MonoBehaviour
     public void restoreHealth() 
     {
         audioSource.PlayOneShot(eatingBiscuit);
-        Health = Health + 2 >= 5 ? 5 : Health + 2;
-        Damage = Damage - 2 <= 0 ? 0 : Damage - 2;
+        Health = Health + 1 >= 5 ? 5 : Health + 1;
+        Damage = Damage - 1 <= 0 ? 0 : Damage - 1;
         cameraEffects.GetComponent<UIMaterialSwitcher>().damageScreen = Damage;
     }
 
@@ -245,7 +245,6 @@ public class PlayerMotor : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    rayHit.collider.tag = "specialdoorused";
                     interactingWithObject(false);
                     string num = rayHit.collider.gameObject.name.Substring(rayHit.collider.gameObject.name.Length - 1);
                     bool isCorrectDoor = num == VictoryKey;
@@ -253,7 +252,8 @@ public class PlayerMotor : MonoBehaviour
                     if (keysFound["key" + num] == true)
                     {
                         audioSource.PlayOneShot(unlock);
-                        
+                        rayHit.collider.tag = "specialdoorused";
+
                         if (isCorrectDoor)
                         {
                             StartCoroutine(win(rayHit.collider.gameObject, claps, true));

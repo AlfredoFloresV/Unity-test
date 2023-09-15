@@ -237,12 +237,12 @@ public class LarryActions : MonoBehaviour
             recoverPlayerCam();
         }
         currentState = LarryState.Idle;
-        
     }
 
     IEnumerator chasing() 
     {
         yield return new WaitForSeconds(chaseTime);
+        Debug.Log("distance enemy player in chasing " + Vector3.Distance(transform.position, player.transform.position));
         if (Vector3.Distance(transform.position, player.transform.position) > 5)
         {
             currentState = LarryState.Idle;
