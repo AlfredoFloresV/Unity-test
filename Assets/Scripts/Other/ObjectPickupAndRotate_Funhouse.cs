@@ -4,9 +4,11 @@ public class ObjectPickupAndRotate_Funhouse : MonoBehaviour
 {
     public GameObject ticketPrefab;
     public GameObject missingpersonPrefab;
+    public GameObject newspaperPrefab;
 
     public bool ticket = false;
     public bool missingperson = false;
+    public bool newspaper = false;
 
     private bool isPaused = false;
     private float originalTimeScale;
@@ -53,6 +55,14 @@ public class ObjectPickupAndRotate_Funhouse : MonoBehaviour
             objectNameMessage = "MISSING PERSON POSTER";
             interactionMessage = "Press Q to return";
         }
+        if (newspaper && !isPaused)
+        {
+            PauseScene();
+            SpawnObject(newspaperPrefab, new Vector3(1f, 1f, 1f));
+            objectIntMessage = "Found ";
+            objectNameMessage = "NEWSPAPER";
+            interactionMessage = "Press Q to return";
+        }
         if (Input.GetKeyDown(KeyCode.Q) && isPaused)
         {
             DestroyObject();
@@ -63,6 +73,7 @@ public class ObjectPickupAndRotate_Funhouse : MonoBehaviour
             }
             ticket = false;
             missingperson = false;
+            newspaper = false;
             objectIntMessage = "";
             objectNameMessage = "";
             interactionMessage = "";

@@ -29,6 +29,7 @@ TagManager:
   - ticket
   - arrow
   - specialdoorused
+  - newspaper
   layers:
   - Default
   - TransparentFX

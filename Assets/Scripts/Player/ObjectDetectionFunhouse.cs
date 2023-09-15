@@ -153,6 +153,23 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                 }
             }
 
+            if (rayHit.collider.tag == "newspaper") 
+            {
+                if (!interactionMessage.Equals("Press E to interact") && !interactionMessage.Equals(""))
+                    prevMsg = interactionMessage;
+
+                interactionMessage = "Press E to interact";
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
+                    interactionMessage = "";
+                    Destroy(rayHit.transform.gameObject); 
+                    pickup.newspaper = true;
+                }
+            }
+
             if (rayHit.collider.tag == "missingposter") 
             {
                 if (!interactionMessage.Equals("Press E to interact") && !interactionMessage.Equals(""))
