@@ -84,7 +84,7 @@ public class LarryActions : MonoBehaviour
                     break;
                 case LarryState.Chase:
                     ChaseActions();
-                    ai.speed = speed * increaseFactor * 1.3f;
+                    ai.speed = speed * increaseFactor * 1.5f;
                     break;
                 case LarryState.Stun:
                     ai.speed = 0;
@@ -93,7 +93,7 @@ public class LarryActions : MonoBehaviour
                     ai.speed = 0;
                     break;
                 case LarryState.Kill:
-                    ai.speed = speed * increaseFactor * 1.6f;
+                    ai.speed = speed * increaseFactor * 1.8f;
                     KillActions();
                     break;
             }
@@ -207,6 +207,18 @@ public class LarryActions : MonoBehaviour
         }
     }
 
+    public void HornActions(Vector3 dest) 
+    {
+        if (currentState != LarryState.Stun) 
+        {
+            StopAllCoroutines();
+            ai.destination = dest;
+            ai.speed = speed * 3f;
+            animator.Play("Larry_Run");
+            Debug.Log(gameObject.name + " horn to " + dest);
+        }
+    }
+
     IEnumerator comeBackToKill() 
     {
         yield return new WaitForSeconds(2f);
@@ -274,6 +286,20 @@ public class LarryActions : MonoBehaviour
             Debug.Log("Arrived " + gameObject.name + " " + currentDestination);
             StartCoroutine(recover(3f, false));
         }
+
+        if (other.gameObject.CompareTag("horn")) 
+        {
+            if (currentState != LarryState.Kill
+                && currentState != LarryState.Killing
+                && currentState != LarryState.Stun
+                && Vector3.Distance(transform.position, player.transform.position) > 5) 
+            {
+                ai.speed = 0;
+                animator.Play("Larry_Celebration1");
+                Debug.Log("Arrived " + gameObject.name + " " + currentDestination);
+                StartCoroutine(recover(2f, false));
+            }
+        }
     }
 }
 
@@ -287,5 +313,7 @@ public enum LarryState
     Walking,
     Chasing,
     Kill,
-    Killing
+    Killing,
+    Horn,
+    GoingHorn
 }

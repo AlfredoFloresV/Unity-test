@@ -130,7 +130,7 @@ public class MST
         foreach (var item in dictRE)
         {
             int value = random.Next(0, 10);
-            if (value < 2) 
+            if (value < 4) 
             {
                 mstree.Add(item.Value);
             }

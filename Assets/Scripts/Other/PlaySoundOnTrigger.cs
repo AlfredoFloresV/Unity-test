@@ -4,6 +4,7 @@ public class PlaySoundOnTrigger : MonoBehaviour
 {
     public AudioClip soundClip; // The sound clip to play
     private AudioSource audioSource; // Reference to the AudioSource component
+    private GameObject[] enemies;
 
     void Start()
     {
@@ -19,6 +20,8 @@ public class PlaySoundOnTrigger : MonoBehaviour
         {
             audioSource.clip = soundClip;
         }
+
+        enemies = GameObject.FindGameObjectsWithTag("enemy");
     }
 
     // Called when another Collider enters this trigger collider
@@ -29,6 +32,10 @@ public class PlaySoundOnTrigger : MonoBehaviour
         {
             // Play the assigned sound clip
             audioSource.Play();
+
+            GameObject enemy = Random.Range(0, 2) == 0 ? enemies[0] : enemies[1];
+            enemy.GetComponent<LarryActions>().currentState = LarryState.Horn;
+            enemy.GetComponent<LarryActions>().HornActions(transform.position);
         }
     }
 }

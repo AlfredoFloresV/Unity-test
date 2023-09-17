@@ -14,8 +14,14 @@ public class AttackPlayer : MonoBehaviour
     {
         attacks = new List<string>() { "Larry_Attack1", "Larry_Attack3", "Larry_JumpScare3", "Larry_JumpScare2", "Larry_Attack2" };
         waiting = false;
+
+        InvokeRepeating("activeCollider", 1f, 1f);
     }
 
+    private void activeCollider() 
+    {
+        GetComponent<BoxCollider>().enabled = !GetComponent<BoxCollider>().enabled;
+    }
 
     private void OnTriggerEnter(Collider other)
     {

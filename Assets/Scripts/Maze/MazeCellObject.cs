@@ -62,22 +62,26 @@ public class MazeCellObject : MonoBehaviour
 
     public void DisableRight()
     {
-        rightWall.SetActive(false);
+        Destroy(rightWall);
+        //rightWall.SetActive(false);
     }
 
     public void DisableLeft()
     {
-        leftWall.SetActive(false);
+        Destroy(leftWall);
+        //leftWall.SetActive(false);
     }
 
     public void DisableTop()
     {
-        topWall.SetActive(false);
+        Destroy(topWall);
+        //topWall.SetActive(false);
     }
 
     public void DisableBottom() 
     {
-        bottomWall.SetActive(false);
+        Destroy(bottomWall);
+        //bottomWall.SetActive(false);
     }
 
     public void EnableRight() 

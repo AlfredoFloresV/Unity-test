@@ -30,6 +30,7 @@ TagManager:
   - arrow
   - specialdoorused
   - newspaper
+  - horn
   layers:
   - Default
   - TransparentFX
