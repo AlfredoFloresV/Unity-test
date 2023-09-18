@@ -1794,7 +1794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea98b823438547d5fb766195e7d7fbe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyPercentage: 96
+  destroyPercentage: 92
 --- !u!1001 &1829037117892326559
 PrefabInstance:
   m_ObjectHideFlags: 0
