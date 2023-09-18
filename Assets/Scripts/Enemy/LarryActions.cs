@@ -189,7 +189,7 @@ public class LarryActions : MonoBehaviour
             playerCam.gameObject.SetActive(false);
             cam.gameObject.SetActive(true);
             StopAllCoroutines();
-            animator.Play(attack);
+            cam.gameObject.GetComponentInParent<Animator>().Play(attack);
             audioSource.PlayOneShot(Random.Range(0, 2) == 0 ? attackAudio1 : attackAudio2);
             StartCoroutine(recover(2f, true));
         }
