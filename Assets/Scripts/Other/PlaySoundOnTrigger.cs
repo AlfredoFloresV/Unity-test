@@ -22,6 +22,7 @@ public class PlaySoundOnTrigger : MonoBehaviour
         }
 
         enemies = GameObject.FindGameObjectsWithTag("enemy");
+        Debug.Log("enemies found: " + enemies.Length);
     }
 
     // Called when another Collider enters this trigger collider
