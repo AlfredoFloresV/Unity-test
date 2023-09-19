@@ -18,6 +18,7 @@ public class Flashlight : MonoBehaviour
     private AudioSource audioSource;
 
     public float maxIntensity = 5f;
+    private float minIntensity; 
     public float intensity;
     public bool focus;
 
@@ -27,6 +28,7 @@ public class Flashlight : MonoBehaviour
         l = spotlight.GetComponent<Light>();
         audioSource = GetComponent<AudioSource>();
         intensity = maxIntensity;
+        minIntensity = maxIntensity * 0.09f;
         focus = false;
         InvokeRepeating("updateFlashLight", 10.0f, 1.0f);
     }
@@ -58,7 +60,7 @@ public class Flashlight : MonoBehaviour
 
     private void updateFlashLight() 
     {
-        if (l.enabled && intensity > 0) 
+        if (l.enabled && intensity > minIntensity) 
         {
             intensity = intensity - 0.05f;
             l.intensity = intensity;
@@ -78,9 +80,9 @@ public class Flashlight : MonoBehaviour
     public void spendLight(float value) 
     {
         intensity = intensity - value;
-        if (intensity < 0) 
+        if (intensity < minIntensity) 
         {
-            intensity = 0f;
+            intensity = minIntensity;
         }
     }
 
