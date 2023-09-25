@@ -21,6 +21,7 @@ public class DungeonTileReplacement : MonoBehaviour
         {
             ReplaceTiles();
             startReplacement = false; // Reset the boolean
+            GetComponent<DestroyDuplicatePrefabs>().startDestruction = true;
         }
     }
 

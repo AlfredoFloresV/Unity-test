@@ -21,12 +21,17 @@ public class ObjectDetection : MonoBehaviour
     private Camera cam;
 
     [SerializeField]
+    private AudioClip paperAudio;
+
+    [SerializeField]
     private GameObject flashLight;
 
     GameObject lastHighlightedObject = null;
 
     private Shader standard;
     private Shader highlight;
+    private ObjectPickupAndRotate pickup;
+    private AudioSource audioSource;
 
     private string interactionMessage = ""; // Message to display when an object is selected
 
@@ -34,9 +39,11 @@ public class ObjectDetection : MonoBehaviour
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         standard = Shader.Find("Standard"); //Not working
         highlight = Shader.Find("Unlit/Texture");
         playerMotor = GetComponent<PlayerMotor>();
+        pickup = GameObject.Find ("Camera").GetComponent<ObjectPickupAndRotate>();
         StartCoroutine(message());
     }
 
@@ -94,7 +101,6 @@ public class ObjectDetection : MonoBehaviour
             GameObject hitObject = rayHit.collider.gameObject;
             HighlightObject(hitObject);
 
-
             if (rayHit.collider.tag == "doorBtn")
             {
                 interactingWithObject(true);
@@ -139,13 +145,14 @@ public class ObjectDetection : MonoBehaviour
                     interactingWithObject(false);
                     rayHit.collider.gameObject.SetActive(false);
                     GetComponent<PlayerMotor>().handleKeys(rayHit.collider.tag);
+                    if(rayHit.collider.tag == "key1" ){pickup.key1 = true;}
+                    if(rayHit.collider.tag == "key2" ){pickup.key2 = true;}
+                    if(rayHit.collider.tag == "key3" ){pickup.key3 = true;}
+                    if(rayHit.collider.tag == "key4" ){pickup.key4 = true;}
                 }
             }
-
             if (rayHit.collider.tag == "larry_face")
             {
-
-
                 if (rayHit.collider.gameObject.GetComponentInParent<LarryActions>().currentState != LarryState.Stun
                     && flashLight.GetComponent<Flashlight>().lightEnabled() == true
                     && flashLight.GetComponent<Flashlight>().intensity >= 0.5 
@@ -158,7 +165,175 @@ public class ObjectDetection : MonoBehaviour
                 }
             
             }
+            if (rayHit.collider.tag == "drawing1") 
+            {
+                interactingWithObject(true);
 
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
+                    interactionMessage = "";
+                    Destroy(rayHit.transform.gameObject); 
+                    pickup.drawing1 = true;
+                }
+            }
+            if (rayHit.collider.tag == "drawing2") 
+            {
+                interactingWithObject(true);
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
+                    interactionMessage = "";
+                    Destroy(rayHit.transform.gameObject); 
+                    pickup.drawing2 = true;
+                }
+            }
+            if (rayHit.collider.tag == "drawing3") 
+            {
+                interactingWithObject(true);
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
+                    interactionMessage = "";
+                    Destroy(rayHit.transform.gameObject); 
+                    pickup.drawing3 = true;
+                }
+            }
+            if (rayHit.collider.tag == "drawing4") 
+            {
+                interactingWithObject(true);
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
+                    interactionMessage = "";
+                    Destroy(rayHit.transform.gameObject); 
+                    pickup.drawing4 = true;
+                }
+            }
+            if (rayHit.collider.tag == "drawing5") 
+            {
+                interactingWithObject(true);
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
+                    interactionMessage = "";
+                    Destroy(rayHit.transform.gameObject); 
+                    pickup.drawing5 = true;
+                }
+            }
+            if (rayHit.collider.tag == "invite1") 
+            {
+                interactingWithObject(true);
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
+                    interactionMessage = "";
+                    Destroy(rayHit.transform.gameObject); 
+                    pickup.invite1 = true;
+                }
+            }
+            if (rayHit.collider.tag == "invite2") 
+            {
+                interactingWithObject(true);
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
+                    interactionMessage = "";
+                    Destroy(rayHit.transform.gameObject); 
+                    pickup.invite2 = true;
+                }
+            }
+            if (rayHit.collider.tag == "invite3") 
+            {
+                interactingWithObject(true);
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
+                    interactionMessage = "";
+                    Destroy(rayHit.transform.gameObject); 
+                    pickup.invite3 = true;
+                }
+            }
+            if (rayHit.collider.tag == "polaroid1") 
+            {
+                interactingWithObject(true);
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
+                    interactionMessage = "";
+                    Destroy(rayHit.transform.gameObject); 
+                    pickup.polaroid1 = true;
+                }
+            }
+            if (rayHit.collider.tag == "polaroid2") 
+            {
+                interactingWithObject(true);
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
+                    interactionMessage = "";
+                    Destroy(rayHit.transform.gameObject); 
+                    pickup.polaroid2 = true;
+                }
+            }
+            if (rayHit.collider.tag == "polaroid3") 
+            {
+                interactingWithObject(true);
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
+                    interactionMessage = "";
+                    Destroy(rayHit.transform.gameObject); 
+                    pickup.polaroid3 = true;
+                }
+            }
+            if (rayHit.collider.tag == "polaroid4") 
+            {
+                interactingWithObject(true);
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
+                    interactionMessage = "";
+                    Destroy(rayHit.transform.gameObject); 
+                    pickup.polaroid4 = true;
+                }
+            }
+            if (rayHit.collider.tag == "polaroid6") 
+            {
+                interactingWithObject(true);
+
+                if (Input.GetKeyDown(KeyCode.E)) 
+                {
+                    audioSource.pitch = 1f;
+                    audioSource.PlayOneShot(paperAudio);
+                    interactionMessage = "";
+                    Destroy(rayHit.transform.gameObject); 
+                    pickup.polaroid6 = true;
+                }
+            }
         }
         else
         {
@@ -197,7 +372,7 @@ public class ObjectDetection : MonoBehaviour
     IEnumerator message() 
     {
         yield return new WaitForSeconds(7f);
-        interactionMessage = "I need to find a way out";
+        interactionMessage = "I need to find out what happened to those kids";
     }
 
     IEnumerator clean() 

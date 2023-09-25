@@ -302,7 +302,7 @@ public class PlayerMotor : MonoBehaviour
 
     IEnumerator deleteMessage() 
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(6f);
         interactionMessage = "";
     }
 

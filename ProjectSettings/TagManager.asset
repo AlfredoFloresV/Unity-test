@@ -31,6 +31,19 @@ TagManager:
   - specialdoorused
   - newspaper
   - horn
+  - drawing1
+  - drawing2
+  - drawing3
+  - drawing4
+  - drawing5
+  - invite1
+  - invite2
+  - invite3
+  - polaroid1
+  - polaroid2
+  - polaroid3
+  - polaroid4
+  - polaroid6
   layers:
   - Default
   - TransparentFX
