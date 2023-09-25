@@ -174,7 +174,7 @@ public class ObjectDetection : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("drawing1"));
                     pickup.drawing1 = true;
                 }
             }
@@ -187,7 +187,7 @@ public class ObjectDetection : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("drawing2"));
                     pickup.drawing2 = true;
                 }
             }
@@ -200,7 +200,7 @@ public class ObjectDetection : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("drawing3"));
                     pickup.drawing3 = true;
                 }
             }
@@ -213,7 +213,7 @@ public class ObjectDetection : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("drawing4"));
                     pickup.drawing4 = true;
                 }
             }
@@ -226,7 +226,7 @@ public class ObjectDetection : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("drawing5"));
                     pickup.drawing5 = true;
                 }
             }
@@ -239,7 +239,7 @@ public class ObjectDetection : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("invite1"));
                     pickup.invite1 = true;
                 }
             }
@@ -252,7 +252,7 @@ public class ObjectDetection : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("invite2"));
                     pickup.invite2 = true;
                 }
             }
@@ -265,7 +265,7 @@ public class ObjectDetection : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("invite3"));
                     pickup.invite3 = true;
                 }
             }
@@ -278,7 +278,7 @@ public class ObjectDetection : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("polaroid1"));
                     pickup.polaroid1 = true;
                 }
             }
@@ -291,7 +291,7 @@ public class ObjectDetection : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("polaroid2"));
                     pickup.polaroid2 = true;
                 }
             }
@@ -304,7 +304,7 @@ public class ObjectDetection : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("polaroid3"));
                     pickup.polaroid3 = true;
                 }
             }
@@ -317,7 +317,7 @@ public class ObjectDetection : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("polaroid4"));
                     pickup.polaroid4 = true;
                 }
             }
@@ -330,7 +330,7 @@ public class ObjectDetection : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("polaroid6"));
                     pickup.polaroid6 = true;
                 }
             }

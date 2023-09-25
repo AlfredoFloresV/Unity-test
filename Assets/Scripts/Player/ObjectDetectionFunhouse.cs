@@ -144,7 +144,7 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                     audioSource.PlayOneShot(paperAudio);
                     audioSource.pitch = 1.3f;
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("ticket"));
                     pickup.ticket = true;
                     animDoor1.enabled = true;
                     animDoor2.enabled = true;
@@ -165,7 +165,7 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("newspaper"));
                     pickup.newspaper = true;
                 }
             }
@@ -182,7 +182,7 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
                     interactionMessage = "";
-                    Destroy(rayHit.transform.gameObject); 
+                    Destroy (GameObject.FindWithTag("missingposter"));
                     pickup.missingperson = true;
                 }
             }
