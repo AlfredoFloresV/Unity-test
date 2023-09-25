@@ -176,6 +176,7 @@ public class ObjectDetection : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("drawing1"));
                     pickup.drawing1 = true;
+                    PlayerPrefsManager.SaveBool("drawing1", true);
                 }
             }
             if (rayHit.collider.tag == "drawing2") 
@@ -189,6 +190,7 @@ public class ObjectDetection : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("drawing2"));
                     pickup.drawing2 = true;
+                    PlayerPrefsManager.SaveBool("drawing2", true);
                 }
             }
             if (rayHit.collider.tag == "drawing3") 
@@ -202,6 +204,7 @@ public class ObjectDetection : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("drawing3"));
                     pickup.drawing3 = true;
+                    PlayerPrefsManager.SaveBool("drawing3", true);
                 }
             }
             if (rayHit.collider.tag == "drawing4") 
@@ -215,6 +218,7 @@ public class ObjectDetection : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("drawing4"));
                     pickup.drawing4 = true;
+                    PlayerPrefsManager.SaveBool("drawing4", true);
                 }
             }
             if (rayHit.collider.tag == "drawing5") 
@@ -228,6 +232,7 @@ public class ObjectDetection : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("drawing5"));
                     pickup.drawing5 = true;
+                    PlayerPrefsManager.SaveBool("drawing5", true);
                 }
             }
             if (rayHit.collider.tag == "invite1") 
@@ -241,6 +246,7 @@ public class ObjectDetection : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("invite1"));
                     pickup.invite1 = true;
+                    PlayerPrefsManager.SaveBool("invite1", true);
                 }
             }
             if (rayHit.collider.tag == "invite2") 
@@ -254,6 +260,7 @@ public class ObjectDetection : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("invite2"));
                     pickup.invite2 = true;
+                    PlayerPrefsManager.SaveBool("invite2", true);
                 }
             }
             if (rayHit.collider.tag == "invite3") 
@@ -267,6 +274,7 @@ public class ObjectDetection : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("invite3"));
                     pickup.invite3 = true;
+                    PlayerPrefsManager.SaveBool("invite3", true);
                 }
             }
             if (rayHit.collider.tag == "polaroid1") 
@@ -280,6 +288,7 @@ public class ObjectDetection : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("polaroid1"));
                     pickup.polaroid1 = true;
+                    PlayerPrefsManager.SaveBool("polaroid1", true);
                 }
             }
             if (rayHit.collider.tag == "polaroid2") 
@@ -293,6 +302,7 @@ public class ObjectDetection : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("polaroid2"));
                     pickup.polaroid2 = true;
+                    PlayerPrefsManager.SaveBool("polaroid2", true);
                 }
             }
             if (rayHit.collider.tag == "polaroid3") 
@@ -306,6 +316,7 @@ public class ObjectDetection : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("polaroid3"));
                     pickup.polaroid3 = true;
+                    PlayerPrefsManager.SaveBool("polaroid3", true);
                 }
             }
             if (rayHit.collider.tag == "polaroid4") 
@@ -319,6 +330,7 @@ public class ObjectDetection : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("polaroid4"));
                     pickup.polaroid4 = true;
+                    PlayerPrefsManager.SaveBool("polaroid4", true);
                 }
             }
             if (rayHit.collider.tag == "polaroid6") 
@@ -332,6 +344,7 @@ public class ObjectDetection : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("polaroid6"));
                     pickup.polaroid6 = true;
+                    PlayerPrefsManager.SaveBool("polaroid6", true);
                 }
             }
         }
