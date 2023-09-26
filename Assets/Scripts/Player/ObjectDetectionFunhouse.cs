@@ -146,6 +146,7 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("ticket"));
                     pickup.ticket = true;
+                    PlayerPrefsManager.SaveBool("ticket", true);
                     animDoor1.enabled = true;
                     animDoor2.enabled = true;
                     StopAllCoroutines();
@@ -167,6 +168,7 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("newspaper"));
                     pickup.newspaper = true;
+                    PlayerPrefsManager.SaveBool("newspaper", true);
                 }
             }
 
@@ -184,6 +186,7 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                     interactionMessage = "";
                     Destroy (GameObject.FindWithTag("missingposter"));
                     pickup.missingperson = true;
+                    PlayerPrefsManager.SaveBool("missingperson", true);
                 }
             }
 
