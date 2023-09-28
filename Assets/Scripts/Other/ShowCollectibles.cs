@@ -20,10 +20,30 @@ public class ShowCollectibles : MonoBehaviour
     public GameObject polaroid3;
     public GameObject polaroid4;
     public GameObject polaroid6;
+    public GameObject LinkNT;
+    public GameObject LinkD3P4;
+    public GameObject LinkD5P6;
+    public GameObject LinkMI2;
+    public GameObject LinkD2I1;
+    public GameObject LinkD2I2;
+    public GameObject LinkD2I3;
+    public GameObject LinkND1;
+    public GameObject LinkNM;
+    public GameObject LinkNP2;
 
     // Start is called before the first frame update
     void Start()
     {
+        LinkNT.SetActive(false);
+        LinkD3P4.SetActive(false);
+        LinkD5P6.SetActive(false);
+        LinkMI2.SetActive(false);
+        LinkD2I1.SetActive(false);
+        LinkD2I2.SetActive(false);
+        LinkD2I3.SetActive(false);
+        LinkND1.SetActive(false);
+        LinkNM.SetActive(false);
+        LinkNP2.SetActive(false);
         ticket.GetComponent<Renderer>().enabled = PlayerPrefsManager.LoadBool("ticket");
         if (PlayerPrefsManager.LoadBool("ticket")) {Destroy(GameObject.Find("ticket (1)"));}
         newspaper.GetComponent<Renderer>().enabled = PlayerPrefsManager.LoadBool("newspaper");
@@ -56,5 +76,15 @@ public class ShowCollectibles : MonoBehaviour
         if (PlayerPrefsManager.LoadBool("polaroid4")) {Destroy(GameObject.Find("Polaroid4 (1)"));}
         polaroid6.GetComponent<Renderer>().enabled = PlayerPrefsManager.LoadBool("polaroid6");
         if (PlayerPrefsManager.LoadBool("polaroid6")) {Destroy(GameObject.Find("Polaroid6 (1)"));}
+        if (PlayerPrefsManager.LoadBool("newspaper")&&PlayerPrefsManager.LoadBool("ticket")) {LinkNT.SetActive(true);}
+        if (PlayerPrefsManager.LoadBool("drawing3")&&PlayerPrefsManager.LoadBool("polaroid4")) {LinkD3P4.SetActive(true);;}
+        if (PlayerPrefsManager.LoadBool("drawing5")&&PlayerPrefsManager.LoadBool("polaroid6")) {LinkD5P6.SetActive(true);;}
+        if (PlayerPrefsManager.LoadBool("missingperson")&&PlayerPrefsManager.LoadBool("invite2")) {LinkMI2.SetActive(true);;}
+        if (PlayerPrefsManager.LoadBool("drawing2")&&PlayerPrefsManager.LoadBool("invite1")) {LinkD2I1.SetActive(true);;}
+        if (PlayerPrefsManager.LoadBool("drawing2")&&PlayerPrefsManager.LoadBool("invite2")) {LinkD2I2.SetActive(true);;}
+        if (PlayerPrefsManager.LoadBool("drawing2")&&PlayerPrefsManager.LoadBool("invite3")) {LinkD2I3.SetActive(true);;}
+        if (PlayerPrefsManager.LoadBool("newspaper")&&PlayerPrefsManager.LoadBool("drawing1")) {LinkND1.SetActive(true);;}
+        if (PlayerPrefsManager.LoadBool("newspaper")&&PlayerPrefsManager.LoadBool("missingperson")) {LinkNM.SetActive(true);;}
+        if (PlayerPrefsManager.LoadBool("newspaper")&&PlayerPrefsManager.LoadBool("polaroid2")) {LinkNP2.SetActive(true);;}
     }
 }
