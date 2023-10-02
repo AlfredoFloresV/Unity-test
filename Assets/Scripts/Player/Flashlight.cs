@@ -5,30 +5,33 @@ using UnityEngine;
 public class Flashlight : MonoBehaviour
 {
     [SerializeField]
-    private Light spotlight;
+    private AudioClip clickBtn;
 
     [SerializeField]
-    private Transform flEnabled;
+    private GameObject pauseObj;
+
     [SerializeField]
-    private Transform flDisabled;
-    [SerializeField]
-    private AudioClip clickBtn;
+    private GameObject freezeObj;
 
     private Light l;
     private AudioSource audioSource;
 
-    public float maxIntensity = 5f;
+    public float maxIntensity = 2f;
     private float minIntensity; 
     public float intensity;
+    private float spotAngle;
+    private float range;
     public bool focus;
 
     // Start is called before the first frame update
     void Start()
     {
-        l = spotlight.GetComponent<Light>();
+        l = GetComponent<Light>();
         audioSource = GetComponent<AudioSource>();
         intensity = maxIntensity;
-        minIntensity = maxIntensity * 0.09f;
+        spotAngle = l.spotAngle;
+        range = l.range;
+        minIntensity = maxIntensity * 0.25f;
         focus = false;
         InvokeRepeating("updateFlashLight", 10.0f, 1.0f);
     }
@@ -36,6 +39,9 @@ public class Flashlight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (pauseObj.GetComponent<PauseMenu>().isPaused || freezeObj.GetComponent<ObjectPickupAndRotate>().Freezed)
+            return;
+
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             audioSource.PlayOneShot(clickBtn);
@@ -44,15 +50,15 @@ public class Flashlight : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Mouse0)) 
         {
-            l.spotAngle = 50;
-            l.range = 10;
+            l.spotAngle = spotAngle / 2;
+            l.range = range / 2;
             l.intensity = intensity * 3;
             focus = true;
         }
         else 
         { 
-            l.spotAngle = 100;
-            l.range = 80;
+            l.spotAngle = spotAngle;
+            l.range = range;
             l.intensity = intensity;
             focus = false;
         }
@@ -62,7 +68,7 @@ public class Flashlight : MonoBehaviour
     {
         if (l.enabled && intensity > minIntensity) 
         {
-            intensity = intensity - 0.05f;
+            intensity = intensity - 0.01f;
             l.intensity = intensity;
         }
     }
@@ -70,7 +76,7 @@ public class Flashlight : MonoBehaviour
 
     public void chargeBattery() 
     {
-        intensity = intensity + 0.5f;
+        intensity = intensity + 0.4f;
         if (intensity > maxIntensity) 
         {
             intensity = maxIntensity;

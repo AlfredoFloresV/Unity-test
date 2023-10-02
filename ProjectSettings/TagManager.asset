@@ -44,6 +44,8 @@ TagManager:
   - polaroid3
   - polaroid4
   - polaroid6
+  - face
+  - mainenemy
   layers:
   - Default
   - TransparentFX

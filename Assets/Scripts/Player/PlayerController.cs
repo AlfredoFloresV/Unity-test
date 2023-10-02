@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerController : MonoBehaviour
 {
+    /*
     [SerializeField]
     private float speed = 1f;
     private float orgSpeed;
@@ -48,14 +49,15 @@ public class PlayerController : MonoBehaviour
         motor.RotateCamera(cameraRotation);
 
 
-        if (Input.GetKey(KeyCode.Space)) 
+        if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.LeftShift)) 
         {
             speed = orgSpeed * 2f;
         }
 
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.LeftShift))
         {
             speed = orgSpeed;
         }
     }
+    */
 }

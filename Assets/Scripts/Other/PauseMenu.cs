@@ -9,7 +9,7 @@ public class PauseMenu : MonoBehaviour
     public Button returnToGameButton;
     public Button quitGameButton;
 
-    private bool isPaused = false;
+    public bool isPaused = false;
 
     private void Start()
     {
@@ -23,7 +23,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
         {
             if (isPaused)
             {
@@ -41,7 +41,7 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0; // Pause the game
         pauseMenuUI.SetActive(true);
         isPaused = true;
-        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     private void ResumeGame()
@@ -50,7 +50,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         isPaused = false;
         EventSystem.current.SetSelectedGameObject(null);
-        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void QuitGame()

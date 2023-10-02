@@ -39,6 +39,9 @@ public class MazeGrid : MonoBehaviour
     private GameObject enemy2;
 
     [SerializeField]
+    private List<GameObject> extraEnemies;
+ 
+    [SerializeField]
     private GameObject destPrefab;
 
     [SerializeField]
@@ -127,11 +130,24 @@ public class MazeGrid : MonoBehaviour
                     if (NavMesh.SamplePosition(enemy2.transform.position, out closestHit, 500f, NavMesh.AllAreas)) 
                     {
                         enemy2.transform.position = closestHit.position;
-                        Debug.Log("setting up Larry 1 correctly");
+                        Debug.Log("setting up Larry 2 correctly");
                     }
                     else Debug.Log("something weird happened");
                     enemy2.GetComponent<LarryActions>().setRandomDestinations(destinations);
                 }
+
+                foreach (GameObject enemy in extraEnemies) 
+                {
+                    if (NavMesh.SamplePosition(enemy.transform.position, out closestHit, 500f, NavMesh.AllAreas))
+                    {
+                        enemy.transform.position = closestHit.position;
+                        Debug.Log("setting up extra Larry correctly");
+                    }
+                    else Debug.Log("something weird happened");
+                    enemy.GetComponent<LarryActions>().setRandomDestinations(destinations);
+                }
+
+
                 ready = true;
                 GetComponent<DungeonTileReplacement>().startReplacement = true;
             }
@@ -296,13 +312,18 @@ public class MazeGrid : MonoBehaviour
         updateGrids(loc, size, room);
 
 
-        player.GetComponent<Transform>().position = new Vector3(6f, 0.7f, 10f);
+        player.GetComponent<Transform>().position = new Vector3(6f, 0f, 10f);
         player.GetComponent<Transform>().eulerAngles = new Vector3(0f,180f,0f);
         enemy.GetComponent<Transform>().position = new Vector3(24f * Scale, 0f, 3f * Scale);
         if (enemy2 != null) 
         {
             enemy2.GetComponent<Transform>().position = new Vector3(3f * Scale, 0f, 27f * Scale);
         }
+
+        extraEnemies[0].GetComponent<Transform>().position = new Vector3(66f, 0f, 45f);
+        extraEnemies[1].GetComponent<Transform>().position = new Vector3(66f, 0f, 47f);
+        extraEnemies[2].GetComponent<Transform>().position = new Vector3(66f, 0f, 49f);
+        extraEnemies[3].GetComponent<Transform>().position = new Vector3(66f, 0f, 51f);
     }
 
     private void createGrid() 

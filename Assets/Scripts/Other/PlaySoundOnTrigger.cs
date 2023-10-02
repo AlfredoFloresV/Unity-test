@@ -21,7 +21,7 @@ public class PlaySoundOnTrigger : MonoBehaviour
             audioSource.clip = soundClip;
         }
 
-        enemies = GameObject.FindGameObjectsWithTag("enemy");
+        enemies = GameObject.FindGameObjectsWithTag("mainenemy");
         Debug.Log("enemies found: " + enemies.Length);
     }
 

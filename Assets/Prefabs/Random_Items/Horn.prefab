@@ -157,6 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundClip: {fileID: 8300000, guid: 65aa6d49acf0ec30c8a6ea678ab600e7, type: 3}
+  enemies: []
 --- !u!82 &5311144746213144294
 AudioSource:
   m_ObjectHideFlags: 0

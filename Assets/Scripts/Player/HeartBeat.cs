@@ -20,7 +20,7 @@ public class HeartBeat : MonoBehaviour
     private void updateSound() 
     {
         pm = player.GetComponent<PlayerMotor>();
-        audioSource.volume = (float) pm.numKeys / 4.0f;
+        audioSource.volume = 1.0f - (float) pm.Health / 5.0f;
     }
 
 

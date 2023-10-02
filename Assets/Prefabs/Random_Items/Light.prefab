@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea98b823438547d5fb766195e7d7fbe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyPercentage: 85
+  destroyPercentage: 80
 --- !u!114 &168526782258340737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,13 +195,13 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 0.99012125, g: 0.9634428, b: 0.79299706, a: 1}
-  m_Intensity: 1.4
-  m_Range: 5
-  m_SpotAngle: 60
+  m_Intensity: 0.4
+  m_Range: 20
+  m_SpotAngle: 65
   m_InnerSpotAngle: 1
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -227,17 +227,17 @@ Light:
       e33: 1
     m_UseCullingMatrixOverride: 0
   m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
+  m_DrawHalo: 1
+  m_Flare: {fileID: 12100000, guid: e1f20beb66008754f899aee5ade952c9, type: 2}
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 5
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}

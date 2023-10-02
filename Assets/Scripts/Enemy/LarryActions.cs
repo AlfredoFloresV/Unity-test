@@ -38,6 +38,9 @@ public class LarryActions : MonoBehaviour
     [SerializeField]
     private Camera playerCam;
 
+    [SerializeField]
+    private GameObject textObj;
+
     private AudioSource audioSource;
     private Animator animator;
     private NavMeshAgent ai;
@@ -187,9 +190,11 @@ public class LarryActions : MonoBehaviour
         {
             player.GetComponent<PlayerMotor>().hit = true;
             playerCam.gameObject.SetActive(false);
+            textObj.GetComponent<TextSupportGUI>().showText = false;
             cam.gameObject.SetActive(true);
             StopAllCoroutines();
-            cam.gameObject.GetComponentInParent<Animator>().Play(attack);
+            cam.transform.parent.gameObject.GetComponent<Animator>().Play(attack);
+            //cam.gameObject.GetComponentInParent<Animator>().Play(attack);
             audioSource.PlayOneShot(Random.Range(0, 2) == 0 ? attackAudio1 : attackAudio2);
             StartCoroutine(recover(2f, true));
         }
@@ -227,7 +232,9 @@ public class LarryActions : MonoBehaviour
 
     public void recoverPlayerCam()
     {
+        textObj.GetComponent<TextSupportGUI>().showText = true;
         cam.gameObject.SetActive(false);
+        cam.gameObject.GetComponentInParent<Animator>().Play("Larry_Idle2");
         playerCam.gameObject.SetActive(true);
         player.GetComponent<PlayerMotor>().playerAttacked();
     }

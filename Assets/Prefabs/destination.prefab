@@ -131,10 +131,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1
+  m_Radius: 0.2696965
+  m_Height: 1.0923609
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: -3.6787356e-17, y: 0.68254954, z: 0.0082065305}
 --- !u!1 &7188341201082513848 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8164078558771037576, guid: a021727c7f1c910228a1cfb48b01f18d, type: 3}

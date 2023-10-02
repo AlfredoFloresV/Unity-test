@@ -24,64 +24,61 @@ public class ObjectDetection : MonoBehaviour
     private AudioClip paperAudio;
 
     [SerializeField]
+    private AudioClip keysAudio;
+
+    [SerializeField]
+    private AudioClip biscuitAudio;
+
+    [SerializeField]
+    private AudioClip batteryAudio;
+
+    [SerializeField]
     private GameObject flashLight;
+
+    [SerializeField]
+    private GameObject textObj;
 
     GameObject lastHighlightedObject = null;
 
-    private Shader standard;
-    private Shader highlight;
     private ObjectPickupAndRotate pickup;
     private AudioSource audioSource;
 
-    private string interactionMessage = ""; // Message to display when an object is selected
-
-    private PlayerMotor playerMotor;
+    //private string interactionMessage = ""; // Message to display when an object is selected
+    //private string introMessage = "I need to find out what happened to those kids";
+    private List<string> collectibles;
 
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        standard = Shader.Find("Standard"); //Not working
-        highlight = Shader.Find("Unlit/Texture");
-        playerMotor = GetComponent<PlayerMotor>();
-        pickup = GameObject.Find ("Camera").GetComponent<ObjectPickupAndRotate>();
-        StartCoroutine(message());
+        pickup = cam.GetComponent<ObjectPickupAndRotate>();
+
+        collectibles = new List<string>();
+
+        foreach (ObjectPickupAndRotate.Collectible c in pickup.collectibleList)
+        {
+            collectibles.Add(c.name);
+        }
+
+        textObj.GetComponent<TextSupportGUI>().setInteractionMessage("I need to find out what happened to those kids", true);
     }
 
     void HighlightObject(GameObject gameObject)
     {
-        if (lastHighlightedObject != gameObject)
+        if (gameObject.GetComponent<MeshRenderer>().sharedMaterial != selectedMaterial) 
         {
-            if (gameObject.CompareTag("doorBtn") && gameObject.GetComponent<MeshRenderer>().sharedMaterial != selectedMaterial) 
-            {
-                ClearHighlighted();
-                originalMaterial = gameObject.GetComponent<MeshRenderer>().sharedMaterial;
-                gameObject.GetComponent<MeshRenderer>().sharedMaterial = highlightMaterial;
-                gameObject.GetComponent<MeshRenderer>().sharedMaterial.shader = highlight;
-            }
-
+            ClearHighlighted();
+            gameObject.GetComponent<MeshRenderer>().sharedMaterial = highlightMaterial;
             lastHighlightedObject = gameObject;
-            interactingWithObject(false);
         }
-
     }
 
     void ClearHighlighted()
     {
-        if (lastHighlightedObject != null)
+        if (lastHighlightedObject != null && lastHighlightedObject.GetComponent<MeshRenderer>().sharedMaterial == highlightMaterial)
         {
-            if (gameObject.CompareTag("doorBtn"))
-            {
-                Material m = lastHighlightedObject.GetComponent<MeshRenderer>().sharedMaterial;
-                if (m == highlightMaterial)
-                {
-                    lastHighlightedObject.GetComponent<MeshRenderer>().sharedMaterial = originalMaterial;
-                    lastHighlightedObject.GetComponent<MeshRenderer>().sharedMaterial.shader = standard;
-                }
-                
-            }
-
+            lastHighlightedObject.GetComponent<MeshRenderer>().sharedMaterial = originalMaterial;
             lastHighlightedObject = null;
-            interactingWithObject(false);
+            //interactingWithObject(false);
         }
     }
 
@@ -91,7 +88,7 @@ public class ObjectDetection : MonoBehaviour
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit rayHit;
 
-        Vector3 forward = cam.transform.TransformDirection(Vector3.forward) * 3f;
+        Vector3 forward = cam.transform.TransformDirection(Vector3.forward) * 2f;
         Debug.DrawRay(cam.transform.position, forward, Color.green);
         
         // Check if we hit something.
@@ -99,253 +96,99 @@ public class ObjectDetection : MonoBehaviour
         {
             // Get the object that was hit.
             GameObject hitObject = rayHit.collider.gameObject;
-            HighlightObject(hitObject);
+            string colliderTag = rayHit.collider.tag;
+            //ClearHighlighted();
 
-            if (rayHit.collider.tag == "doorBtn")
+            if (colliderTag == "doorBtn" && hitObject.GetComponent<MeshRenderer>().sharedMaterial != selectedMaterial)
             {
+                HighlightObject(hitObject);
                 interactingWithObject(true);
 
-                if (Input.GetKeyDown(KeyCode.E)) 
-                {
-                    interactionMessage = "";
-                    rayHit.collider.gameObject.GetComponent<OpenDoor>().open();
-                    rayHit.collider.gameObject.GetComponent<Renderer>().material = selectedMaterial;
-                }
-
-                //HandleObjectInteraction(rayHit.collider.transform);
-            }
-            if (rayHit.collider.tag == "biscuit") 
-            {
-                interactingWithObject(true);
-
-                if (Input.GetKeyDown(KeyCode.E)) 
+                if (Input.GetKeyDown(KeyCode.E))
                 {
                     interactingWithObject(false);
+                    hitObject.GetComponent<OpenDoor>().open();
+                    hitObject.GetComponent<MeshRenderer>().sharedMaterial = selectedMaterial;
+                }
+            }
+            else if (colliderTag == "biscuit")
+            {
+                interactingWithObject(true);
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    interactingWithObject(false);
+                    audioSource.PlayOneShot(biscuitAudio);
                     rayHit.collider.gameObject.SetActive(false);
                     GetComponent<PlayerMotor>().restoreHealth();
                 }
             }
-            if (rayHit.collider.tag == "battery") 
+            else if (colliderTag == "battery")
             {
                 interactingWithObject(true);
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     interactingWithObject(false);
+                    audioSource.PlayOneShot(batteryAudio);
                     rayHit.collider.gameObject.SetActive(false);
                     GetComponent<PlayerMotor>().restoreLight();
                 }
             }
-            if (rayHit.collider.tag == "key1" || rayHit.collider.tag == "key2" || rayHit.collider.tag == "key3" || rayHit.collider.tag == "key4") 
-            {
-                interactingWithObject(true);
-
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    interactingWithObject(false);
-                    rayHit.collider.gameObject.SetActive(false);
-                    GetComponent<PlayerMotor>().handleKeys(rayHit.collider.tag);
-                    if(rayHit.collider.tag == "key1" ){pickup.key1 = true;}
-                    if(rayHit.collider.tag == "key2" ){pickup.key2 = true;}
-                    if(rayHit.collider.tag == "key3" ){pickup.key3 = true;}
-                    if(rayHit.collider.tag == "key4" ){pickup.key4 = true;}
-                }
-            }
-            if (rayHit.collider.tag == "larry_face")
+            else if (colliderTag == "larry_face")
             {
                 if (rayHit.collider.gameObject.GetComponentInParent<LarryActions>().currentState != LarryState.Stun
                     && flashLight.GetComponent<Flashlight>().lightEnabled() == true
-                    && flashLight.GetComponent<Flashlight>().intensity >= 0.5 
+                    && flashLight.GetComponent<Flashlight>().intensity >= 0.5
                     && flashLight.GetComponent<Flashlight>().focus == true
-                    && GetComponent<PlayerMotor>().hit == false) 
+                    && GetComponent<PlayerMotor>().hit == false)
                 {
                     LarryActions ai = rayHit.collider.gameObject.GetComponentInParent<LarryActions>();
                     ai.StunActions();
                     GetComponent<PlayerMotor>().spendLight();
                 }
-            
+
             }
-            if (rayHit.collider.tag == "drawing1") 
+            else if (colliderTag == "specialdoor")
             {
                 interactingWithObject(true);
 
-                if (Input.GetKeyDown(KeyCode.E)) 
+                if (Input.GetKeyDown(KeyCode.E))
                 {
-                    audioSource.pitch = 1f;
-                    audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("drawing1"));
-                    pickup.drawing1 = true;
-                    PlayerPrefsManager.SaveBool("drawing1", true);
+                    interactingWithObject(false);
+                    string num = rayHit.collider.gameObject.name.Substring(rayHit.collider.gameObject.name.Length - 1);
+                    GetComponent<PlayerMotor>().verifyVictoryCondition(num, rayHit.collider.gameObject);
                 }
             }
-            if (rayHit.collider.tag == "drawing2") 
+            else if (collectibles.Contains(colliderTag))
             {
                 interactingWithObject(true);
 
-                if (Input.GetKeyDown(KeyCode.E)) 
+                if (Input.GetKeyDown(KeyCode.E))
                 {
-                    audioSource.pitch = 1f;
-                    audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("drawing2"));
-                    pickup.drawing2 = true;
-                    PlayerPrefsManager.SaveBool("drawing2", true);
+                    interactingWithObject(false);
+                    Destroy(rayHit.collider.gameObject);
+                    pickup.displayObject(colliderTag);
+                    //Keys
+                    if (colliderTag.Contains("key"))
+                    {
+                        audioSource.PlayOneShot(keysAudio);
+                        GetComponent<PlayerMotor>().handleKeys(colliderTag);
+                        string text = GetComponent<PlayerMotor>().numKeys + "/4 keys found";
+                        textObj.GetComponent<TextSupportGUI>().setSubInteractionMessage(text);
+                        //interactionMessage = GetComponent<PlayerMotor>().numKeys + "/4 keys";
+                    }
+                    else
+                    {
+                        audioSource.PlayOneShot(paperAudio);
+                        PlayerPrefsManager.SaveBool(colliderTag, true);
+                    }
                 }
             }
-            if (rayHit.collider.tag == "drawing3") 
+            else 
             {
-                interactingWithObject(true);
-
-                if (Input.GetKeyDown(KeyCode.E)) 
-                {
-                    audioSource.pitch = 1f;
-                    audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("drawing3"));
-                    pickup.drawing3 = true;
-                    PlayerPrefsManager.SaveBool("drawing3", true);
-                }
-            }
-            if (rayHit.collider.tag == "drawing4") 
-            {
-                interactingWithObject(true);
-
-                if (Input.GetKeyDown(KeyCode.E)) 
-                {
-                    audioSource.pitch = 1f;
-                    audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("drawing4"));
-                    pickup.drawing4 = true;
-                    PlayerPrefsManager.SaveBool("drawing4", true);
-                }
-            }
-            if (rayHit.collider.tag == "drawing5") 
-            {
-                interactingWithObject(true);
-
-                if (Input.GetKeyDown(KeyCode.E)) 
-                {
-                    audioSource.pitch = 1f;
-                    audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("drawing5"));
-                    pickup.drawing5 = true;
-                    PlayerPrefsManager.SaveBool("drawing5", true);
-                }
-            }
-            if (rayHit.collider.tag == "invite1") 
-            {
-                interactingWithObject(true);
-
-                if (Input.GetKeyDown(KeyCode.E)) 
-                {
-                    audioSource.pitch = 1f;
-                    audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("invite1"));
-                    pickup.invite1 = true;
-                    PlayerPrefsManager.SaveBool("invite1", true);
-                }
-            }
-            if (rayHit.collider.tag == "invite2") 
-            {
-                interactingWithObject(true);
-
-                if (Input.GetKeyDown(KeyCode.E)) 
-                {
-                    audioSource.pitch = 1f;
-                    audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("invite2"));
-                    pickup.invite2 = true;
-                    PlayerPrefsManager.SaveBool("invite2", true);
-                }
-            }
-            if (rayHit.collider.tag == "invite3") 
-            {
-                interactingWithObject(true);
-
-                if (Input.GetKeyDown(KeyCode.E)) 
-                {
-                    audioSource.pitch = 1f;
-                    audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("invite3"));
-                    pickup.invite3 = true;
-                    PlayerPrefsManager.SaveBool("invite3", true);
-                }
-            }
-            if (rayHit.collider.tag == "polaroid1") 
-            {
-                interactingWithObject(true);
-
-                if (Input.GetKeyDown(KeyCode.E)) 
-                {
-                    audioSource.pitch = 1f;
-                    audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("polaroid1"));
-                    pickup.polaroid1 = true;
-                    PlayerPrefsManager.SaveBool("polaroid1", true);
-                }
-            }
-            if (rayHit.collider.tag == "polaroid2") 
-            {
-                interactingWithObject(true);
-
-                if (Input.GetKeyDown(KeyCode.E)) 
-                {
-                    audioSource.pitch = 1f;
-                    audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("polaroid2"));
-                    pickup.polaroid2 = true;
-                    PlayerPrefsManager.SaveBool("polaroid2", true);
-                }
-            }
-            if (rayHit.collider.tag == "polaroid3") 
-            {
-                interactingWithObject(true);
-
-                if (Input.GetKeyDown(KeyCode.E)) 
-                {
-                    audioSource.pitch = 1f;
-                    audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("polaroid3"));
-                    pickup.polaroid3 = true;
-                    PlayerPrefsManager.SaveBool("polaroid3", true);
-                }
-            }
-            if (rayHit.collider.tag == "polaroid4") 
-            {
-                interactingWithObject(true);
-
-                if (Input.GetKeyDown(KeyCode.E)) 
-                {
-                    audioSource.pitch = 1f;
-                    audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("polaroid4"));
-                    pickup.polaroid4 = true;
-                    PlayerPrefsManager.SaveBool("polaroid4", true);
-                }
-            }
-            if (rayHit.collider.tag == "polaroid6") 
-            {
-                interactingWithObject(true);
-
-                if (Input.GetKeyDown(KeyCode.E)) 
-                {
-                    audioSource.pitch = 1f;
-                    audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("polaroid6"));
-                    pickup.polaroid6 = true;
-                    PlayerPrefsManager.SaveBool("polaroid6", true);
-                }
+                ClearHighlighted();
+                interactingWithObject(false);
             }
         }
         else
@@ -363,29 +206,33 @@ public class ObjectDetection : MonoBehaviour
     {
         if (interacting == true)
         {
-            interactionMessage = "Press E to interact";
+            textObj.GetComponent<TextSupportGUI>().setInteractionMessage("Press E to interact", false);
             cameraEffects.GetComponent<UISight>().pointing(true);
         }
         else 
         {
-            interactionMessage = "";
+            //cleanMessage();
+            textObj.GetComponent<TextSupportGUI>().cleanMessages();
             cameraEffects.GetComponent<UISight>().pointing(false);
         }
     }
 
     // Display GUI elements
+    /*
     private void OnGUI()
     {
         GUIStyle style = new GUIStyle();
         style.alignment = TextAnchor.MiddleCenter;
         GUI.Label(new Rect(0, Screen.height * 0.8f, Screen.width, Screen.height * 0.15f), "<color=white><size=50>" + interactionMessage + "</size></color>", style);
-        //GUI.Label(new Rect(Screen.width / 2 - (Screen.width * 0.25f), Screen.height * 0.8f, Screen.width * 0.5f, Screen.height * 0.14f), "<size=50>" + interactionMessage + "</size>", style);
     }
+    */
 
+    /*
     IEnumerator message() 
     {
         yield return new WaitForSeconds(7f);
-        interactionMessage = "I need to find out what happened to those kids";
+        interactionMessage = introMessage;
+        StartCoroutine(clean());
     }
 
     IEnumerator clean() 
@@ -393,5 +240,5 @@ public class ObjectDetection : MonoBehaviour
         yield return new WaitForSeconds(10f);
         interactionMessage = "";
     }
-
+    */
 }
