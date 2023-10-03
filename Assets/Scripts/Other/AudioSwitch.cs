@@ -6,7 +6,7 @@ public class AudioSwitch : MonoBehaviour
     public AudioClip originalAudioClip; // The original audio clip
     public AudioClip alternateAudioClip; // The alternate audio clip
     private AudioSource audioSource; // Reference to the AudioSource component
-
+    
     private void Start()
     {
         // Get a reference to the AudioSource component attached to this GameObject
@@ -25,15 +25,10 @@ public class AudioSwitch : MonoBehaviour
         if (switchAudio)
         {
             // If it's true, switch to the alternate audio clip
+            audioSource.Stop();
             audioSource.clip = alternateAudioClip;
+            audioSource.Play();
+            switchAudio = false;
         }
-        else
-        {
-            // If it's false, switch back to the original audio clip
-            audioSource.clip = originalAudioClip;
-        }
-
-        // Reset the bool to prevent continuous switching (you can adjust this based on your needs)
-        switchAudio = false;
     }
 }

@@ -91,18 +91,19 @@ public class ObjectPickupAndRotate : MonoBehaviour
 
     public void displayObject(string name) 
     {
+        Debug.Log("displayObject " + name);
         freezeScene(true);
+
         currname = name;
         Vector3 spawnPosition = transform.position + transform.forward * distance; // Adjust the distance as needed
         obj = Instantiate(collectibles[name].prefab, spawnPosition, Quaternion.identity);
-        if (name.Contains("key")) 
+        if (name.Contains("key"))
         {
             obj.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
-            obj.transform.eulerAngles = obj.transform.eulerAngles + new Vector3(32f,0f,90f);
+            obj.transform.eulerAngles = obj.transform.eulerAngles + new Vector3(32f, 0f, 90f);
         }
         textObj.GetComponent<TextSupportGUI>().setInteractionMessage("Press Q to return", false);
         textObj.GetComponent<TextSupportGUI>().setHeaderMessage("Found <b>" + collectibles[name].description + "</b>");
-        
     }
 
     private void rotateObject()

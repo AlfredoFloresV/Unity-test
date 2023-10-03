@@ -40,6 +40,12 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField]
     private GameObject bgmusic;
 
+    [SerializeField]
+    private GameObject siren;
+
+    [SerializeField]
+    private GameObject textObj;
+
     private AudioSource audioSource;
 
     public int Health = 5;
@@ -130,6 +136,12 @@ public class PlayerMotor : MonoBehaviour
     {
         keysFound[key] = true;
         numKeys++;
+        if (numKeys == 4) 
+        {
+            siren.SetActive(true);
+            bgmusic.GetComponent<AudioSwitch>().switchAudio = true;
+            textObj.GetComponent<TextSupportGUI>().setInteractionMessage("I gotta get outta here!", true);
+        }
     }
 
     public void verifyVictoryCondition(string doorNum, GameObject doorObj) 

@@ -84,8 +84,8 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                     PlayerPrefsManager.SaveBool("ticket", true);
                     animDoor1.enabled = true;
                     animDoor2.enabled = true;
-                    afterTicket();
                     pickup.displayObject(currTag);
+                    afterTicket();
                 }
             }
 
@@ -150,6 +150,7 @@ public class ObjectDetectionFunhouse : MonoBehaviour
 
     private void interactingWithObject(bool interacting)
     {
+        Debug.Log("interacting " + interacting);
         if (interacting == true)
         {
             textObj.GetComponent<TextSupportGUI>().setInteractionMessage("Press E to interact", false);
@@ -170,6 +171,6 @@ public class ObjectDetectionFunhouse : MonoBehaviour
 
     private void Update()
     {
-        HighlightObjectInCenterOfCam();
+        if(!pickup.Freezed) HighlightObjectInCenterOfCam();
     }
 }

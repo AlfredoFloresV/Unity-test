@@ -59,6 +59,12 @@ public class ObjectDetection : MonoBehaviour
             collectibles.Add(c.name);
         }
 
+        StartCoroutine(introMsg());
+    }
+
+    IEnumerator introMsg() 
+    {
+        yield return new WaitForSeconds(7f);
         textObj.GetComponent<TextSupportGUI>().setInteractionMessage("I need to find out what happened to those kids", true);
     }
 
@@ -176,7 +182,6 @@ public class ObjectDetection : MonoBehaviour
                         GetComponent<PlayerMotor>().handleKeys(colliderTag);
                         string text = GetComponent<PlayerMotor>().numKeys + "/4 keys found";
                         textObj.GetComponent<TextSupportGUI>().setSubInteractionMessage(text);
-                        //interactionMessage = GetComponent<PlayerMotor>().numKeys + "/4 keys";
                     }
                     else
                     {
