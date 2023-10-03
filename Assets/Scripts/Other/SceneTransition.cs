@@ -4,7 +4,12 @@ using UnityEngine.SceneManagement;
 
 public class SceneTransition : MonoBehaviour
 {
-    public string targetSceneName = "MainMenu"; 
+    public string targetSceneName = "MainMenu";
+
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
+    }
 
     public void LoadTargetScene()
     {

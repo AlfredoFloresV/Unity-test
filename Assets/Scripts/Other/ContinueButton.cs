@@ -7,7 +7,7 @@ public class ContinueButton : MonoBehaviour
 {
     public Image imageToFade; // Reference to the Image component to fade in
     public Button startButton; // Reference to the StartButton
-    public float fadeInTime = 2.0f; // Duration of the fade-in in seconds
+    public float fadeInTime = 1.0f; // Duration of the fade-in in seconds
     public float startDelay = 1.0f; // Delay before starting the fade-in
 
     private float startTime;

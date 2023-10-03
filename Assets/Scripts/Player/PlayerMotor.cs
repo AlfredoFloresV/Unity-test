@@ -46,6 +46,7 @@ public class PlayerMotor : MonoBehaviour
     public int Damage = 0;
     
     public Dictionary<string, bool> keysFound;
+    public bool victory;
     public string VictoryKey;
     public int numKeys;
     public bool hit;
@@ -64,7 +65,8 @@ public class PlayerMotor : MonoBehaviour
         //Debug.Log("VictoryKey" + VictoryKey);
         numKeys = 0;
         hit = false;
-        hearbeat.SetActive(Health - Damage <= 1);
+        victory = false;
+        if(hearbeat != null) hearbeat.SetActive(Health - Damage <= 1);
     }
 
     public void playerAttacked() 
@@ -106,7 +108,7 @@ public class PlayerMotor : MonoBehaviour
 
     public void spendLight() 
     {
-        flashLight.GetComponent<Flashlight>().spendLight(0.3f);
+        flashLight.GetComponent<Flashlight>().spendLight(0.15f);
     }
 
     public float getIntensity() 
@@ -141,6 +143,7 @@ public class PlayerMotor : MonoBehaviour
             
             if (isCorrectDoor)
             {
+                victory = true;
                 StartCoroutine(win(doorObj, claps, true));
             }
             else
@@ -163,7 +166,6 @@ public class PlayerMotor : MonoBehaviour
         {
             hearbeat.SetActive(false);
             bgmusic.SetActive(false);
-
             fade.SetActive(true);
             fade.GetComponent<Animator>().Play("FadeOut");
             StartCoroutine(winGame());

@@ -100,6 +100,11 @@ public class LarryActions : MonoBehaviour
                     KillActions();
                     break;
             }
+
+            if (player.GetComponent<PlayerMotor>().victory) 
+            {
+                Defeated();
+            }
         }
     }
 
@@ -224,6 +229,15 @@ public class LarryActions : MonoBehaviour
         }
     }
 
+    private void Defeated() 
+    {
+        currentState = LarryState.Defeated;
+        //audioSource.volume = 0.1f;
+        //audioSource.PlayOneShot(stunAudio);
+        animator.Play("Larry_Defeated");
+    }
+
+
     IEnumerator comeBackToKill() 
     {
         yield return new WaitForSeconds(2f);
@@ -322,5 +336,6 @@ public enum LarryState
     Kill,
     Killing,
     Horn,
-    GoingHorn
+    GoingHorn,
+    Defeated
 }

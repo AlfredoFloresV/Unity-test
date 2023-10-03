@@ -8,15 +8,21 @@ public class ObjectDetectionFunhouse : MonoBehaviour
     [SerializeField]
     float detectionDistance = 5f;
 
-    [SerializeField]
-    private Material highlightMaterial;
-    [SerializeField]
-    private Material originalMaterial;
-    [SerializeField]
-    private Material selectedMaterial;
+    //[SerializeField]
+    //private Material highlightMaterial;
+    //[SerializeField]
+    //private Material originalMaterial;
+    //[SerializeField]
+    //private Material selectedMaterial;
 
     [SerializeField]
     private Camera cam;
+
+    [SerializeField]
+    private GameObject cameraEffects;
+
+    [SerializeField]
+    private GameObject textObj;
 
     [SerializeField]
     private AudioClip paperAudio;
@@ -27,13 +33,8 @@ public class ObjectDetectionFunhouse : MonoBehaviour
     [SerializeField]
     private GameObject fade;
 
-    GameObject lastHighlightedObject = null;
-
-    private Shader standard;
-    private Shader highlight;
-
-    private string interactionMessage = ""; // Message to display when an object is selected
-    private ObjectPickupAndRotate_Funhouse pickup;
+    private ObjectPickupAndRotate pickup;
+    private IntroMessages introMsg;
     private Animator animDoor1;
     private Animator animDoor2;
     private BoxCollider funhouseFloor;
@@ -41,79 +42,15 @@ public class ObjectDetectionFunhouse : MonoBehaviour
     private AudioSource audioSource;
     public string targetSceneName = "DungeonLevel";
 
-    private float WidthPosition;
-    private float HeightPosition;
-
-    private float WidthBox;
-
-    public int msgState;
-    private Dictionary<int, string> messages;
-    private string prevMsg;
-
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        standard = Shader.Find("Standard"); //Not working
-        highlight = Shader.Find("Unlit/Texture");
-        pickup = GameObject.Find ("Camera").GetComponent<ObjectPickupAndRotate_Funhouse>();
-        animDoor1 = GameObject.Find ("StartDoor1").GetComponent<Animator>();
-        animDoor2 = GameObject.Find ("StartDoor2").GetComponent<Animator>();
-        funhouseFloor = GameObject.Find ("FunhouseFloor").GetComponent<BoxCollider>();
-        playerAnimator = GameObject.Find ("Player").GetComponent<Animator>();
-
-        messages = new Dictionary<int, string>();
-        messages[0] = "I should find a way inside...";
-        messages[1] = "It's locked. I need to find something to open the doors";
-        messages[2] = "If only I could buy a <b>ticket</b>";
-        messages[3] = "What?";
-        messages[4] = "I should take a closer look at that <b>arrow</b>";
-        msgState = 0;
-        prevMsg = "";
-    }
-
-    void HighlightObject(GameObject gameObject)
-    {
-        if (lastHighlightedObject != gameObject)
-        {
-            if (gameObject.CompareTag("doorBtn") && gameObject.GetComponent<MeshRenderer>().sharedMaterial != selectedMaterial) 
-            {
-                ClearHighlighted();
-                originalMaterial = gameObject.GetComponent<MeshRenderer>().sharedMaterial;
-                gameObject.GetComponent<MeshRenderer>().sharedMaterial = highlightMaterial;
-                gameObject.GetComponent<MeshRenderer>().sharedMaterial.shader = highlight;
-            }
-
-            lastHighlightedObject = gameObject;
-            if (interactionMessage.Equals("Press E to interact")) 
-            {
-                interactionMessage = prevMsg != "" ? prevMsg : "";
-                prevMsg = "";
-            }
-            
-        }
-
-    }
-
-    void ClearHighlighted()
-    {
-        if (lastHighlightedObject != null)
-        {
-            if (gameObject.CompareTag("doorBtn"))
-            {
-                Material m = lastHighlightedObject.GetComponent<MeshRenderer>().sharedMaterial;
-                if (m == highlightMaterial)
-                {
-                    lastHighlightedObject.GetComponent<MeshRenderer>().sharedMaterial = originalMaterial;
-                    lastHighlightedObject.GetComponent<MeshRenderer>().sharedMaterial.shader = standard;
-                }
-            }
-            lastHighlightedObject = null;
-            if (interactionMessage.Equals("Press E to interact"))
-            {
-                interactionMessage = prevMsg != "" ? prevMsg : "";
-                prevMsg = "";
-            }
-        }
+        introMsg = GetComponent<IntroMessages>();
+        pickup = cam.gameObject.GetComponent<ObjectPickupAndRotate>();
+        animDoor1 = GameObject.Find("StartDoor1").GetComponent<Animator>();
+        animDoor2 = GameObject.Find("StartDoor2").GetComponent<Animator>();
+        funhouseFloor = GameObject.Find("FunhouseFloor").GetComponent<BoxCollider>();
+        playerAnimator = GameObject.Find("Player").GetComponent<Animator>();
     }
 
     void HighlightObjectInCenterOfCam()
@@ -122,84 +59,73 @@ public class ObjectDetectionFunhouse : MonoBehaviour
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit rayHit;
 
-        Vector3 forward = cam.transform.TransformDirection(Vector3.forward) * 5f;
+        Vector3 forward = cam.transform.TransformDirection(Vector3.forward) * 3f;
         Debug.DrawRay(cam.transform.position, forward, Color.green);
-        
+        interactingWithObject(false);
+
         // Check if we hit something.
         if (Physics.Raycast(ray, out rayHit, detectionDistance))
         {
             // Get the object that was hit.
             GameObject hitObject = rayHit.collider.gameObject;
-            HighlightObject(hitObject);
+            string currTag = rayHit.collider.tag;
 
-            if (rayHit.collider.tag == "ticket") 
+
+            if (currTag == "ticket")
             {
-                if (!interactionMessage.Equals("Press E to interact") && !interactionMessage.Equals(""))
-                    prevMsg = interactionMessage;
+                interactingWithObject(true);
 
-                interactionMessage = "Press E to interact";
-
-                if (Input.GetKeyDown(KeyCode.E)) 
+                if (Input.GetKeyDown(KeyCode.E))
                 {
+                    interactingWithObject(false);
                     audioSource.PlayOneShot(paperAudio);
                     audioSource.pitch = 1.3f;
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("ticket"));
-                    pickup.ticket = true;
+                    Destroy(GameObject.FindWithTag("ticket"));
                     PlayerPrefsManager.SaveBool("ticket", true);
                     animDoor1.enabled = true;
                     animDoor2.enabled = true;
-                    StopAllCoroutines();
-                    StartCoroutine(afterTicket());
+                    afterTicket();
+                    pickup.displayObject(currTag);
                 }
             }
 
-            if (rayHit.collider.tag == "newspaper") 
+            else if (currTag == "newspaper")
             {
-                if (!interactionMessage.Equals("Press E to interact") && !interactionMessage.Equals(""))
-                    prevMsg = interactionMessage;
+                interactingWithObject(true);
 
-                interactionMessage = "Press E to interact";
-
-                if (Input.GetKeyDown(KeyCode.E)) 
+                if (Input.GetKeyDown(KeyCode.E))
                 {
+                    interactingWithObject(false);
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("newspaper"));
-                    pickup.newspaper = true;
+                    Destroy(GameObject.FindWithTag("newspaper"));
                     PlayerPrefsManager.SaveBool("newspaper", true);
+                    pickup.displayObject(currTag);
                 }
             }
 
-            if (rayHit.collider.tag == "missingposter") 
+            else if (currTag == "missingposter")
             {
-                if (!interactionMessage.Equals("Press E to interact") && !interactionMessage.Equals(""))
-                    prevMsg = interactionMessage;
+                interactingWithObject(true);
 
-                interactionMessage = "Press E to interact";
-
-                if (Input.GetKeyDown(KeyCode.E)) 
+                if (Input.GetKeyDown(KeyCode.E))
                 {
+                    interactingWithObject(false);
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(paperAudio);
-                    interactionMessage = "";
-                    Destroy (GameObject.FindWithTag("missingposter"));
-                    pickup.missingperson = true;
+                    Destroy(GameObject.FindWithTag("missingposter"));
                     PlayerPrefsManager.SaveBool("missingperson", true);
+                    pickup.displayObject(currTag);
                 }
             }
 
-            if (rayHit.collider.tag == "arrow") 
+            else if (currTag == "arrow")
             {
-                if (!interactionMessage.Equals("Press E to interact") && !interactionMessage.Equals(""))
-                    prevMsg = interactionMessage;
+                interactingWithObject(true);
 
-                interactionMessage = "Press E to interact";
-
-                if (Input.GetKeyDown(KeyCode.E)) 
+                if (Input.GetKeyDown(KeyCode.E))
                 {
-                    interactionMessage = "";
+                    interactingWithObject(false);
                     StopAllCoroutines();
                     audioSource.pitch = 1f;
                     audioSource.PlayOneShot(scream);
@@ -209,10 +135,10 @@ public class ObjectDetectionFunhouse : MonoBehaviour
                     StartCoroutine(NextLevel());
                 }
             }
-        }
-        else
-        {
-            ClearHighlighted();
+            else 
+            {
+                interactingWithObject(false);
+            }
         }
     }
 
@@ -222,48 +148,28 @@ public class ObjectDetectionFunhouse : MonoBehaviour
         SceneManager.LoadScene(targetSceneName);
     }
 
-    void Update()
+    private void interactingWithObject(bool interacting)
     {
-        HighlightObjectInCenterOfCam();
-
-        if (msgState != -1) 
+        if (interacting == true)
         {
-            StartCoroutine(instructions(messages[msgState], msgState == 2 ? -1 : msgState + 1));
-            msgState = -1;
+            textObj.GetComponent<TextSupportGUI>().setInteractionMessage("Press E to interact", false);
+            cameraEffects.GetComponent<UISight>().pointing(true);
+        }
+        else
+        {
+            //cleanMessage();
+            textObj.GetComponent<TextSupportGUI>().cleanMessages();
+            cameraEffects.GetComponent<UISight>().pointing(false);
         }
     }
 
-    // Display GUI elements
-    private void OnGUI()
+    private void afterTicket() 
     {
-        //GUIStyle style = new GUIStyle();
-        //style.alignment = TextAnchor.MiddleCenter;
-        //GUI.Label(new Rect(WidthPosition, HeightPosition, WidthBox, Screen.height * 0.15f), "<size=50>" + interactionMessage + "</size>", style);
-        //GUI.Label(new Rect(Screen.width / 2 - (Screen.width * 0.1f), Screen.height - (Screen.height * 0.07f), Screen.width * 0.4f, Screen.height * 0.14f), "<size=50>" + interactionMessage + "</size>");
-        GUIStyle style = new GUIStyle();
-        style.alignment = TextAnchor.MiddleCenter;
-        GUI.Label(new Rect(0, Screen.height * 0.8f, Screen.width, Screen.height * 0.15f), "<color=white><size=50>" + interactionMessage + "</size></color>", style);
+        introMsg.continueIntro();
     }
 
-
-    IEnumerator instructions(string message, int nextState)
+    private void Update()
     {
-        interactionMessage = message;
-        yield return new WaitForSeconds(5f);
-        interactionMessage = "";
-        StartCoroutine(wait(nextState));
-    }
-
-    
-    IEnumerator wait(int nextState) 
-    {
-        yield return new WaitForSeconds(40f);
-        msgState = nextState;
-    }
-
-    IEnumerator afterTicket() 
-    {
-        yield return new WaitForSeconds(2f);
-        msgState = 3;
+        HighlightObjectInCenterOfCam();
     }
 }

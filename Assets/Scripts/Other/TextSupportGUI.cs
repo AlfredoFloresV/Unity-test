@@ -32,13 +32,13 @@ public class TextSupportGUI : MonoBehaviour
 
     public void setInteractionMessage(string msg, bool isQuote) 
     {
+        interactionMessage = msg;
+
         if (isQuote) 
         {
             quote = msg;
             StartCoroutine(cleanQuote());
         }
-
-        interactionMessage = msg;
     }
 
     public void cleanMessages() 
@@ -49,13 +49,13 @@ public class TextSupportGUI : MonoBehaviour
 
     IEnumerator cleanQuote() 
     {
-        yield return new WaitForSeconds(7f);
+        yield return new WaitForSeconds(5f);
         quote = "";
     }
 
     IEnumerator cleanSubMsg() 
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         subInteractionMessage = "";
     }
 

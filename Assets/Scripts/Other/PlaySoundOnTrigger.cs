@@ -34,9 +34,12 @@ public class PlaySoundOnTrigger : MonoBehaviour
             // Play the assigned sound clip
             audioSource.Play();
 
-            GameObject enemy = Random.Range(0, 2) == 0 ? enemies[0] : enemies[1];
-            enemy.GetComponent<LarryActions>().currentState = LarryState.Horn;
-            enemy.GetComponent<LarryActions>().HornActions(transform.position);
+            if (enemies.Length != 0) 
+            {
+                GameObject enemy = Random.Range(0, 2) == 0 ? enemies[0] : enemies[1];
+                enemy.GetComponent<LarryActions>().currentState = LarryState.Horn;
+                enemy.GetComponent<LarryActions>().HornActions(transform.position);
+            }
         }
     }
 }

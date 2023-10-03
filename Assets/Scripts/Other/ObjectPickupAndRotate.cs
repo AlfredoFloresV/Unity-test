@@ -19,6 +19,9 @@ public class ObjectPickupAndRotate : MonoBehaviour
     [SerializeField]
     private GameObject textObj;
 
+    [SerializeField]
+    private float distance = 0.1f;
+
     public bool Freezed;
 
     private Dictionary<string, Collectible> collectibles;
@@ -52,8 +55,12 @@ public class ObjectPickupAndRotate : MonoBehaviour
             {
                 freezeScene(false);
                 textObj.GetComponent<TextSupportGUI>().cleanMessages();
-                //interactionMessage = "";
-                //header = "";
+
+                if (currname.Contains("ticket")) 
+                {
+                    OpenDoors();
+                }
+
                 xRotation = 0;
                 yRotation = 0;
                 if (obj != null) Destroy(obj);
@@ -69,11 +76,24 @@ public class ObjectPickupAndRotate : MonoBehaviour
         }
     }
 
+    private void OpenDoors() 
+    {
+        MeshRenderer policeTape1 = GameObject.Find("PoliceTapeD1").GetComponent<MeshRenderer>();
+        MeshRenderer policeTape2 = GameObject.Find("PoliceTapeD2").GetComponent<MeshRenderer>();
+        MeshRenderer policeTape3 = GameObject.Find("PoliceTapeD3").GetComponent<MeshRenderer>();
+        AudioSource doorsOpen = GameObject.Find("DoorSound").GetComponent<AudioSource>();
+
+        policeTape1.enabled = false;
+        policeTape2.enabled = false;
+        policeTape3.enabled = false;
+        doorsOpen.Play();
+    }
+
     public void displayObject(string name) 
     {
         freezeScene(true);
         currname = name;
-        Vector3 spawnPosition = transform.position + transform.forward * 0.1f; // Adjust the distance as needed
+        Vector3 spawnPosition = transform.position + transform.forward * distance; // Adjust the distance as needed
         obj = Instantiate(collectibles[name].prefab, spawnPosition, Quaternion.identity);
         if (name.Contains("key")) 
         {
@@ -82,8 +102,7 @@ public class ObjectPickupAndRotate : MonoBehaviour
         }
         textObj.GetComponent<TextSupportGUI>().setInteractionMessage("Press Q to return", false);
         textObj.GetComponent<TextSupportGUI>().setHeaderMessage("Found <b>" + collectibles[name].description + "</b>");
-        //interactionMessage = "Press Q to return";
-        //header = "Found <b>" + collectibles[name].description + "</b>";
+        
     }
 
     private void rotateObject()

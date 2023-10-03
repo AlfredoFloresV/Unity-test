@@ -14,9 +14,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Funhouse.unity
     guid: ec568a42fce331866a039473ec82fb7d
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/DungeonLevel.unity
     guid: 86edc23e9e4fc874d9bcadc531f0a6ad
+  - enabled: 1
+    path: Assets/Scenes/DungeonLevel_02OctNoSeOlvida.unity
+    guid: 30c3796a30acd7749ac04e1a03f8b575
   - enabled: 1
     path: Assets/Scenes/GameOver1 1.unity
     guid: 64927b2d6ed9071999f9c3d3375f06ee

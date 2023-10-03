@@ -29,9 +29,12 @@ public class AttackPlayer : MonoBehaviour
         {
             if (waiting == false) 
             {
-                enemy.GetComponent<LarryActions>().AttackActions(attacks[Random.Range(0, attacks.Count)]);
-                waiting = true;
-                StartCoroutine(wait());
+                if (!other.gameObject.GetComponent<PlayerMotor>().victory) 
+                {
+                    enemy.GetComponent<LarryActions>().AttackActions(attacks[Random.Range(0, attacks.Count)]);
+                    waiting = true;
+                    StartCoroutine(wait());
+                }
             }
             
         }
