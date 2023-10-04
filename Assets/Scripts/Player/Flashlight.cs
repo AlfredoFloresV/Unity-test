@@ -23,6 +23,13 @@ public class Flashlight : MonoBehaviour
     private float range;
     public bool focus;
 
+    public GameObject bat1;
+    public GameObject bat2;
+    public GameObject bat3;
+    public GameObject bat4;
+    public GameObject bat5;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,6 +68,46 @@ public class Flashlight : MonoBehaviour
             l.range = range;
             l.intensity = intensity;
             focus = false;
+        }
+        if (intensity > 1.6f)
+        {
+            bat1.SetActive(true);
+            bat2.SetActive(true);
+            bat3.SetActive(true);
+            bat4.SetActive(true);
+            bat5.SetActive(true);
+        }
+        if (intensity < 1.6f)
+        {
+            bat1.SetActive(false);
+            bat2.SetActive(true);
+            bat3.SetActive(true);
+            bat4.SetActive(true);
+            bat5.SetActive(true);
+        }
+        if (intensity < 1.2f)
+        {
+            bat1.SetActive(false);
+            bat2.SetActive(false);
+            bat3.SetActive(true);
+            bat4.SetActive(true);
+            bat5.SetActive(true);
+        }
+        if (intensity < 0.8f)
+        {
+            bat1.SetActive(false);
+            bat2.SetActive(false);
+            bat3.SetActive(false);
+            bat4.SetActive(true);
+            bat5.SetActive(true);
+        }
+        if (intensity < 0.4f)
+        {
+            bat1.SetActive(false);
+            bat2.SetActive(false);
+            bat3.SetActive(false);
+            bat4.SetActive(false);
+            bat5.SetActive(true);
         }
     }
 
