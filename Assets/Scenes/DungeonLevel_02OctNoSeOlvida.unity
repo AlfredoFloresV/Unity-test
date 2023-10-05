@@ -1097,11 +1097,11 @@ MonoBehaviour:
   maxIntensity: 2
   intensity: 0
   focus: 0
-  bat1: {fileID: 0}
-  bat2: {fileID: 0}
-  bat3: {fileID: 0}
-  bat4: {fileID: 0}
-  bat5: {fileID: 0}
+  bat1: {fileID: 1411232372}
+  bat2: {fileID: 674978128}
+  bat3: {fileID: 2067925381}
+  bat4: {fileID: 404928349}
+  bat5: {fileID: 563423295}
 --- !u!82 &533837563
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1232,7 +1232,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -830, y: 387.7}
+  m_AnchoredPosition: {x: -829.99994, y: 387.7}
   m_SizeDelta: {x: -1901.2, y: -1036.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &563423297
